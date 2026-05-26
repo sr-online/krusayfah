@@ -722,6 +722,11 @@ document.querySelectorAll('.unit-tab-btn').forEach(btn => {
     if (target === 'utab-scores') initStudentScoreTab('media-m1');
   });
 });
+/* ── Auto-switch tab from URL hash ── */
+if (location.hash === '#exercises') {
+  const exBtn = document.querySelector('[data-utab="utab-exercises"]');
+  if (exBtn) exBtn.click();
+}
 
 /* ── Section accordion ── */
 function toggleSection(header) {

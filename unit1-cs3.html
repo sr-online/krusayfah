@@ -824,6 +824,11 @@
       document.getElementById('utab-' + target).classList.add('active');
     });
   });
+  /* ── Auto-switch tab from URL hash ── */
+  if (location.hash === '#exercises') {
+    const exBtn = document.querySelector('[data-utab="exercises"]');
+    if (exBtn) exBtn.click();
+  }
 
   /* ===== SECTION TOGGLE ===== */
   function toggleSection(header) {
