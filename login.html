@@ -301,9 +301,6 @@
   <p>&copy; 2569 <strong>ครูศิริศักดิ์ ปิลอง</strong> &mdash; ระบบการจัดการเรียนการสอน</p>
 </footer>
 
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script src="js/firebase-config.js"></script>
 <script src="js/students.js"></script>
 <script src="js/auth.js"></script>
 <script src="js/app.js"></script>
@@ -313,13 +310,13 @@
     if (getCurrentStudent()) { window.location.replace('home.html'); }
   })();
 
-  /* ===== Login ===== */
-  async function doLogin() {
+  /* ===== Login — ใช้ students.js เท่านั้น ไม่รอ Firebase ===== */
+  function doLogin() {
     const input    = document.getElementById('studentIdInput');
     const errorBox = document.getElementById('loginError');
     const errorMsg = document.getElementById('loginErrorMsg');
     const btn      = document.getElementById('loginBtn');
-    const id = input.value.trim();
+    const id       = input.value.trim();
 
     input.classList.remove('error');
     errorBox.classList.remove('show');
@@ -332,28 +329,7 @@
       return;
     }
 
-    // Show loading
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังตรวจสอบ...';
-
-    let student = null;
-
-    // 1. ค้นจาก students.js ในเครื่องก่อน (instant, ไม่ต้องรอ network)
-    if (typeof STUDENTS !== 'undefined' && STUDENTS[id]) {
-      student = STUDENTS[id];
-    }
-
-    // 2. ถ้าไม่เจอในเครื่อง ค่อยลอง Firebase (3 วิ timeout)
-    if (!student && firebaseReady) {
-      const result = await Promise.race([
-        getStudentById(id),
-        new Promise(resolve => setTimeout(() => resolve({ ok: false, error: 'timeout' }), 3000))
-      ]);
-      if (result.ok) student = result.data;
-    }
-
-    btn.disabled = false;
-    btn.innerHTML = '<i class="fas fa-right-to-bracket"></i> เข้าสู่ระบบ';
+    var student = (typeof STUDENTS !== 'undefined') ? STUDENTS[id] : null;
 
     if (!student) {
       input.classList.add('error');
@@ -363,7 +339,6 @@
       return;
     }
 
-    // Save session (localStorage) then redirect
     saveSession(id, student);
     window.location.href = 'home.html';
   }
