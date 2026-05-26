@@ -338,18 +338,18 @@
 
     let student = null;
 
-    // 1. Try Firebase first (5-second timeout — fallback to local if slow/blocked)
-    if (firebaseReady) {
-      const result = await Promise.race([
-        getStudentById(id),
-        new Promise(resolve => setTimeout(() => resolve({ ok: false, error: 'timeout' }), 5000))
-      ]);
-      if (result.ok) student = result.data;
+    // 1. ค้นจาก students.js ในเครื่องก่อน (instant, ไม่ต้องรอ network)
+    if (typeof STUDENTS !== 'undefined' && STUDENTS[id]) {
+      student = STUDENTS[id];
     }
 
-    // 2. Fallback to local students.js
-    if (!student && typeof STUDENTS !== 'undefined' && STUDENTS[id]) {
-      student = STUDENTS[id];
+    // 2. ถ้าไม่เจอในเครื่อง ค่อยลอง Firebase (3 วิ timeout)
+    if (!student && firebaseReady) {
+      const result = await Promise.race([
+        getStudentById(id),
+        new Promise(resolve => setTimeout(() => resolve({ ok: false, error: 'timeout' }), 3000))
+      ]);
+      if (result.ok) student = result.data;
     }
 
     btn.disabled = false;
