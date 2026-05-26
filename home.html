@@ -276,7 +276,12 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     const s = getCurrentStudent();
-    if (!s) return;
+    // Session หาย หรือรูปแบบเก่า — ล้างแล้ว redirect ใหม่
+    if (!s || !s.name || !s.grade) {
+      localStorage.removeItem('srr_student_2569');
+      window.location.replace('login.html');
+      return;
+    }
 
     const theme = _COLORS[s.grade] || _COLORS['6'];
     const sub   = _SUBJECT[s.grade];
@@ -334,9 +339,14 @@
       return;
     }
 
-    const result = await getStudentScores(subjectId, studentId);
+    const result = await Promise.race([
+      getStudentScores(subjectId, studentId),
+      new Promise(resolve => setTimeout(() => resolve({ ok: false, error: 'timeout' }), 6000))
+    ]);
     if (!result.ok) {
-      body.innerHTML = '<div class="empty-state"><i class="fas fa-triangle-exclamation"></i>เกิดข้อผิดพลาด: ' + result.error + '</div>';
+      body.innerHTML = result.error === 'timeout'
+        ? '<div class="empty-state"><i class="fas fa-wifi-slash"></i> โหลดคะแนนไม่ได้ (Firebase ไม่ตอบสนอง)<br><small>ตรวจสอบ Firestore Security Rules</small></div>'
+        : '<div class="empty-state"><i class="fas fa-triangle-exclamation"></i>เกิดข้อผิดพลาด: ' + result.error + '</div>';
       return;
     }
     if (!result.data.length) {
