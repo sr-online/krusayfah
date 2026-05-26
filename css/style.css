@@ -690,6 +690,53 @@ img { max-width: 100%; height: auto; }
 }
 
 /* ========================================
+   Work Cards (exercises list style)
+   ======================================== */
+.work-card {
+  background: white; border-radius: 14px;
+  box-shadow: var(--shadow); margin-bottom: 1.25rem;
+  overflow: hidden; border: 1px solid #e2e8f0;
+}
+.work-card-header {
+  display: flex; align-items: flex-start; gap: 1rem;
+  padding: 1.25rem; border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+.work-card.clickable { cursor: pointer; transition: box-shadow .2s, border-color .2s; }
+.work-card.clickable:hover { box-shadow: 0 4px 20px rgba(0,0,0,.1); border-color: #cbd5e1; }
+.work-num {
+  min-width: 42px; height: 42px;
+  background: linear-gradient(135deg, #1e40af, #2563eb);
+  color: white; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; font-weight: 700; flex-shrink: 0;
+}
+.work-num.gray { background: linear-gradient(135deg, #64748b, #94a3b8); }
+.work-title { flex: 1; min-width: 0; }
+.work-title h3 { font-size: 1rem; font-weight: 700; color: #1e293b; margin: 0 0 .25rem; }
+.work-title p  { font-size: .85rem; color: #64748b; margin: 0; line-height: 1.5; }
+.work-badges { display: flex; flex-direction: column; align-items: flex-end; gap: .4rem; flex-shrink: 0; }
+.work-score-badge {
+  background: #dbeafe; color: #1e40af;
+  padding: .25rem .8rem; border-radius: 999px;
+  font-size: .8rem; font-weight: 700; white-space: nowrap;
+}
+.work-score-badge.muted { background: #f1f5f9; color: #64748b; }
+.work-status-badge {
+  padding: .2rem .75rem; border-radius: 999px;
+  font-size: .78rem; font-weight: 600; white-space: nowrap;
+  display: flex; align-items: center; gap: .3rem;
+}
+.work-status-badge.open   { background: #d1fae5; color: #065f46; }
+.work-status-badge.coming { background: #f1f5f9; color: #64748b; }
+.work-status-badge.done   { background: #ede9fe; color: #5b21b6; }
+.work-card-body { padding: 1.25rem; }
+.work-coming-body {
+  padding: 2rem; text-align: center; color: #94a3b8; font-size: .9rem;
+}
+.work-coming-body i { font-size: 1.5rem; display: block; margin-bottom: .5rem; opacity: .5; }
+
+/* ========================================
    Score System
    ======================================== */
 .score-section {
