@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>หน่วยที่ 1 เทคโนโลยีสารสนเทศในการนำเสนอ | วิทยาการคำนวณ 3</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ===== Unit Page Specific ===== */
+    .unit-hero {
+      background: linear-gradient(135deg, #dc2626 0%, #991b1b 60%, #7f1d1d 100%);
+      color: white;
+      padding: 2.5rem 1rem 0;
+    }
+    .unit-hero-content { max-width: 1200px; margin: 0 auto; }
+    .unit-hero h1 { font-size: 1.7rem; font-weight: 700; margin-bottom: .4rem; }
+    .unit-hero p { opacity: .85; font-size: .95rem; margin-bottom: .3rem; }
+    .unit-hero .indicator-box {
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 10px;
+      padding: .75rem 1rem;
+      margin: 1rem 0;
+      font-size: .9rem;
+    }
+
+    .unit-tabs {
+      display: flex; gap: .5rem; flex-wrap: wrap; padding-top: 1rem;
+    }
+    .unit-tab-btn {
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.3);
+      color: white; padding: .55rem 1.1rem;
+      border-radius: 8px 8px 0 0; cursor: pointer;
+      font-family: 'Sarabun', sans-serif; font-size: .9rem;
+      transition: all .2s; display: flex; align-items: center; gap: .4rem;
+    }
+    .unit-tab-btn.active { background: white; color: #dc2626; border-color: white; font-weight: 700; }
+    .unit-tab-btn:hover:not(.active) { background: rgba(255,255,255,.25); }
+
+    /* ===== Tab Content Area ===== */
+    .unit-tab-content { display: none; }
+    .unit-tab-content.active { display: block; }
+
+    /* ===== Sections ===== */
+    .lesson-section {
+      background: white; border-radius: 14px; box-shadow: var(--shadow);
+      margin-bottom: 1.5rem; overflow: hidden;
+    }
+    .section-header {
+      background: linear-gradient(90deg, #dc2626, #b91c1c);
+      color: white; padding: 1rem 1.25rem;
+      display: flex; align-items: center; gap: .75rem;
+      cursor: pointer; user-select: none;
+    }
+    .section-header .section-num {
+      width: 32px; height: 32px; background: rgba(255,255,255,.25);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: .95rem; flex-shrink: 0;
+    }
+    .section-header h2 { font-size: 1.05rem; font-weight: 700; flex: 1; }
+    .section-header .toggle-icon { transition: transform .3s; }
+    .section-header.collapsed .toggle-icon { transform: rotate(-90deg); }
+    .section-body { padding: 1.5rem; }
+    .section-body.hidden { display: none; }
+
+    /* ===== Content Cards ===== */
+    .info-card {
+      background: #f8fafc; border: 1px solid #e2e8f0;
+      border-radius: 10px; padding: 1.25rem; margin-bottom: 1rem;
+    }
+    .info-card h3 {
+      font-size: 1rem; font-weight: 700; color: #dc2626;
+      margin-bottom: .75rem; display: flex; align-items: center; gap: .5rem;
+    }
+    .info-card p { color: #374151; line-height: 1.8; margin-bottom: .5rem; }
+
+    .highlight-box {
+      background: linear-gradient(135deg, #fef2f2, #fee2e2);
+      border-left: 4px solid #dc2626;
+      border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0;
+    }
+    .highlight-box h4 { color: #991b1b; font-weight: 700; margin-bottom: .5rem; }
+    .highlight-box p, .highlight-box li { color: #374151; line-height: 1.8; }
+
+    .blue-box {
+      background: linear-gradient(135deg, #eff6ff, #dbeafe);
+      border-left: 4px solid #3b82f6; border-radius: 8px;
+      padding: 1rem 1.25rem; margin: 1rem 0;
+    }
+    .blue-box h4 { color: #1e40af; font-weight: 700; margin-bottom: .5rem; }
+
+    .green-box {
+      background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+      border-left: 4px solid #16a34a; border-radius: 8px;
+      padding: 1rem 1.25rem; margin: 1rem 0;
+    }
+    .green-box h4 { color: #15803d; font-weight: 700; margin-bottom: .5rem; }
+
+    .orange-box {
+      background: linear-gradient(135deg, #fff7ed, #fed7aa);
+      border-left: 4px solid #ea580c; border-radius: 8px;
+      padding: 1rem 1.25rem; margin: 1rem 0;
+    }
+    .orange-box h4 { color: #9a3412; font-weight: 700; margin-bottom: .5rem; }
+
+    /* ===== Step List ===== */
+    .step-list { list-style: none; padding: 0; }
+    .step-list li {
+      display: flex; align-items: flex-start; gap: .75rem;
+      padding: .6rem 0; border-bottom: 1px solid #f1f5f9;
+    }
+    .step-list li:last-child { border-bottom: none; }
+    .step-num {
+      min-width: 28px; height: 28px; background: #dc2626; color: white;
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; font-size: .8rem; font-weight: 700; flex-shrink: 0;
+    }
+
+    /* ===== Check List ===== */
+    .check-list { list-style: none; padding: 0; }
+    .check-list li {
+      padding: .45rem 0; display: flex; align-items: flex-start; gap: .6rem;
+      color: #374151; line-height: 1.7;
+    }
+    .check-list li i { color: #dc2626; margin-top: .2rem; flex-shrink: 0; }
+    .check-list li.cross i { color: #64748b; }
+
+    /* ===== Tool Grid ===== */
+    .tool-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem; margin-top: 1rem;
+    }
+    .tool-card {
+      background: white; border: 1px solid #e2e8f0;
+      border-radius: 10px; padding: 1rem; text-align: center;
+      transition: all .2s; box-shadow: 0 2px 4px rgba(0,0,0,.06);
+    }
+    .tool-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+    .tool-card .tool-icon { font-size: 2rem; margin-bottom: .5rem; }
+    .tool-card h4 { font-size: .9rem; font-weight: 700; color: #1e293b; margin-bottom: .3rem; }
+    .tool-card p { font-size: .8rem; color: #64748b; }
+
+    /* ===== CC Table ===== */
+    .cc-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: .9rem; }
+    .cc-table th {
+      background: #dc2626; color: white; padding: .65rem 1rem;
+      text-align: left; font-weight: 700;
+    }
+    .cc-table td { padding: .6rem 1rem; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+    .cc-table tr:nth-child(even) td { background: #fef2f2; }
+    .cc-table .cc-badge {
+      display: inline-block; background: #dc2626; color: white;
+      padding: .2rem .6rem; border-radius: 20px; font-size: .78rem; font-weight: 700;
+    }
+
+    /* ===== Impact Grid ===== */
+    .impact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+    @media (max-width: 600px) { .impact-grid { grid-template-columns: 1fr; } }
+    .impact-card {
+      border-radius: 10px; padding: 1.1rem;
+    }
+    .impact-positive { background: #f0fdf4; border: 1px solid #bbf7d0; }
+    .impact-negative { background: #fef2f2; border: 1px solid #fecaca; }
+    .impact-card h4 { font-weight: 700; margin-bottom: .75rem; display: flex; align-items: center; gap: .5rem; }
+    .impact-positive h4 { color: #15803d; }
+    .impact-negative h4 { color: #dc2626; }
+
+    /* ===== Accordion for 23 Code ===== */
+    .code-item {
+      border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: .5rem; overflow: hidden;
+    }
+    .code-item-header {
+      background: #f8fafc; padding: .7rem 1rem;
+      cursor: pointer; display: flex; align-items: center; gap: .75rem;
+      font-weight: 600; color: #1e293b;
+    }
+    .code-item-header:hover { background: #f1f5f9; }
+    .code-num {
+      min-width: 26px; height: 26px; background: #dc2626; color: white;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: .78rem; font-weight: 700; flex-shrink: 0;
+    }
+    .code-item-body { padding: .6rem 1rem .6rem 3.5rem; color: #64748b; font-size: .88rem; display: none; }
+    .code-item-body.open { display: block; }
+
+    /* ===== Data Type Table ===== */
+    .dtype-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: .9rem; }
+    .dtype-table th {
+      background: #dc2626; color: white; padding: .65rem 1rem;
+      text-align: left; font-weight: 700;
+    }
+    .dtype-table td { padding: .65rem 1rem; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+    .dtype-table tr:nth-child(even) td { background: #fef9f9; }
+
+    /* ===== Work/Exercise Cards ===== */
+    .work-card {
+      background: white; border-radius: 14px;
+      box-shadow: var(--shadow); margin-bottom: 1.5rem;
+      overflow: hidden; border: 1px solid #e2e8f0;
+    }
+    .work-card-header {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: 1.25rem; border-bottom: 1px solid #e2e8f0;
+      background: #f8fafc;
+    }
+    .work-num {
+      min-width: 42px; height: 42px;
+      background: linear-gradient(135deg, #1e40af, #2563eb);
+      color: white; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; font-weight: 700; flex-shrink: 0;
+    }
+    .work-title { flex: 1; min-width: 0; }
+    .work-title h3 { font-size: 1rem; font-weight: 700; color: #1e293b; margin: 0 0 .25rem; }
+    .work-title p  { font-size: .85rem; color: #64748b; margin: 0; line-height: 1.5; }
+    .work-badges { display: flex; flex-direction: column; align-items: flex-end; gap: .4rem; flex-shrink: 0; }
+    .work-score-badge {
+      background: #dbeafe; color: #1e40af;
+      padding: .25rem .8rem; border-radius: 999px;
+      font-size: .8rem; font-weight: 700; white-space: nowrap;
+    }
+    .work-status-badge {
+      padding: .2rem .75rem; border-radius: 999px;
+      font-size: .78rem; font-weight: 600; white-space: nowrap;
+    }
+    .work-status-badge.open    { background: #d1fae5; color: #065f46; }
+    .work-status-badge.coming  { background: #f1f5f9; color: #64748b; }
+    .work-status-badge.done    { background: #ede9fe; color: #5b21b6; }
+    .work-card-body { padding: 1.25rem; }
+    .work-coming-body {
+      padding: 2rem; text-align: center; color: #94a3b8; font-size: .9rem;
+    }
+    .work-coming-body i { font-size: 1.5rem; display: block; margin-bottom: .5rem; opacity: .5; }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      .unit-hero h1 { font-size: 1.3rem; }
+      .tool-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .tool-grid { grid-template-columns: 1fr; }
+      .cc-table { font-size: .8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-icon"><i class="fas fa-chalkboard-user"></i></div>
+      <span>ครูศิริศักดิ์ ปิลอง</span>
+    </a>
+    <ul class="navbar-menu">
+      <li><a href="home.html"><i class="fas fa-house"></i> หน้าหลัก</a></li>
+      <li><a href="subject-cs3.html"><i class="fas fa-microchip"></i> วิทยาการคำนวณ 3 ม.6</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="เมนู">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="home.html"><i class="fas fa-house"></i> หน้าหลัก</a>
+    <a href="subject-cs3.html"><i class="fas fa-microchip"></i> วิทยาการคำนวณ 3 ม.6</a>
+  </div>
+</nav>
+
+<!-- ===== UNIT HERO ===== -->
+<div class="unit-hero">
+  <div class="unit-hero-content container">
+    <p style="opacity:.75;font-size:.83rem;margin-bottom:.5rem">
+      <a href="home.html" style="color:rgba(255,255,255,.8)">หน้าหลัก</a>
+      <i class="fas fa-chevron-right" style="font-size:.65rem;margin:0 .35rem"></i>
+      <a href="subject-cs3.html" style="color:rgba(255,255,255,.8)">วิทยาการคำนวณ 3</a>
+      <i class="fas fa-chevron-right" style="font-size:.65rem;margin:0 .35rem"></i>
+      หน่วยที่ 1
+    </p>
+    <h1>💡 หน่วยที่ 1: เทคโนโลยีสารสนเทศในการนำเสนอ</h1>
+    <p>วิทยาการคำนวณ 3 &bull; มัธยมศึกษาปีที่ 6 &bull; ภาคเรียนที่ 1/2569</p>
+
+    <div class="indicator-box">
+      <strong>ตัวชี้วัด:</strong> ประยุกต์เทคโนโลยีสารสนเทศในการนำเสนอและแบ่งปันข้อมูลอย่างปลอดภัย มีจริยธรรม
+      และวิเคราะห์การเปลี่ยนแปลงของเทคโนโลยีสารสนเทศที่มีผลต่อการดำเนินชีวิต อาชีพ สังคม และวัฒนธรรม
+      <em style="opacity:.8">(ว. 4.2 ม. 6/1)</em>
+    </div>
+
+    <div class="unit-tabs">
+      <button class="unit-tab-btn active" data-utab="lesson">
+        <i class="fas fa-book-open"></i> เนื้อหาบทเรียน
+      </button>
+      <button class="unit-tab-btn" data-utab="exercises">
+        <i class="fas fa-pencil-alt"></i> แบบฝึกหัด
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LESSON TAB ===== -->
+<div id="utab-lesson" class="unit-tab-content active">
+<div class="content-section">
+
+  <!-- ========== SECTION 1: การนำเสนอและแบ่งปันข้อมูล ========== -->
+  <div class="lesson-section" id="section-present">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-num">1</div>
+      <h2>การนำเสนอและแบ่งปันข้อมูล</h2>
+      <i class="fas fa-chevron-down toggle-icon"></i>
+    </div>
+    <div class="section-body">
+
+      <div class="info-card">
+        <h3><i class="fas fa-info-circle"></i> การนำเสนอและแบ่งปันข้อมูล คืออะไร?</h3>
+        <p>
+          การนำเสนอและแบ่งปันข้อมูล คือ <strong>การเผยแพร่ข้อมูลหรือสารสนเทศ</strong> ไปยังบุคคลทั่วไป
+          หรือบุคคลเฉพาะกลุ่ม เพื่อแบ่งปันให้ผู้รับสารได้รับรู้กว้างขวาง
+        </p>
+        <p>
+          การนำเสนอข้อมูลที่ดีต้องมี <strong>เทคนิค วิธีการ และรูปแบบการนำเสนอ</strong>
+          ที่ <em>น่าสนใจ</em> และ <em>เข้าใจง่าย</em>
+        </p>
+      </div>
+
+      <div class="highlight-box">
+        <h4><i class="fas fa-globe"></i> การแบ่งปันข้อมูลโดยใช้เครื่องมือออนไลน์</h4>
+        <p>
+          เป็นวิธีที่ได้รับความนิยมมากที่สุด เนื่องจากสามารถเข้าถึงกลุ่มเป้าหมายได้
+          <strong>ง่าย รวดเร็ว และประหยัดค่าใช้จ่าย</strong>
+        </p>
+        <p style="margin-top:.75rem"><strong>เครื่องมือที่ได้รับความนิยมในปัจจุบัน มี 3 ประเภท:</strong></p>
+        <ul class="check-list" style="margin-top:.5rem">
+          <li><i class="fas fa-check-circle"></i> บล็อก (Blog หรือ Weblog)</li>
+          <li><i class="fas fa-check-circle"></i> วิดีโอ (Video)</li>
+          <li><i class="fas fa-check-circle"></i> ภาพอินโฟกราฟิก (Infographic)</li>
+        </ul>
+      </div>
+
+      <!-- 1.1 Blog -->
+      <div class="info-card" style="border-left:4px solid #dc2626">
+        <h3><i class="fab fa-wordpress"></i> 1.1 บล็อก (Blog หรือ Weblog)</h3>
+        <p>
+          บล็อก คือ <strong>เว็บไซต์ประเภทหนึ่ง</strong> ที่ผู้เขียนสามารถเขียนเรื่องราว เนื้อหา
+          หรือข้อมูลที่ต้องการนำเสนอลงบนเว็บไซต์ เพื่อให้บุคคลทั่วไปสามารถรับข้อมูลข่าวสารได้ง่าย
+        </p>
+        <div class="tool-grid" style="margin-top:1rem">
+          <div class="tool-card">
+            <div class="tool-icon">🌐</div>
+            <h4>WordPress.com</h4>
+            <p>แพลตฟอร์มสร้างบล็อกและเว็บไซต์ที่ใช้งานได้ง่าย รองรับภาษาไทย</p>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon">✍️</div>
+            <h4>Blogger</h4>
+            <p>บริการบล็อกฟรีจาก Google เชื่อมต่อกับ Google Account ได้ทันที</p>
+          </div>
+        </div>
+
+        <div class="blue-box" style="margin-top:1rem">
+          <h4><i class="fas fa-list-ol"></i> ขั้นตอนการสร้างบล็อกด้วย WordPress.com</h4>
+          <ul class="step-list">
+            <li><div class="step-num">1</div><span>เข้าสู่เว็บไซต์ <strong>www.wordpress.com</strong> และคลิก "Start your website"</span></li>
+            <li><div class="step-num">2</div><span>สมัครสมาชิกโดยกรอก <em>Email, Username, Password</em> แล้วคลิก "Create your account"</span></li>
+            <li><div class="step-num">3</div><span>เลือก <strong>ประเภทของเว็บไซต์หรือบล็อก</strong> ที่ต้องการ เช่น บล็อกส่วนตัว ธุรกิจ Professional เป็นต้น</span></li>
+            <li><div class="step-num">4</div><span>ระบบจะ<strong>เลือกรูปแบบการนำเสนอหรือหน้าเว็บไซต์ให้อัตโนมัติ</strong> ซึ่งสามารถเปลี่ยนรหัสหรือแก้ไขภายหลังได้</span></li>
+            <li><div class="step-num">5</div><span>ตั้งชื่อให้กับเว็บบล็อกของตนเอง เช่น "Future Technology"</span></li>
+            <li><div class="step-num">6</div><span>กำหนดชื่อ URL ที่ต้องการ แล้วเลือกใช้บริการในรูปแบบ <strong>"ฟรี"</strong></span></li>
+            <li><div class="step-num">7</div><span>คลิก <strong>"Start with a free site"</strong> เพื่อใช้บริการเว็บบล็อกแบบดั้งเดิมไม่เสียค่าใช้จ่าย</span></li>
+            <li><div class="step-num">8</div><span>ระบบจะนำเข้าสู่ <strong>ระบบหลังบ้าน (Backend)</strong> ซึ่งผู้เขียนเว็บบล็อกสามารถเขียนเนื้อหาและปรับแต่งการแสดงผลได้</span></li>
+            <li><div class="step-num">9</div><span>เผยแพร่เว็บบล็อกให้บุคคลทั่วไปผ่าน <strong>URL</strong> ที่ได้สร้างขึ้น</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 1.2 Video -->
+      <div class="info-card" style="border-left:4px solid #dc2626">
+        <h3><i class="fab fa-youtube"></i> 1.2 วิดีโอ (Video)</h3>
+        <p>
+          วิดีโอ เป็น<strong>การนำเสนอและแบ่งปันข้อมูลเป็นภาพเคลื่อนไหว</strong>
+          ทำให้ผู้รับข้อมูลเข้าใจวัตถุประสงค์ของการนำเสนอนั้น ๆ ได้ง่าย รวดเร็ว
+        </p>
+        <div class="green-box">
+          <h4><i class="fas fa-plus-circle"></i> ข้อดีของการนำเสนอด้วยวิดีโอ</h4>
+          <ul class="check-list">
+            <li><i class="fas fa-check-circle"></i> สามารถถ่ายทำได้ง่าย โดยใช้สมาร์ทโฟน</li>
+            <li><i class="fas fa-check-circle"></i> ถ่ายภาพเคลื่อนไหว ตัดต่อให้น่าสนใจ</li>
+            <li><i class="fas fa-check-circle"></i> นำเสนอผ่านเว็บไซต์ที่ได้รับความนิยมและเข้าถึงง่าย</li>
+            <li><i class="fas fa-check-circle"></i> ผู้รับข้อมูลเข้าใจได้ทันทีจากภาพและเสียง</li>
+          </ul>
+        </div>
+
+        <div class="blue-box">
+          <h4><i class="fas fa-list-ol"></i> ขั้นตอนการอัปโหลดวิดีโอบน YouTube</h4>
+          <ul class="step-list">
+            <li><div class="step-num">1</div><span>เข้าสู่เว็บไซต์ <strong>www.youtube.com</strong> และเข้าสู่ระบบด้วย Google Account</span></li>
+            <li><div class="step-num">2</div><span>เมื่อเข้าสู่ระบบแล้ว จะปรากฏเครื่องมือสำหรับอัปโหลดวิดีโอที่มุมบนขวาของภาพ เลือก <strong>"อัปโหลดวิดีโอ"</strong></span></li>
+            <li><div class="step-num">3</div><span>เลือกไฟล์วิดีโอที่ต้องการอัปโหลด และกดปุ่มอัปโหลด ระบบจะทำการอัปโหลดวิดีโอนี้เข้าสู่ระบบ</span></li>
+            <li><div class="step-num">4</div><span>ในระหว่างการรอวิดีโออัปโหลดเสร็จสิ้น สามารถกำหนด<strong>ชื่อวิดีโอ รายละเอียด การกำหนดการแสดงผล</strong>ได้ตามความต้องการ</span></li>
+            <li><div class="step-num">5</div><span>เมื่ออัปโหลดเสร็จสิ้น ระบบจะทำการประมวลผลวิดีโอ และสามารถ<strong>เผยแพร่วิดีโอ</strong>กับผู้อื่นต่อได้</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 1.3 Infographic -->
+      <div class="info-card" style="border-left:4px solid #dc2626">
+        <h3><i class="fas fa-chart-pie"></i> 1.3 ภาพอินโฟกราฟิก (Infographic)</h3>
+        <p>
+          ภาพอินโฟกราฟิก คือการ<strong>นำข้อมูลที่มีเนื้อหาจำนวนมาก ซับซ้อน ยากต่อการทำความเข้าใจ
+          มาทำเป็นรูปภาพ</strong> เพื่อให้สามารถอ่านและเข้าใจจุดประสงค์ของการนำเสนอได้ทันที
+        </p>
+        <div class="orange-box">
+          <h4><i class="fas fa-tools"></i> เครื่องมือออกแบบอินโฟกราฟิกออนไลน์ (ฟรี)</h4>
+        </div>
+        <div class="tool-grid">
+          <div class="tool-card">
+            <div class="tool-icon">🎨</div>
+            <h4>Easel.ly</h4>
+            <p>easel.ly — มีเทมเพลตหลากหลาย ใช้งานได้ง่าย</p>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon">🖌️</div>
+            <h4>Canva</h4>
+            <p>canva.com — ยอดนิยม มีเทมเพลตสวยงามมากมาย</p>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon">📊</div>
+            <h4>Visme</h4>
+            <p>my.visme.co — เหมาะสำหรับงานนำเสนอและอินโฟกราฟิก</p>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon">📈</div>
+            <h4>Infogram</h4>
+            <p>infogram.com — เน้นการสร้างกราฟและแดชบอร์ด</p>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon">🗺️</div>
+            <h4>Venngage</h4>
+            <p>venngage.com — มีแผนที่ กราฟ และ Icon Charts</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== SECTION 2: การแบ่งปันข้อมูลอย่างปลอดภัย ========== -->
+  <div class="lesson-section" id="section-share">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-num">2</div>
+      <h2>การแบ่งปันข้อมูลอย่างปลอดภัย</h2>
+      <i class="fas fa-chevron-down toggle-icon"></i>
+    </div>
+    <div class="section-body">
+
+      <!-- การจัดเก็บ -->
+      <div class="info-card">
+        <h3><i class="fas fa-hdd"></i> การจัดเก็บข้อมูลทางกายภาพ</h3>
+        <p>อุปกรณ์จัดเก็บข้อมูลที่สามารถนำมาเชื่อมต่อกับคอมพิวเตอร์ได้โดยตรง ได้แก่:</p>
+        <div class="tool-grid" style="margin-top:1rem">
+          <div class="tool-card"><div class="tool-icon">💾</div><h4>ฮาร์ดดิสก์</h4><p>ความจุสูง เหมาะเก็บข้อมูลขนาดใหญ่</p></div>
+          <div class="tool-card"><div class="tool-icon">📀</div><h4>แฟลชไดรฟ์</h4><p>พกพาสะดวก ใช้ได้กับอุปกรณ์หลากหลาย</p></div>
+          <div class="tool-card"><div class="tool-icon">📷</div><h4>SD Card</h4><p>ใช้กับกล้องถ่ายรูปและสมาร์ทโฟน</p></div>
+          <div class="tool-card"><div class="tool-icon">💿</div><h4>CD/DVD/Blu-ray</h4><p>เหมาะสำหรับเก็บข้อมูลถาวร</p></div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <h3><i class="fas fa-cloud"></i> การจัดเก็บข้อมูลแบบคลาวด์ (Cloud Storage)</h3>
+        <p>จัดเก็บข้อมูลบนเซิร์ฟเวอร์ผ่านอินเทอร์เน็ต <strong>เรียกใช้ข้อมูลได้ทุกที่ทุกเวลา</strong> จากอุปกรณ์ใดก็ได้ เช่น โน้ตบุ๊ก สมาร์ทโฟน แท็บเล็ต คอมพิวเตอร์</p>
+      </div>
+
+      <!-- Creative Commons -->
+      <div class="info-card">
+        <h3><i class="fab fa-creative-commons"></i> สิทธิ์ในการเผยแพร่ข้อมูลสารสนเทศ (Creative Commons)</h3>
+        <p>
+          การแลกเปลี่ยนข้อมูลระหว่างบุคคลหรือหน่วยงาน ทำได้ <strong>สะดวก รวดเร็ว มีประสิทธิภาพ</strong>
+          โดยการแชร์ข้อมูล จึงจำเป็นต้องมีการจัดระเบียบการแชร์และการเผยแพร่
+          ในการถือสิทธิ์ของเนื้อหาหรือข้อมูล ซึ่งเรียกว่า <strong>Creative Commons</strong>
+        </p>
+
+        <div class="highlight-box" style="margin-top:1rem">
+          <h4>สัญลักษณ์หลัก 4 ตัว</h4>
+          <table class="cc-table">
+            <thead>
+              <tr><th>สัญลักษณ์</th><th>ชื่อ</th><th>ความหมาย</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><i class="fas fa-user" style="font-size:1.2rem;color:#dc2626"></i></td>
+                <td><span class="cc-badge">BY</span> Attribution</td>
+                <td>ดำเนินการใช้ต้องการ<strong>อ้างอิงแหล่งที่มา</strong>อย่างชัดเจน</td>
+              </tr>
+              <tr>
+                <td><i class="fas fa-dollar-sign" style="font-size:1.2rem;color:#dc2626;text-decoration:line-through"></i></td>
+                <td><span class="cc-badge">NC</span> Non-Commercial</td>
+                <td><strong>ห้าม</strong>ดำเนินการใช้เพื่อหาประโยชน์ / การค้า</td>
+              </tr>
+              <tr>
+                <td><i class="fas fa-equals" style="font-size:1.2rem;color:#dc2626"></i></td>
+                <td><span class="cc-badge">ND</span> No Derivative</td>
+                <td><strong>ห้าม</strong>ดัดแปลงแก้ไข</td>
+              </tr>
+              <tr>
+                <td><i class="fas fa-sync-alt" style="font-size:1.2rem;color:#dc2626"></i></td>
+                <td><span class="cc-badge">SA</span> Share Alike</td>
+                <td>หากนำผลงานไปใช้ต่อ งานนั้นต้องเป็น Creative Commons ด้วย</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="blue-box" style="margin-top:1rem">
+          <h4>การกำหนดเงื่อนไขสัญญาอนุญาต 6 แบบ</h4>
+          <table class="cc-table" style="margin-top:.75rem">
+            <thead>
+              <tr><th>รหัส</th><th>ความหมาย</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="cc-badge">CC-BY</span></td>
+                <td>ให้เผยแพร่ ดัดแปลงได้ โดยต้องระบุหรือแสดงที่มา</td>
+              </tr>
+              <tr>
+                <td><span class="cc-badge">CC-BY-SA</span></td>
+                <td>ให้เผยแพร่ ดัดแปลง โดยต้องระบุที่มา และต้องใช้สัญญาอนุญาตเดียวกัน</td>
+              </tr>
+              <tr>
+                <td><span class="cc-badge">CC-BY-ND</span></td>
+                <td>ให้เผยแพร่ โดยต้องระบุที่มา แต่<strong>ห้ามดัดแปลง</strong>จากเดิมทั้งสิ้น</td>
+              </tr>
+              <tr>
+                <td><span class="cc-badge">CC-BY-NC</span></td>
+                <td>ให้เผยแพร่ ดัดแปลง โดยต้องระบุที่มา แต่<strong>ห้ามใช้เพื่อการค้า</strong>โดยเด็ดขาด</td>
+              </tr>
+              <tr>
+                <td><span class="cc-badge">CC-BY-NC-SA</span></td>
+                <td>ให้เผยแพร่ ดัดแปลง โดยต้องระบุที่มา ห้ามใช้เพื่อการค้า และต้องเผยแพร่ดัดแปลงโดยใช้สัญญาอนุญาตชนิดเดียวกัน</td>
+              </tr>
+              <tr>
+                <td><span class="cc-badge">CC-BY-NC-ND</span></td>
+                <td>ให้เผยแพร่ โดยต้องระบุที่มา แต่<strong>ห้ามใช้เพื่อดัดแปลงและการค้า</strong>โดยเด็ดขาด</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== SECTION 3: ผลกระทบจากการเผยแพร่ข้อมูล ========== -->
+  <div class="lesson-section" id="section-impact">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-num">3</div>
+      <h2>ผลกระทบจากการเผยแพร่ข้อมูล</h2>
+      <i class="fas fa-chevron-down toggle-icon"></i>
+    </div>
+    <div class="section-body">
+
+      <div class="info-card">
+        <h3><i class="fas fa-exclamation-triangle"></i> หลักการเผยแพร่ข้อมูลอย่างรับผิดชอบ</h3>
+        <p>
+          การเผยแพร่ข้อมูลควร<strong>ใช้วิจารณญาณและมีความรับผิดชอบ</strong>ในข้อมูลข่าวสารที่เผยแพร่ออกไป
+          ตรวจสอบความถูกต้องของข้อมูลทุกครั้งก่อนทำการเผยแพร่
+        </p>
+        <div class="highlight-box">
+          <h4><i class="fas fa-times-circle" style="color:#dc2626"></i> สิ่งที่ไม่ควรทำ</h4>
+          <ul class="check-list">
+            <li><i class="fas fa-times" style="color:#dc2626!important"></i> ไม่ยอมให้ร้ายผู้อื่น</li>
+            <li><i class="fas fa-times" style="color:#dc2626!important"></i> ไม่บิดเบือนข้อมูล</li>
+            <li><i class="fas fa-times" style="color:#dc2626!important"></i> ไม่เผยแพร่ข้อมูลอันเป็นเท็จ</li>
+            <li><i class="fas fa-times" style="color:#dc2626!important"></i> ไม่เผยแพร่ข้อมูลที่สร้างความเสียหายต่อบุคคลอื่น</li>
+          </ul>
+          <p style="margin-top:.75rem;color:#991b1b">
+            <i class="fas fa-gavel"></i>
+            <strong>หากสิ่งที่เผยแพร่ออกไปกระทบและสร้างความเสียหายต่อบุคคลอื่น อาจถูกดำเนินคดีตามกฎหมายได้</strong>
+          </p>
+        </div>
+      </div>
+
+      <div class="impact-grid">
+        <div class="impact-card impact-positive">
+          <h4><i class="fas fa-thumbs-up"></i> ผลกระทบด้านบวก</h4>
+          <ul class="check-list">
+            <li><i class="fas fa-plus-circle" style="color:#16a34a!important"></i> การรับ-ส่งข้อมูลข่าวสารทำได้รวดเร็ว สะดวกสบาย ประหยัดค่าใช้จ่าย</li>
+            <li><i class="fas fa-plus-circle" style="color:#16a34a!important"></i> เกิดระบบผู้เชี่ยวชาญที่ช่วยให้คำแนะนำในด้าน ๆ ที่มีประโยชน์ต่อการดำเนินชีวิต</li>
+            <li><i class="fas fa-plus-circle" style="color:#16a34a!important"></i> สร้างโอกาสในหลาย ๆ ด้าน เพราะทุกคนสามารถเข้าถึงข้อมูลข่าวสารได้อย่างเท่าเทียมกัน</li>
+          </ul>
+        </div>
+        <div class="impact-card impact-negative">
+          <h4><i class="fas fa-thumbs-down"></i> ผลกระทบด้านลบ</h4>
+          <ul class="check-list">
+            <li><i class="fas fa-minus-circle" style="color:#dc2626!important"></i> หากข้อมูลที่เผยแพร่นั้นไม่ถูกต้อง อาจทำให้ผู้รับข้อมูลเข้าใจผิดและเกิดความเสียหายอื่น ๆ ตามมา</li>
+            <li><i class="fas fa-minus-circle" style="color:#dc2626!important"></i> เกิดการละเมิดสิทธิ์หรือการละเมิดทรัพย์สินทางปัญญา</li>
+            <li><i class="fas fa-minus-circle" style="color:#dc2626!important"></i> เกิดการเผยแพร่ข้อมูลที่เป็นการชักจูงสังคมให้เกิดความเข้าใจผิด เพื่อหวังผลประโยชน์ต่าง ๆ</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== SECTION 4: จริยธรรม ========== -->
+  <div class="lesson-section" id="section-ethics">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-num">4</div>
+      <h2>จริยธรรมในการใช้เทคโนโลยีสารสนเทศ</h2>
+      <i class="fas fa-chevron-down toggle-icon"></i>
+    </div>
+    <div class="section-body">
+
+      <!-- ลักษณะข้อมูล 6 ประเภท -->
+      <div class="info-card">
+        <h3><i class="fas fa-database"></i> ลักษณะของข้อมูล 6 ประเภท</h3>
+        <p>ข้อมูลจากเทคโนโลยีสารสนเทศในเชิงการนำไปใช้และเผยแพร่ อาจแบ่งเป็นลักษณะของข้อมูล ดังนี้</p>
+        <table class="dtype-table">
+          <thead>
+            <tr><th>ประเภทข้อมูล</th><th>ตัวอย่าง</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1. ข้อมูลเชิงคณิตศาสตร์ ตรรกะ และวิทยาศาสตร์</strong></td>
+              <td>ตัวเลข สูตรและสมการคณิตศาสตร์ สมการเคมี ตาราง แผนภูมิ กราฟ</td>
+            </tr>
+            <tr>
+              <td><strong>2. ข้อมูลเชิงเทคนิค คุณสมบัติ หรือเชิงรูปธรรม</strong></td>
+              <td>สิ่งประดิษฐ์ เครื่องมืออุปกรณ์ต่าง ๆ ยารักษาโรค สมุดภาพ</td>
+            </tr>
+            <tr>
+              <td><strong>3. ข้อมูลเชิงคุณค่า หรือนามธรรม</strong></td>
+              <td>กลอน คำคม บทกวี คำสอน สุภาษิต</td>
+            </tr>
+            <tr>
+              <td><strong>4. ข้อมูลเชิงข่าวสารทั้งในอดีตและปัจจุบัน</strong></td>
+              <td>ข่าวประจำวัน ข่าวถ่ายทอดสด บทความข่าว</td>
+            </tr>
+            <tr>
+              <td><strong>5. ข้อมูลเชิงความบันเทิง</strong></td>
+              <td>ภาพยนตร์ คลิปเกษตรา รายการบันเทิงต่าง ๆ</td>
+            </tr>
+            <tr>
+              <td><strong>6. ข้อมูลเชิงแสดงความรู้สึกและอารมณ์</strong></td>
+              <td>ภาพอุบัติเหตุ ภาพการเสียชีวิต ภาพการทารุณ</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- จรรยาบรรณ 23 ข้อ -->
+      <div class="info-card">
+        <h3><i class="fas fa-scroll"></i> จรรยาบรรณของนักสื่อสารมวลชนสากล 23 ข้อ</h3>
+        <p style="margin-bottom:1rem">
+          หลักการทางจริยธรรมสื่อที่นักเรียนสามารถนำไปใช้ได้เมื่อจำเป็นต้องมีการเผยแพร่หรือแชร์ต่อ
+          โดยให้นักเรียนระลึกไว้เสมอว่า เมื่อนักเรียนเผยแพร่สิ่งใดสู่สาธารณะแล้ว
+          ต้องมีความรับผิดชอบต่อสิ่งที่นำเสนอหรือเผยแพร่ออกไปในฐานะนักสื่อสารมวลชนด้วยเช่นกัน
+        </p>
+
+        <div id="codeList">
+          <!-- ข้อ 1–23 -->
+          <div class="code-item"><div class="code-item-header" onclick="toggleCode(this)"><div class="code-num">1</div>ต้องกระทำตนให้อยู่ในขอบเขตของความเหมาะสม มีกิริยาดี<i class="fas fa-chevron-down" style="margin-left:auto;color:#94a3b8;font-size:.8rem"></i></div><div class="code-item-body">The bounds of decency — ผู้เผยแพร่ข้อมูลต้องแสดงออกอย่างสุภาพ เหมาะสมกับบริบท</div></div>
+          <div class="code-item"><div class="code-item-header" onclick="toggleCode(this)"><div class="code-num">2</div>ไม่สร้างข่าวเองขึ้นมา<i class="fas fa-chevron-down" style="margin-left:auto;color:#94a3b8;font-size:.8rem"></i></div><div class="code-item-body">Do not attempt to make news — ห้ามสร้างข่าวหรือข้อมูลปลอมเพื่อเผยแพร่</div></div>
+          <div class="code-item"><div class="code-item-header" onclick="toggleCode(this)"><div class="code-num">3</div>ต้องนำเสนอข่าวทั้งความจริงทั้งหมดแก่ผู้รับสาร<i class="fas fa-chevron-down" style="margin-left:auto;color:#94a3b8;font-size:.8rem"></i></div><div class="code-item-body">The truth and the whole truth — นำเสนอข้อมูลที่ครบถ้วน ไม่ตัดทอนหรือบิดเบือน</div></div>
+          <div class="code-item"><div class="code-item-header" onclick="toggleCode(this)"><div class="code-num">4</div>ไม่ก้าวก่ายสิทธิ์ส่วนตัวของบุคคลอื่น<i class="fas fa-chevron-down" style="margin-left:auto;color:#94a3b8;font-size:.8rem"></i></div><div class="code-item-body">Do not to invade the private rights — เคารพความเป็นส่วนตัว ไม่เปิดเผยข้อมูลส่วนตัวของผู้อื่นโดยไม่ได้รับอนุญาต</div></div>
+          <div class="code-item"><div class="code-item-header" onclick="toggleCode(this)"><div class="code-num">5</div>ไม่บังคับบุคคลให้พูด<i class="fas fa-chevron-down" style="margin-left:auto;color:#94a3b8;font-size:.8rem"></i></div><div class="code-item-body">Do not to force individuals to speak — ไม่บังคับหรือกดดันให้บุคคลใดให้ข้อมูล</div></div>
+          <div class="code-item"><div class="code-item-header" onclick="toggleCode(this)"><div class="code-num">6</div>ซื่อสัตย์ต่อบุคคลที่ต่อสู้เพื่อสังคม<i class="fas fa-chevron-down" style="margin-left:auto;color:#94a3b8;font-size:.8rem"></i></div><div class="code-item-body">Play fair with a person against whom derogatory charges — รายงานข้อมูลอย่างเป็นธรรมต่อทุกฝ่าย</div></div>
+          <div class="code-item"><div class="code-item-header" onclick="toggleCode(this)"><div class="code-num">7</div>ซื่อสัตย์ต่อบุคคลที่นำมากล่าวถึงในคอลัมน์<i class="fas fa-chevron-down" style="margin-left:auto;color:#94a3b8;font-size:.8rem"></i></div><div class="code-item-body">Play fair with persons quoted in its columns — อ้างอิงคำพูดของบุคคลอย่างถูกต้องและเป็นธรรม</div></div>
+          <div class="code-item"><div class="code-item-header" onclick="toggleCode(this)"><div class="code-num">8</div>รักษาความซึ่งความลับของแหล่งข่าว<i class="fas fa-chevron-down" style="margin-left:auto;color:#94a3b8;font-size:.8rem"></i></div><div class="code-item-body">Keep the confidence of its news sources — ไม่เปิดเผยแหล่งข่าวหากได้รับการร้องขอให้ปกปิด</div></div>
+          <div class="code-item"><div class="code-item-header" onclick="toggleCode(this)"><div class="code-num">9</div>ไม่ปิดบังอำพรางข่าวที่นำเสนอ<i class="fas fa-chevron-down" style="margin-left:auto;color:#94a3b8;font-size:.8rem"></i></div><div class="code-item-body">Do not suppress news — ไม่ซ่อนเร้นข้อมูลสำคัญที่สาธารณะควรรับรู้</div></div>
+          <div class="code-item"><div class="code-item-header" onclick="toggleCode(this)"><div class="code-num">10</div>ไม่ควรขายข่าว ขายคอลัมน์เพื่อเงิน หรือความพอใจส่วนตัว<i class="fas fa-chevron-down" style="margin-left:auto;color:#94a3b8;font-size:.8rem"></i></div><div class="code-item-body">Do not "sell" its news columns for money or courtesies — ไม่แลกข้อมูลกับผลประโยชน์ส่วนตัว</div></div>
+          <div class="code-item"><div class="code-item-header" onclick="toggleCode(this)"><div class="code-num">11</div>ละเว้นจากการเข้าร่วมพรรคการเมืองหนึ่ง<i class="fas fa-chevron-down" style="margin-left:auto;color:#94a3b8;font-size:.8rem"></i></div><div class="code-item-body">Refrain from allowing party politics — ไม่ฝักใฝ่ฝ่ายใดฝ่ายหนึ่งทางการเมืองในการรายงานข่าว</div></div>
+          <div class="code-item"><div class="code-item-header" onclick="toggleCode(this)"><div class="code-num">12</div>ต้องบริการคนส่วนรวม มิใช่บริการคนกลุ่มใดกลุ่มหนึ่ง<i class="fas fa-chevron-down" style="margin-left:auto;color:#94a3b8;font-size:.8rem"></i></div><div class="code-item-body">Serve the whole society, not just one "class" — ให้ข้อมูลที่เป็นประโยชน์แก่ทุกคนในสังคม</div></div>
+          <div class="code-item"><div class="code-item-header" onclick="toggleCode(this)"><div class="code-num">13</div>ช่วยต่อสู้และปราบปรามอาชญากร<i class="fas fa-chevron-down" style="margin-left:auto;color:#94a3b8;font-size:.8rem"></i></div><div class="code-item-body">Fight and discourage crime — ใช้สื่อเป็นเครื่องมือในการป้องกันและต่อต้านอาชญากรรม</div></div>
+          <div class="code-item"><div class="code-item-header" onclick="toggleCode(this)"><div class="code-num">14</div>ต้องเคารพ และช่วยผดุงกฎหมายบ้านเมือง<i class="fas fa-chevron-down" style="margin-left:auto;color:#94a3b8;font-size:.8rem"></i></div><div class="code-item-body">Must respect and aid the law and the courts — ไม่กระทำการใดที่ขัดต่อกฎหมาย</div></div>
+          <div class="code-item"><div class="code-item-header" onclick="toggleCode(this)"><div class="code-num">15</div>สร้างความสัมพันธ์อันดีแก่ชุมชน<i class="fas fa-chevron-down" style="margin-left:auto;color:#94a3b8;font-size:.8rem"></i></div><div class="code-item-body">Seek to build its community — ใช้สื่อในการสร้างสัมพันธ์ที่ดีในชุมชน</div></div>
+          <div class="code-item"><div class="code-item-header" onclick="toggleCode(this)"><div class="code-num">16</div>ไม่ทำลายความสัมพันธ์ระหว่างญาติและเพื่อนของผู้อื่น<i class="fas fa-chevron-down" style="margin-left:auto;color:#94a3b8;font-size:.8rem"></i></div><div class="code-item-body">Not injure the relatives and friends — ไม่เผยแพร่ข้อมูลที่ทำให้เกิดความแตกแยกในครอบครัวหรือกลุ่มเพื่อน</div></div>
+          <div class="code-item"><div class="code-item-header" onclick="toggleCode(this)"><div class="code-num">17</div>คำนึงว่าการหย่าร้าง การฆ่าตัวตายนั้นเป็นปัญหาสังคมสิ่งหนึ่ง ไม่ควรนำเสนอข่าวนั้นในเชิงไม่สุภาพ<i class="fas fa-chevron-down" style="margin-left:auto;color:#94a3b8;font-size:.8rem"></i></div><div class="code-item-body">To recognize divorce, suicide as an unfortunate social problem — รายงานด้วยความเห็นอกเห็นใจ ไม่ทำให้เป็นเรื่องตลก</div></div>
+          <div class="code-item"><div class="code-item-header" onclick="toggleCode(this)"><div class="code-num">18</div>อย่ากล่าวโจมตี<i class="fas fa-chevron-down" style="margin-left:auto;color:#94a3b8;font-size:.8rem"></i></div><div class="code-item-body">Do not attack on competitive — ไม่ใช้สื่อเป็นเครื่องมือในการโจมตีองค์กรหรือบุคคลอื่น</div></div>
+          <div class="code-item"><div class="code-item-header" onclick="toggleCode(this)"><div class="code-num">19</div>อย่าหัวเราะเยาะความวิกลจริต จิตทราม หรือการพลาดโอกาสของบุคคล<i class="fas fa-chevron-down" style="margin-left:auto;color:#94a3b8;font-size:.8rem"></i></div><div class="code-item-body">Do not ridicule the insane or the feebleminded or misfortunes — ไม่ดูถูกหรือเยาะเย้ยผู้มีปัญหาสุขภาพจิต</div></div>
+          <div class="code-item"><div class="code-item-header" onclick="toggleCode(this)"><div class="code-num">20</div>เคารพนับถือวัด ศาสนา เชื้อชาติ และเผ่าพันธุ์ของบุคคล<i class="fas fa-chevron-down" style="margin-left:auto;color:#94a3b8;font-size:.8rem"></i></div><div class="code-item-body">Respect churches, nationalities and races — ไม่เผยแพร่เนื้อหาที่ดูหมิ่นศาสนา เชื้อชาติ หรือวัฒนธรรม</div></div>
+          <div class="code-item"><div class="code-item-header" onclick="toggleCode(this)"><div class="code-num">21</div>หน้ากีฬาควรเขียนถึงทุก ๆ คน<i class="fas fa-chevron-down" style="margin-left:auto;color:#94a3b8;font-size:.8rem"></i></div><div class="code-item-body">Sports page is written for everybody — นำเสนอกีฬาทุกประเภทและทุกระดับ ไม่ลำเอียงเฉพาะกีฬายอดนิยม</div></div>
+          <div class="code-item"><div class="code-item-header" onclick="toggleCode(this)"><div class="code-num">22</div>แก้ไขข้อผิดพลาดที่พบในทันที<i class="fas fa-chevron-down" style="margin-left:auto;color:#94a3b8;font-size:.8rem"></i></div><div class="code-item-body">Be prompt in correcting errors — เมื่อพบว่าข้อมูลที่เผยแพร่นั้นผิดพลาด ต้องรีบแก้ไขและแจ้งผู้รับสารทราบ</div></div>
+          <div class="code-item"><div class="code-item-header" onclick="toggleCode(this)"><div class="code-num">23</div>จำไว้ว่าข่าวที่นำเสนอนั้น มีเยาวชนชาย-หญิงอ่านด้วย<i class="fas fa-chevron-down" style="margin-left:auto;color:#94a3b8;font-size:.8rem"></i></div><div class="code-item-body">Remember that the news is read by young boys and girls — คำนึงถึงเยาวชน ไม่เผยแพร่เนื้อหาที่ไม่เหมาะสมกับช่วงวัย</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- end content-section -->
+</div><!-- end utab-lesson -->
+
+<!-- ===== EXERCISES TAB ===== -->
+<div id="utab-exercises" class="unit-tab-content">
+<div class="content-section">
+
+  <!-- ===== งานที่ 1: Google Sites ===== -->
+  <div class="work-card">
+    <div class="work-card-header">
+      <div class="work-num">1</div>
+      <div class="work-title">
+        <h3><i class="fas fa-globe" style="color:#2563eb;margin-right:.4rem"></i>สร้างและส่ง Google Sites</h3>
+        <p>สร้างเว็บไซต์ส่วนตัวด้วย Google Sites แนะนำตัวเอง ครอบครัว งานอดิเรก หรือหัวข้อที่สนใจ แล้วส่งลิงก์มาที่นี่</p>
+      </div>
+      <div class="work-badges">
+        <span class="work-score-badge"><i class="fas fa-star" style="font-size:.75rem"></i> 10 คะแนน</span>
+        <span class="work-status-badge open"><i class="fas fa-circle-check" style="font-size:.7rem"></i> เปิดรับงาน</span>
+      </div>
+    </div>
+    <div class="work-card-body">
+
+      <!-- คำสั่ง -->
+      <div class="blue-box" style="margin-top:0;margin-bottom:1.25rem">
+        <h4><i class="fas fa-list-ol"></i> ขั้นตอนการทำงาน</h4>
+        <ol style="padding-left:1.25rem;margin:.5rem 0 0;line-height:2.1;color:#374151;font-size:.93rem">
+          <li>เข้าไปที่ <a href="https://sites.google.com" target="_blank" style="color:#1e40af;font-weight:600">sites.google.com</a></li>
+          <li>คลิก <strong>"ใหม่"</strong> เพื่อสร้างเว็บไซต์ใหม่</li>
+          <li>ออกแบบหน้าเว็บและใส่เนื้อหาให้ครบถ้วน</li>
+          <li>คลิก <strong>"เผยแพร่" (Publish)</strong> มุมบนขวา</li>
+          <li>คัดลอก URL แล้วกรอกในช่องด้านล่าง</li>
+        </ol>
+      </div>
+
+      <!-- ฟอร์มส่งงาน -->
+      <div id="activitySubmitForm" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:1.25rem">
+        <p style="font-weight:700;color:#1e293b;margin:0 0 .75rem;font-size:.95rem">
+          <i class="fas fa-paper-plane" style="color:#1e40af"></i> ส่งลิงก์ Google Sites
+        </p>
+        <div id="actStudentInfo" style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:.65rem .9rem;font-size:.88rem;color:#475569;margin-bottom:.75rem">
+          <i class="fas fa-user-graduate" style="color:#dc2626"></i> กำลังโหลด...
+        </div>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center">
+          <input type="url" id="googleSitesUrl"
+            placeholder="https://sites.google.com/view/..."
+            style="flex:1;min-width:200px;padding:.65rem .9rem;border:2px solid #e2e8f0;border-radius:8px;font-family:inherit;font-size:.9rem;outline:none;box-sizing:border-box"
+            onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='#e2e8f0'">
+          <button id="submitSitesBtn" onclick="submitGoogleSites()"
+            style="background:linear-gradient(135deg,#1e40af,#2563eb);color:#fff;border:none;padding:.65rem 1.25rem;border-radius:8px;font-family:inherit;font-size:.9rem;font-weight:600;cursor:pointer;white-space:nowrap">
+            <i class="fas fa-paper-plane"></i> ส่งงาน
+          </button>
+        </div>
+        <div id="submitSitesMsg" style="margin-top:.6rem;font-size:.85rem;display:none"></div>
+      </div>
+
+      <!-- แสดงเมื่อส่งสำเร็จ -->
+      <div id="activityDoneBox" style="display:none;margin-top:1.25rem;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:1.5rem;text-align:center">
+        <i class="fas fa-circle-check" style="color:#16a34a;font-size:2.5rem;margin-bottom:.6rem;display:block"></i>
+        <p style="font-weight:700;color:#166534;font-size:1.05rem;margin:0 0 .3rem">ส่งงานสำเร็จแล้ว!</p>
+        <p id="submittedUrlText" style="font-size:.85rem;color:#166534;margin:0 0 .75rem">
+          <i class="fas fa-link"></i> <span></span>
+        </p>
+        <a id="submittedLink" href="#" target="_blank"
+          style="display:inline-block;background:#1e40af;color:#fff;padding:.5rem 1.25rem;border-radius:8px;font-size:.88rem;font-weight:600;text-decoration:none">
+          <i class="fas fa-external-link-alt"></i> เปิดเว็บไซต์ของฉัน
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== งานที่ 2 (placeholder) ===== -->
+  <div class="work-card">
+    <div class="work-card-header">
+      <div class="work-num" style="background:linear-gradient(135deg,#64748b,#94a3b8)">2</div>
+      <div class="work-title">
+        <h3><i class="fas fa-file-alt" style="color:#94a3b8;margin-right:.4rem"></i>งานที่ 2</h3>
+        <p>ครูจะเพิ่มงานนี้เร็ว ๆ นี้</p>
+      </div>
+      <div class="work-badges">
+        <span class="work-score-badge" style="background:#f1f5f9;color:#64748b">— คะแนน</span>
+        <span class="work-status-badge coming"><i class="fas fa-clock" style="font-size:.7rem"></i> เร็ว ๆ นี้</span>
+      </div>
+    </div>
+    <div class="work-coming-body">
+      <i class="fas fa-hourglass-half"></i>
+      ยังไม่เปิดรับงาน — ติดตามจากครูในห้องเรียน
+    </div>
+  </div>
+
+  <!-- ===== งานที่ 3 (placeholder) ===== -->
+  <div class="work-card">
+    <div class="work-card-header">
+      <div class="work-num" style="background:linear-gradient(135deg,#64748b,#94a3b8)">3</div>
+      <div class="work-title">
+        <h3><i class="fas fa-file-alt" style="color:#94a3b8;margin-right:.4rem"></i>งานที่ 3</h3>
+        <p>ครูจะเพิ่มงานนี้เร็ว ๆ นี้</p>
+      </div>
+      <div class="work-badges">
+        <span class="work-score-badge" style="background:#f1f5f9;color:#64748b">— คะแนน</span>
+        <span class="work-status-badge coming"><i class="fas fa-clock" style="font-size:.7rem"></i> เร็ว ๆ นี้</span>
+      </div>
+    </div>
+    <div class="work-coming-body">
+      <i class="fas fa-hourglass-half"></i>
+      ยังไม่เปิดรับงาน — ติดตามจากครูในห้องเรียน
+    </div>
+  </div>
+
+</div><!-- end content-section -->
+</div><!-- end utab-exercises -->
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <p>&copy; 2569 <strong>ครูศิริศักดิ์ ปิลอง</strong> &mdash; วิทยาการคำนวณ 3 ม.6 | หน่วยที่ 1</p>
+</footer>
+
+<script src="js/auth.js"></script>
+<script>requireAuth('6');</script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/app.js"></script>
+<script>
+  /* ===== TAB ===== */
+  document.querySelectorAll('.unit-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.utab;
+      document.querySelectorAll('.unit-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.unit-tab-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('utab-' + target).classList.add('active');
+    });
+  });
+
+  /* ===== SECTION TOGGLE ===== */
+  function toggleSection(header) {
+    const body = header.nextElementSibling;
+    header.classList.toggle('collapsed');
+    body.classList.toggle('hidden');
+  }
+
+  /* ===== CODE ITEM TOGGLE ===== */
+  function toggleCode(header) {
+    const body = header.nextElementSibling;
+    body.classList.toggle('open');
+  }
+
+  /* ===== HAMBURGER ===== */
+  const ham = document.getElementById('hamburger');
+  const mob = document.getElementById('mobileMenu');
+  if (ham) ham.addEventListener('click', () => mob.classList.toggle('open'));
+
+  /* ===== ACTIVITY: Google Sites ===== */
+  document.addEventListener('DOMContentLoaded', function () {
+    const s = getCurrentStudent();
+    if (s) {
+      document.getElementById('actStudentInfo').innerHTML =
+        '<i class="fas fa-user-graduate" style="color:#dc2626"></i> ' +
+        s.name + '&nbsp;&nbsp;|&nbsp;&nbsp;' + s.class +
+        '&nbsp;&nbsp;เลขที่ ' + s.no + '&nbsp;&nbsp;(รหัส ' + s.id + ')';
+    }
+  });
+
+  async function submitGoogleSites() {
+    const s   = getCurrentStudent();
+    const url = document.getElementById('googleSitesUrl').value.trim();
+    const btn = document.getElementById('submitSitesBtn');
+    const msg = document.getElementById('submitSitesMsg');
+
+    msg.style.display = 'none';
+
+    if (!s) {
+      msg.style.color = '#dc2626';
+      msg.textContent = 'กรุณาเข้าสู่ระบบก่อนส่งงาน';
+      msg.style.display = 'block';
+      return;
+    }
+    if (!url) {
+      msg.style.color = '#dc2626';
+      msg.textContent = 'กรุณากรอก URL ของ Google Sites';
+      msg.style.display = 'block';
+      return;
+    }
+    if (!url.startsWith('http')) {
+      msg.style.color = '#dc2626';
+      msg.textContent = 'URL ไม่ถูกต้อง ต้องเริ่มด้วย https://';
+      msg.style.display = 'block';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังส่ง...';
+
+    const result = await saveScore('cs3-m6',
+      { name: s.name, studentId: s.id, room: s.class },
+      { title: 'กิจกรรมที่ 1: Google Sites', score: 0, maxScore: 10, type: 'project', note: url }
+    );
+
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-paper-plane"></i> ส่งงาน';
+
+    if (result.ok) {
+      document.getElementById('activitySubmitForm').style.display = 'none';
+      document.getElementById('submittedUrlText').querySelector('span').textContent = url;
+      document.getElementById('submittedLink').href = url;
+      document.getElementById('activityDoneBox').style.display = 'block';
+    } else {
+      msg.style.color = '#dc2626';
+      msg.textContent = '❌ เกิดข้อผิดพลาด: ' + result.error;
+      msg.style.display = 'block';
+    }
+  }
+</script>
+</body>
+</html>

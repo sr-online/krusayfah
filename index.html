@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ครูศิริศักดิ์ ปิลอง | ระบบการจัดการเรียนการสอน</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-icon"><i class="fas fa-chalkboard-user"></i></div>
+      <span>ครูศิริศักดิ์ ปิลอง</span>
+    </a>
+    <ul class="navbar-menu">
+      <li><a href="index.html" class="active"><i class="fas fa-home"></i> หน้าหลัก</a></li>
+      <li><a href="login.html"><i class="fas fa-user-graduate"></i> เข้าสู่ระบบ</a></li>
+      <li><a href="dashboard.html"><i class="fas fa-gauge-high"></i> Dashboard</a></li>
+      <li><a href="subject-media.html"><i class="fas fa-tv"></i> รู้เท่าทันสื่อ ม.1</a></li>
+      <li><a href="subject-programming.html"><i class="fas fa-code"></i> โปรแกรมเบื้องต้น ม.2</a></li>
+      <li><a href="subject-cs3.html"><i class="fas fa-microchip"></i> วิทยาการคำนวณ 3 ม.6</a></li>
+      <li><a href="scores.html"><i class="fas fa-chart-bar"></i> คะแนน</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="เมนู">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html"><i class="fas fa-home"></i> หน้าหลัก</a>
+    <a href="login.html"><i class="fas fa-user-graduate"></i> เข้าสู่ระบบ</a>
+    <a href="dashboard.html"><i class="fas fa-gauge-high"></i> Dashboard ครู</a>
+    <a href="subject-media.html"><i class="fas fa-tv"></i> รู้เท่าทันสื่อ ม.1</a>
+    <a href="subject-programming.html"><i class="fas fa-code"></i> โปรแกรมเบื้องต้น ม.2</a>
+    <a href="subject-cs3.html"><i class="fas fa-microchip"></i> วิทยาการคำนวณ 3 ม.6</a>
+    <a href="scores.html"><i class="fas fa-chart-bar"></i> ระบบจัดการคะแนน</a>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-avatar"><i class="fas fa-user-tie"></i></div>
+    <h1>ครูศิริศักดิ์ ปิลอง</h1>
+    <p class="subtitle">ครูคอมพิวเตอร์ กลุ่มสาระการเรียนรู้วิทยาศาสตร์และเทคโนโลยี</p>
+    <p class="subtitle">ภาคเรียนที่ 1 ปีการศึกษา 2569</p>
+    <span class="school-badge"><i class="fas fa-school"></i> ระบบการจัดการเรียนการสอน</span>
+    <div style="margin-top:1.25rem">
+      <a href="login.html" style="display:inline-block;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.6);color:#fff;padding:.6rem 1.5rem;border-radius:999px;font-weight:700;text-decoration:none;font-size:.95rem;transition:background .2s"
+         onmouseover="this.style.background='rgba(255,255,255,.3)'" onmouseout="this.style.background='rgba(255,255,255,.2)'">
+        <i class="fas fa-user-graduate"></i> นักเรียนเข้าสู่ระบบ
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== STATS ===== -->
+<div class="stats-bar">
+  <div class="stats-grid container">
+    <div class="stat-item">
+      <div class="stat-value">3</div>
+      <div class="stat-label">รายวิชา</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">3</div>
+      <div class="stat-label">ระดับชั้น</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value"><i class="fas fa-database"></i></div>
+      <div class="stat-label">Firebase</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value"><i class="fas fa-mobile-screen"></i></div>
+      <div class="stat-label">Responsive</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SUBJECTS ===== -->
+<section class="subjects-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>รายวิชาที่สอน</h2>
+      <p>เลือกรายวิชาเพื่อเข้าถึงเนื้อหา แบบฝึกหัด และแบบทดสอบ</p>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="subjects-grid">
+
+      <!-- Subject 1: รู้เท่าทันสื่อ -->
+      <div class="subject-card s1">
+        <div class="subject-card-header">
+          <div class="subject-icon">📱</div>
+          <span class="subject-grade">ชั้นมัธยมศึกษาปีที่ 1</span>
+          <h3>รู้เท่าทันสื่อ<br>Media Literacy</h3>
+        </div>
+        <div class="subject-card-body">
+          <p class="subject-desc">
+            เรียนรู้การวิเคราะห์สื่อ การรับรู้ข้อมูลข่าวสาร ความปลอดภัยทางไซเบอร์
+            และการใช้สื่อดิจิทัลอย่างสร้างสรรค์และมีวิจารณญาณ
+          </p>
+          <div class="subject-features">
+            <span class="feature-chip"><i class="fas fa-book-open"></i> เนื้อหา</span>
+            <span class="feature-chip"><i class="fas fa-pencil"></i> แบบฝึกหัด</span>
+            <span class="feature-chip"><i class="fas fa-clipboard-check"></i> แบบทดสอบ</span>
+          </div>
+        </div>
+        <div class="subject-card-footer">
+          <a href="subject-media.html" class="btn btn-primary">
+            <i class="fas fa-arrow-right"></i> เข้าสู่รายวิชา
+          </a>
+          <a href="scores.html?subject=media-m1" class="btn btn-outline">
+            <i class="fas fa-chart-bar"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Subject 2: โปรแกรมเบื้องต้น 1 -->
+      <div class="subject-card s2">
+        <div class="subject-card-header">
+          <div class="subject-icon">💻</div>
+          <span class="subject-grade">ชั้นมัธยมศึกษาปีที่ 2</span>
+          <h3>โปรแกรมเบื้องต้น 1<br>Introduction to Programming</h3>
+        </div>
+        <div class="subject-card-body">
+          <p class="subject-desc">
+            พื้นฐานการเขียนโปรแกรม ตรรกศาสตร์การคอมพิวเตอร์ อัลกอริทึม
+            และการแก้ปัญหาด้วยโปรแกรมคอมพิวเตอร์เบื้องต้น
+          </p>
+          <div class="subject-features">
+            <span class="feature-chip"><i class="fas fa-book-open"></i> เนื้อหา</span>
+            <span class="feature-chip"><i class="fas fa-pencil"></i> แบบฝึกหัด</span>
+            <span class="feature-chip"><i class="fas fa-clipboard-check"></i> แบบทดสอบ</span>
+          </div>
+        </div>
+        <div class="subject-card-footer">
+          <a href="subject-programming.html" class="btn btn-primary">
+            <i class="fas fa-arrow-right"></i> เข้าสู่รายวิชา
+          </a>
+          <a href="scores.html?subject=programming-m2" class="btn btn-outline">
+            <i class="fas fa-chart-bar"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Subject 3: วิทยาการคำนวณ 3 -->
+      <div class="subject-card s3">
+        <div class="subject-card-header">
+          <div class="subject-icon">🖥️</div>
+          <span class="subject-grade">ชั้นมัธยมศึกษาปีที่ 6</span>
+          <h3>วิทยาการคำนวณ 3<br>Computing Science 3</h3>
+        </div>
+        <div class="subject-card-body">
+          <p class="subject-desc">
+            วิทยาการข้อมูล การเขียนโปรแกรมขั้นสูง ระบบปัญญาประดิษฐ์
+            และการพัฒนาซอฟต์แวร์ในยุคดิจิทัล
+          </p>
+          <div class="subject-features">
+            <span class="feature-chip"><i class="fas fa-book-open"></i> เนื้อหา</span>
+            <span class="feature-chip"><i class="fas fa-pencil"></i> แบบฝึกหัด</span>
+            <span class="feature-chip"><i class="fas fa-clipboard-check"></i> แบบทดสอบ</span>
+          </div>
+        </div>
+        <div class="subject-card-footer">
+          <a href="subject-cs3.html" class="btn btn-primary">
+            <i class="fas fa-arrow-right"></i> เข้าสู่รายวิชา
+          </a>
+          <a href="scores.html?subject=cs3-m6" class="btn btn-outline">
+            <i class="fas fa-chart-bar"></i>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== QUICK LINKS ===== -->
+<section class="quick-links">
+  <div class="container">
+    <div class="section-header">
+      <h2>เมนูลัด</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="quick-grid">
+      <a href="scores.html" class="quick-card">
+        <div class="qc-icon"><i class="fas fa-chart-bar"></i></div>
+        <div class="qc-label">ระบบจัดการคะแนน</div>
+      </a>
+      <a href="scores.html#add" class="quick-card">
+        <div class="qc-icon"><i class="fas fa-plus-circle"></i></div>
+        <div class="qc-label">บันทึกคะแนน</div>
+      </a>
+      <a href="scores.html#view" class="quick-card">
+        <div class="qc-icon"><i class="fas fa-table"></i></div>
+        <div class="qc-label">ดูคะแนนนักเรียน</div>
+      </a>
+      <a href="subject-media.html#exercises" class="quick-card">
+        <div class="qc-icon"><i class="fas fa-pencil-alt"></i></div>
+        <div class="qc-label">แบบฝึกหัด</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <p>
+    &copy; 2569 <strong>ครูศิริศักดิ์ ปิลอง</strong> &mdash;
+    กลุ่มสาระการเรียนรู้วิทยาศาสตร์และเทคโนโลยี
+  </p>
+</footer>
+
+<script src="js/firebase-config.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

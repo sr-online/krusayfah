@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>บทที่ 1: รู้จักสื่อในยุคดิจิทัล | รู้เท่าทันสื่อ ม.1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ── Purple theme overrides ── */
+    :root { --unit-accent: #7c3aed; --unit-accent-dark: #4c1d95; --unit-accent-light: #ede9fe; }
+
+    .unit-hero { background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%); color: white; padding: 2.5rem 0 0; }
+    .unit-hero-content { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+    .unit-hero h1 { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 700; margin: .5rem 0 .4rem; }
+    .unit-hero p { opacity: .85; font-size: .95rem; margin-bottom: 1.5rem; }
+    .unit-breadcrumb { opacity: .8; font-size: .82rem; margin-bottom: .5rem; }
+    .unit-breadcrumb a { color: rgba(255,255,255,.85); text-decoration: none; }
+    .unit-breadcrumb a:hover { text-decoration: underline; }
+
+    .unit-tabs { display: flex; gap: .5rem; padding-top: .5rem; flex-wrap: wrap; }
+    .unit-tab-btn { background: rgba(255,255,255,.15); color: white; border: none; border-radius: 8px 8px 0 0; padding: .6rem 1.2rem; font-family: inherit; font-size: .9rem; cursor: pointer; display: flex; align-items: center; gap: .4rem; transition: background .2s; }
+    .unit-tab-btn.active { background: white; color: #7c3aed; font-weight: 700; }
+    .unit-tab-btn:hover:not(.active) { background: rgba(255,255,255,.25); }
+
+    .unit-tab-content { display: none; max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; }
+    .unit-tab-content.active { display: block; }
+
+    /* ── Section cards ── */
+    .section-card { background: white; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,.07); margin-bottom: 1.5rem; overflow: hidden; border: 1px solid #e2e8f0; }
+    .section-card-header { display: flex; align-items: center; gap: 1rem; padding: 1.1rem 1.4rem; background: #f8fafc; border-bottom: 1px solid #e2e8f0; cursor: pointer; user-select: none; }
+    .section-card-header:hover { background: #f1f5f9; }
+    .section-num { min-width: 38px; height: 38px; background: linear-gradient(135deg, #7c3aed, #4c1d95); color: white; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: 700; flex-shrink: 0; }
+    .section-card-header h3 { flex: 1; font-size: 1rem; font-weight: 700; color: #1e293b; margin: 0; }
+    .section-toggle { color: #94a3b8; transition: transform .25s; font-size: .85rem; }
+    .section-card-header.open .section-toggle { transform: rotate(180deg); }
+    .section-body { display: none; padding: 1.4rem; }
+    .section-body.open { display: block; }
+
+    .info-box { background: #f5f3ff; border-left: 4px solid #7c3aed; border-radius: 0 8px 8px 0; padding: 1rem 1.2rem; margin-bottom: 1rem; }
+    .info-box p { margin: 0; color: #1e293b; line-height: 1.75; font-size: .95rem; }
+
+    .def-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: .8rem; margin-top: .8rem; }
+    .def-chip { background: white; border: 1px solid #ddd6fe; border-radius: 10px; padding: .8rem 1rem; text-align: center; }
+    .def-chip .def-icon { font-size: 1.5rem; }
+    .def-chip .def-label { font-size: .82rem; font-weight: 600; color: #5b21b6; margin-top: .3rem; }
+    .def-chip .def-desc { font-size: .78rem; color: #64748b; margin-top: .15rem; }
+
+    .type-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+    .type-table th { background: #7c3aed; color: white; padding: .6rem .9rem; text-align: left; }
+    .type-table td { padding: .55rem .9rem; border-bottom: 1px solid #f1f5f9; }
+    .type-table tr:nth-child(even) td { background: #faf5ff; }
+    .type-badge { display: inline-block; background: #ede9fe; color: #7c3aed; border-radius: 999px; padding: .15rem .7rem; font-size: .78rem; font-weight: 600; }
+
+    .timeline { display: flex; flex-direction: column; gap: .8rem; margin-top: .6rem; }
+    .tl-item { display: flex; gap: .9rem; align-items: flex-start; }
+    .tl-dot { min-width: 32px; height: 32px; background: #7c3aed; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-size: .72rem; font-weight: 700; flex-shrink: 0; margin-top: .1rem; }
+    .tl-content h4 { margin: 0 0 .15rem; font-size: .9rem; color: #1e293b; }
+    .tl-content p { margin: 0; font-size: .82rem; color: #64748b; line-height: 1.5; }
+
+    .role-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: .8rem; margin-top: .8rem; }
+    .role-card { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: .9rem; text-align: center; }
+    .role-card .role-icon { font-size: 1.8rem; }
+    .role-card h4 { font-size: .85rem; font-weight: 700; color: #7c3aed; margin: .4rem 0 .2rem; }
+    .role-card p { font-size: .78rem; color: #64748b; margin: 0; }
+
+    .media-platform-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: .8rem; margin-top: .8rem; }
+    .mp-card { display: flex; align-items: center; gap: .8rem; background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: .8rem 1rem; }
+    .mp-logo { font-size: 1.4rem; }
+    .mp-name { font-weight: 700; font-size: .88rem; color: #1e293b; }
+    .mp-desc { font-size: .76rem; color: #64748b; }
+
+    .literacy-steps { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: .8rem; margin-top: .8rem; }
+    .ls-card { background: white; border: 1px solid #ddd6fe; border-radius: 12px; padding: 1rem; text-align: center; }
+    .ls-step { font-size: 1.8rem; font-weight: 900; color: #7c3aed; opacity: .25; line-height: 1; }
+    .ls-title { font-size: .95rem; font-weight: 700; color: #5b21b6; margin: .3rem 0 .2rem; }
+    .ls-desc { font-size: .8rem; color: #64748b; }
+
+    /* ── Work cards (exercises tab) ── */
+    .work-card { background: white; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,.07); margin-bottom: 1.5rem; overflow: hidden; border: 1px solid #e2e8f0; }
+    .work-card-header { display: flex; align-items: flex-start; gap: 1rem; padding: 1.25rem; border-bottom: 1px solid #e2e8f0; background: #f8fafc; }
+    .work-num { min-width: 42px; height: 42px; background: linear-gradient(135deg, #7c3aed, #4c1d95); color: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 700; flex-shrink: 0; }
+    .work-title { flex: 1; min-width: 0; }
+    .work-title h3 { font-size: 1rem; font-weight: 700; color: #1e293b; margin: 0 0 .35rem; }
+    .work-badges { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .work-score-badge { background: #dbeafe; color: #1e40af; padding: .2rem .75rem; border-radius: 999px; font-size: .78rem; font-weight: 700; }
+    .work-type-badge { background: #ede9fe; color: #6d28d9; padding: .2rem .75rem; border-radius: 999px; font-size: .78rem; font-weight: 700; }
+    .work-status-badge { padding: .2rem .75rem; border-radius: 999px; font-size: .78rem; font-weight: 700; }
+    .work-status-badge.open { background: #d1fae5; color: #065f46; }
+    .work-status-badge.coming { background: #f1f5f9; color: #64748b; }
+    .work-body { padding: 1.4rem; }
+    .work-coming-body { padding: 2rem; text-align: center; color: #94a3b8; font-size: .9rem; }
+
+    /* ── Match exercise ── */
+    .match-grid { display: grid; gap: .8rem; margin: 1rem 0; }
+    .match-row { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
+    .match-label { flex: 1; min-width: 160px; font-size: .9rem; color: #1e293b; font-weight: 500; }
+    .match-label .match-num { display: inline-block; width: 22px; height: 22px; background: #7c3aed; color: white; border-radius: 50%; font-size: .72rem; font-weight: 700; text-align: center; line-height: 22px; margin-right: .5rem; }
+    .match-select { flex: 1; min-width: 160px; padding: .5rem .8rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: .88rem; color: #1e293b; background: white; }
+    .match-select:focus { outline: none; border-color: #7c3aed; box-shadow: 0 0 0 3px rgba(124,58,237,.15); }
+
+    /* ── MCQ exercise ── */
+    .mcq-item { margin-bottom: 1.2rem; }
+    .mcq-q { font-size: .92rem; font-weight: 600; color: #1e293b; margin-bottom: .6rem; }
+    .mcq-options { display: flex; flex-direction: column; gap: .4rem; }
+    .mcq-option { display: flex; align-items: center; gap: .7rem; padding: .55rem .9rem; border: 1.5px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all .15s; font-size: .88rem; }
+    .mcq-option:hover { border-color: #7c3aed; background: #f5f3ff; }
+    .mcq-option input { accent-color: #7c3aed; width: 16px; height: 16px; flex-shrink: 0; }
+    .mcq-option.correct-ans { border-color: #059669; background: #d1fae5; }
+    .mcq-option.wrong-ans { border-color: #dc2626; background: #fee2e2; }
+
+    /* ── Textarea fields ── */
+    .work-textarea { width: 100%; box-sizing: border-box; padding: .75rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 10px; font-family: inherit; font-size: .88rem; resize: vertical; min-height: 90px; transition: border .15s; color: #1e293b; }
+    .work-textarea:focus { outline: none; border-color: #7c3aed; box-shadow: 0 0 0 3px rgba(124,58,237,.15); }
+    .work-input { width: 100%; box-sizing: border-box; padding: .6rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: .88rem; margin-bottom: .6rem; }
+    .work-input:focus { outline: none; border-color: #7c3aed; box-shadow: 0 0 0 3px rgba(124,58,237,.15); }
+    .field-label { font-size: .85rem; font-weight: 600; color: #475569; margin-bottom: .35rem; display: block; }
+
+    .submit-btn { display: inline-flex; align-items: center; gap: .5rem; background: linear-gradient(135deg, #7c3aed, #6d28d9); color: white; border: none; border-radius: 10px; padding: .7rem 1.6rem; font-family: inherit; font-size: .92rem; font-weight: 700; cursor: pointer; margin-top: 1rem; transition: opacity .15s; }
+    .submit-btn:hover { opacity: .9; }
+    .submit-btn:disabled { opacity: .55; cursor: not-allowed; }
+
+    .result-box { margin-top: 1rem; padding: 1rem 1.2rem; border-radius: 10px; font-weight: 600; display: none; }
+    .result-box.show { display: block; }
+    .result-box.pass { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+    .result-box.fail { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+    .result-box.sent { background: #ede9fe; color: #5b21b6; border: 1px solid #c4b5fd; }
+
+    .divider { height: 1px; background: #e2e8f0; margin: 1.2rem 0; }
+
+    @media (max-width: 600px) {
+      .def-grid, .role-grid, .literacy-steps, .media-platform-list { grid-template-columns: 1fr 1fr; }
+      .match-row { flex-direction: column; align-items: stretch; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-icon"><i class="fas fa-chalkboard-user"></i></div>
+      <span>ครูศิริศักดิ์ ปิลอง</span>
+    </a>
+    <ul class="navbar-menu">
+      <li><a href="home.html"><i class="fas fa-house"></i> หน้าหลัก</a></li>
+      <li><a href="subject-media.html" class="active"><i class="fas fa-tv"></i> รู้เท่าทันสื่อ ม.1</a></li>
+      <li><a href="subject-programming.html"><i class="fas fa-code"></i> โปรแกรมเบื้องต้น ม.2</a></li>
+      <li><a href="subject-cs3.html"><i class="fas fa-microchip"></i> วิทยาการคำนวณ 3 ม.6</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="เมนู">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="home.html"><i class="fas fa-house"></i> หน้าหลักนักเรียน</a>
+    <a href="subject-media.html"><i class="fas fa-tv"></i> รู้เท่าทันสื่อ ม.1</a>
+    <a href="subject-programming.html"><i class="fas fa-code"></i> โปรแกรมเบื้องต้น ม.2</a>
+    <a href="subject-cs3.html"><i class="fas fa-microchip"></i> วิทยาการคำนวณ 3 ม.6</a>
+  </div>
+</nav>
+
+<!-- ===== UNIT HERO ===== -->
+<div class="unit-hero">
+  <div class="unit-hero-content">
+    <p class="unit-breadcrumb">
+      <a href="index.html">หน้าหลัก</a>
+      <i class="fas fa-chevron-right" style="font-size:.7rem;margin:0 .4rem"></i>
+      <a href="subject-media.html">รู้เท่าทันสื่อ ม.1</a>
+      <i class="fas fa-chevron-right" style="font-size:.7rem;margin:0 .4rem"></i>
+      บทที่ 1
+    </p>
+    <h1>📱 บทที่ 1 : รู้จักสื่อในยุคดิจิทัล</h1>
+    <p>ความหมาย ประเภท วิวัฒนาการ บทบาท และการรู้เท่าทันสื่อ</p>
+
+    <div class="unit-tabs">
+      <button class="unit-tab-btn active" data-utab="utab-lesson">
+        <i class="fas fa-book-open"></i> เนื้อหาบทเรียน
+      </button>
+      <button class="unit-tab-btn" data-utab="utab-exercises">
+        <i class="fas fa-pencil-alt"></i> แบบฝึกหัด
+      </button>
+      <button class="unit-tab-btn" data-utab="utab-scores">
+        <i class="fas fa-chart-bar"></i> คะแนนของฉัน
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB: เนื้อหาบทเรียน ===== -->
+<div id="utab-lesson" class="unit-tab-content active">
+
+  <!-- Section 1: ความหมาย -->
+  <div class="section-card">
+    <div class="section-card-header open" onclick="toggleSection(this)">
+      <div class="section-num">1</div>
+      <h3>ความหมายของสื่อในยุคดิจิทัล</h3>
+      <i class="fas fa-chevron-down section-toggle"></i>
+    </div>
+    <div class="section-body open">
+      <div class="info-box">
+        <p><strong>สื่อดิจิทัล (Digital Media)</strong> หมายถึง ข้อมูลที่ถูกสร้าง จัดเก็บ และส่งต่อในรูปแบบดิจิทัล ไม่ว่าจะเป็น <strong>ข้อความ รูปภาพ วิดีโอ และเสียง</strong> ที่ถูกผลิตและเผยแพร่ผ่านเทคโนโลยีและอุปกรณ์ดิจิทัลต่าง ๆ</p>
+      </div>
+      <p style="font-size:.9rem;color:#475569;margin-bottom:.8rem">สื่อดิจิทัลแตกต่างจากสื่อดั้งเดิม (สื่อสิ่งพิมพ์ วิทยุ โทรทัศน์) ใน 4 ลักษณะสำคัญ</p>
+      <div class="def-grid">
+        <div class="def-chip">
+          <div class="def-icon">⚡</div>
+          <div class="def-label">Real-time</div>
+          <div class="def-desc">รับส่งข้อมูลได้ทันที ไม่ต้องรอรอบรายการ</div>
+        </div>
+        <div class="def-chip">
+          <div class="def-icon">🤝</div>
+          <div class="def-label">Interactive</div>
+          <div class="def-desc">ผู้ใช้โต้ตอบ แสดงความคิดเห็น และแบ่งปันได้</div>
+        </div>
+        <div class="def-chip">
+          <div class="def-icon">🌐</div>
+          <div class="def-label">เข้าถึงง่าย</div>
+          <div class="def-desc">เข้าถึงได้ทุกที่ทุกเวลาผ่านอินเทอร์เน็ต</div>
+        </div>
+        <div class="def-chip">
+          <div class="def-icon">🎭</div>
+          <div class="def-label">มัลติมีเดีย</div>
+          <div class="def-desc">รวมข้อความ ภาพ เสียง วิดีโอในที่เดียว</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: ประเภท -->
+  <div class="section-card">
+    <div class="section-card-header open" onclick="toggleSection(this)">
+      <div class="section-num">2</div>
+      <h3>ประเภทของสื่อดิจิทัล</h3>
+      <i class="fas fa-chevron-down section-toggle"></i>
+    </div>
+    <div class="section-body open">
+      <table class="type-table">
+        <thead>
+          <tr>
+            <th>ประเภท</th>
+            <th>ความหมาย</th>
+            <th>ตัวอย่าง</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="type-badge">สื่อสังคมออนไลน์</span></td>
+            <td>แพลตฟอร์มที่ผู้ใช้สร้างและแบ่งปันเนื้อหาร่วมกัน</td>
+            <td>Facebook, Instagram, TikTok, X (Twitter)</td>
+          </tr>
+          <tr>
+            <td><span class="type-badge">เว็บไซต์และบล็อก</span></td>
+            <td>แหล่งข้อมูลและสื่อสารผ่านหน้าเว็บ</td>
+            <td>สำนักข่าวออนไลน์, Blogspot, WordPress</td>
+          </tr>
+          <tr>
+            <td><span class="type-badge">แอปพลิเคชัน</span></td>
+            <td>โปรแกรมบนสมาร์ทโฟน/แท็บเล็ต</td>
+            <td>TrueID News, LINE, Grab, Google Maps</td>
+          </tr>
+          <tr>
+            <td><span class="type-badge">วิดีโอและเสียงดิจิทัล</span></td>
+            <td>เนื้อหาที่เผยแพร่ผ่านแพลตฟอร์มสตรีมมิ่ง</td>
+            <td>YouTube, Netflix, Spotify, Podcast</td>
+          </tr>
+          <tr>
+            <td><span class="type-badge">สื่ออินเทอร์แอคทีฟ</span></td>
+            <td>สื่อที่ผู้ใช้มีส่วนร่วมและโต้ตอบได้โดยตรง</td>
+            <td>เกม Kahoot, แบบสำรวจออนไลน์, เกม VR</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Section 3: วิวัฒนาการ -->
+  <div class="section-card">
+    <div class="section-card-header" onclick="toggleSection(this)">
+      <div class="section-num">3</div>
+      <h3>วิวัฒนาการของสื่อ</h3>
+      <i class="fas fa-chevron-down section-toggle"></i>
+    </div>
+    <div class="section-body">
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot">1</div>
+          <div class="tl-content">
+            <h4>ยุคก่อนประวัติศาสตร์</h4>
+            <p>ภาพเขียนถ้ำ สัญลักษณ์ การบอกเล่า — สื่อสารด้วยภาพและปากต่อปาก</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot">2</div>
+          <div class="tl-content">
+            <h4>ยุคตัวอักษร</h4>
+            <p>การประดิษฐ์อักษร (ราว 3500 ปีก่อน ค.ศ.) — บันทึกข้อมูลบนดินเหนียว ปาปิรัส</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot">3</div>
+          <div class="tl-content">
+            <h4>ยุคสิ่งพิมพ์</h4>
+            <p>กูเตนเบิร์กประดิษฐ์แท่นพิมพ์ (ค.ศ. 1440) — หนังสือพิมพ์ นิตยสาร แพร่หลาย</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot">4</div>
+          <div class="tl-content">
+            <h4>ยุคโทรคมนาคม</h4>
+            <p>โทรเลข โทรศัพท์ วิทยุ โทรทัศน์ — ส่งสัญญาณข้ามระยะทางไกลได้</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot">5</div>
+          <div class="tl-content">
+            <h4>ยุคดิจิทัล (ปัจจุบัน)</h4>
+            <p>อินเทอร์เน็ต สมาร์ทโฟน โซเชียลมีเดีย — ทุกคนเป็นทั้งผู้รับและผู้ส่งสาร</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 4: บทบาท -->
+  <div class="section-card">
+    <div class="section-card-header" onclick="toggleSection(this)">
+      <div class="section-num">4</div>
+      <h3>บทบาทของสื่อดิจิทัล</h3>
+      <i class="fas fa-chevron-down section-toggle"></i>
+    </div>
+    <div class="section-body">
+      <div class="role-grid">
+        <div class="role-card">
+          <div class="role-icon">📰</div>
+          <h4>ให้ข้อมูลข่าวสาร</h4>
+          <p>เผยแพร่ข่าวสารเหตุการณ์ต่าง ๆ อย่างรวดเร็ว</p>
+        </div>
+        <div class="role-card">
+          <div class="role-icon">📚</div>
+          <h4>ให้ความรู้/การศึกษา</h4>
+          <p>เรียนออนไลน์ บทเรียน และทรัพยากรความรู้</p>
+        </div>
+        <div class="role-card">
+          <div class="role-icon">🎮</div>
+          <h4>ความบันเทิง</h4>
+          <p>เพลง ภาพยนตร์ เกม ซีรีส์ สตรีมมิ่ง</p>
+        </div>
+        <div class="role-card">
+          <div class="role-icon">✊</div>
+          <h4>ปลุกจิตสำนึก</h4>
+          <p>รณรงค์สังคม สิ่งแวดล้อม สิทธิมนุษยชน</p>
+        </div>
+        <div class="role-card">
+          <div class="role-icon">💰</div>
+          <h4>ส่งเสริมเศรษฐกิจ</h4>
+          <p>E-commerce โฆษณา ธุรกิจออนไลน์</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 5: ภูมิทัศน์สื่อใหม่ -->
+  <div class="section-card">
+    <div class="section-card-header" onclick="toggleSection(this)">
+      <div class="section-num">5</div>
+      <h3>ภูมิทัศน์สื่อใหม่ (New Media Landscape)</h3>
+      <i class="fas fa-chevron-down section-toggle"></i>
+    </div>
+    <div class="section-body">
+      <div class="info-box">
+        <p><strong>Media Landscape</strong> คือ ภาพรวมของสื่อทุกประเภทในสังคม ณ เวลาหนึ่ง ปัจจุบันสื่อใหม่ (New Media) มีลักษณะสำคัญ 4 ประการ คือ <strong>เป็นดิจิทัล · โต้ตอบได้ · เชื่อมโยงกัน · ผู้ใช้สร้างเนื้อหาเองได้</strong></p>
+      </div>
+      <p style="font-size:.88rem;font-weight:600;color:#7c3aed;margin-bottom:.5rem">แพลตฟอร์มโซเชียลมีเดียยอดนิยม</p>
+      <div class="media-platform-list">
+        <div class="mp-card"><div class="mp-logo">📘</div><div><div class="mp-name">Facebook</div><div class="mp-desc">ข่าวสาร ติดตามกลุ่ม เพื่อน</div></div></div>
+        <div class="mp-card"><div class="mp-logo">📸</div><div><div class="mp-name">Instagram</div><div class="mp-desc">รูปภาพ Stories Reels</div></div></div>
+        <div class="mp-card"><div class="mp-logo">🎵</div><div><div class="mp-name">TikTok</div><div class="mp-desc">วิดีโอสั้น เทรนด์ไวรัล</div></div></div>
+        <div class="mp-card"><div class="mp-logo">▶️</div><div><div class="mp-name">YouTube</div><div class="mp-desc">วิดีโอยาว บทเรียน วิดีโอเกม</div></div></div>
+        <div class="mp-card"><div class="mp-logo">💬</div><div><div class="mp-name">LINE</div><div class="mp-desc">แชท สติกเกอร์ กลุ่มชั้นเรียน</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 6: New Media คุณสมบัติ -->
+  <div class="section-card">
+    <div class="section-card-header" onclick="toggleSection(this)">
+      <div class="section-num">6</div>
+      <h3>คุณสมบัติของ New Media เปรียบเทียบ Old Media</h3>
+      <i class="fas fa-chevron-down section-toggle"></i>
+    </div>
+    <div class="section-body">
+      <table class="type-table">
+        <thead>
+          <tr>
+            <th>ด้าน</th>
+            <th>สื่อเก่า (Old Media)</th>
+            <th>สื่อใหม่ (New Media)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>การสื่อสาร</td>
+            <td>ทิศทางเดียว (one-way)</td>
+            <td>สองทาง โต้ตอบได้ (two-way)</td>
+          </tr>
+          <tr>
+            <td>ความเร็ว</td>
+            <td>ต้องรอรอบรายการ</td>
+            <td>ทันทีทันใด (real-time)</td>
+          </tr>
+          <tr>
+            <td>ผู้ผลิตเนื้อหา</td>
+            <td>องค์กรสื่อมืออาชีพ</td>
+            <td>ทุกคนสร้างได้ (User-Generated)</td>
+          </tr>
+          <tr>
+            <td>การเข้าถึง</td>
+            <td>จำกัดพื้นที่ เวลา</td>
+            <td>ทุกที่ ทุกเวลา</td>
+          </tr>
+          <tr>
+            <td>รูปแบบ</td>
+            <td>แยกเป็นประเภท</td>
+            <td>มัลติมีเดียในที่เดียว</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Section 7: การรู้เท่าทันสื่อ -->
+  <div class="section-card">
+    <div class="section-card-header" onclick="toggleSection(this)">
+      <div class="section-num">7</div>
+      <h3>การรู้เท่าทันสื่อ (Media Literacy)</h3>
+      <i class="fas fa-chevron-down section-toggle"></i>
+    </div>
+    <div class="section-body">
+      <div class="info-box">
+        <p><strong>Media Literacy</strong> คือ ความสามารถในการ <strong>เข้าถึง วิเคราะห์ ประเมิน และสร้างสรรค์</strong> สื่อในรูปแบบต่าง ๆ อย่างมีวิจารณญาณ เพื่อให้สามารถรับและส่งสารได้อย่างเหมาะสมในสังคมดิจิทัล</p>
+      </div>
+      <div class="literacy-steps">
+        <div class="ls-card">
+          <div class="ls-step">A</div>
+          <div class="ls-title">Access<br>การเข้าถึง</div>
+          <div class="ls-desc">หาข้อมูลจากแหล่งต่าง ๆ ได้อย่างมีประสิทธิภาพ</div>
+        </div>
+        <div class="ls-card">
+          <div class="ls-step">A</div>
+          <div class="ls-title">Analyze<br>การวิเคราะห์</div>
+          <div class="ls-desc">แยกแยะข้อเท็จจริงออกจากความคิดเห็นได้</div>
+        </div>
+        <div class="ls-card">
+          <div class="ls-step">E</div>
+          <div class="ls-title">Evaluate<br>การประเมิน</div>
+          <div class="ls-desc">ตัดสินความน่าเชื่อถือและคุณค่าของสื่อ</div>
+        </div>
+        <div class="ls-card">
+          <div class="ls-step">C</div>
+          <div class="ls-title">Create<br>การสร้างสรรค์</div>
+          <div class="ls-desc">ผลิตเนื้อหาสื่ออย่างมีจริยธรรม</div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <p style="font-size:.88rem;font-weight:600;color:#7c3aed;margin-bottom:.6rem"><i class="fas fa-lightbulb"></i> คำถามที่ใช้ประเมินสื่อ (Media Literacy Questions)</p>
+      <ul style="font-size:.87rem;color:#475569;line-height:2;padding-left:1.2rem">
+        <li>ใครสร้างสื่อชิ้นนี้? มีจุดประสงค์อะไร?</li>
+        <li>เนื้อหานี้มีข้อเท็จจริงหรือเป็นความคิดเห็น?</li>
+        <li>ข้อมูลมาจากแหล่งที่น่าเชื่อถือหรือไม่?</li>
+        <li>สื่อนี้พยายามชักจูงให้เราคิดหรือรู้สึกอย่างไร?</li>
+        <li>มีมุมมองอื่นที่สื่อไม่ได้นำเสนอหรือเปล่า?</li>
+      </ul>
+    </div>
+  </div>
+
+</div><!-- /utab-lesson -->
+
+<!-- ===== TAB: แบบฝึกหัด ===== -->
+<div id="utab-exercises" class="unit-tab-content">
+
+  <!-- Work Card 1: จับคู่ (Auto-graded) -->
+  <div class="work-card" id="wcard1">
+    <div class="work-card-header">
+      <div class="work-num">1</div>
+      <div class="work-title">
+        <h3>จับคู่ประเภทสื่อกับตัวอย่าง</h3>
+        <div class="work-badges">
+          <span class="work-score-badge"><i class="fas fa-star"></i> 5 คะแนน</span>
+          <span class="work-type-badge"><i class="fas fa-puzzle-piece"></i> จับคู่</span>
+          <span class="work-status-badge open"><i class="fas fa-circle-check"></i> เปิดรับงาน</span>
+        </div>
+      </div>
+    </div>
+    <div class="work-body">
+      <p style="font-size:.88rem;color:#475569;margin-bottom:1rem">เลือกตัวอย่างที่ตรงกับประเภทของสื่อแต่ละข้อ (ตัวเลือกไม่ซ้ำกัน)</p>
+      <div class="match-grid" id="matchGrid">
+        <div class="match-row">
+          <div class="match-label"><span class="match-num">1</span>สื่อสังคมออนไลน์</div>
+          <select class="match-select" id="m1">
+            <option value="">-- เลือก --</option>
+            <option value="TikTok">TikTok</option>
+            <option value="Blogspot">Blogspot</option>
+            <option value="TrueID News">TrueID News</option>
+            <option value="YouTube">YouTube</option>
+            <option value="เกม Kahoot">เกม Kahoot</option>
+          </select>
+        </div>
+        <div class="match-row">
+          <div class="match-label"><span class="match-num">2</span>เว็บไซต์และบล็อก</div>
+          <select class="match-select" id="m2">
+            <option value="">-- เลือก --</option>
+            <option value="TikTok">TikTok</option>
+            <option value="Blogspot">Blogspot</option>
+            <option value="TrueID News">TrueID News</option>
+            <option value="YouTube">YouTube</option>
+            <option value="เกม Kahoot">เกม Kahoot</option>
+          </select>
+        </div>
+        <div class="match-row">
+          <div class="match-label"><span class="match-num">3</span>แอปพลิเคชัน</div>
+          <select class="match-select" id="m3">
+            <option value="">-- เลือก --</option>
+            <option value="TikTok">TikTok</option>
+            <option value="Blogspot">Blogspot</option>
+            <option value="TrueID News">TrueID News</option>
+            <option value="YouTube">YouTube</option>
+            <option value="เกม Kahoot">เกม Kahoot</option>
+          </select>
+        </div>
+        <div class="match-row">
+          <div class="match-label"><span class="match-num">4</span>วิดีโอและเสียงดิจิทัล</div>
+          <select class="match-select" id="m4">
+            <option value="">-- เลือก --</option>
+            <option value="TikTok">TikTok</option>
+            <option value="Blogspot">Blogspot</option>
+            <option value="TrueID News">TrueID News</option>
+            <option value="YouTube">YouTube</option>
+            <option value="เกม Kahoot">เกม Kahoot</option>
+          </select>
+        </div>
+        <div class="match-row">
+          <div class="match-label"><span class="match-num">5</span>สื่ออินเทอร์แอคทีฟ</div>
+          <select class="match-select" id="m5">
+            <option value="">-- เลือก --</option>
+            <option value="TikTok">TikTok</option>
+            <option value="Blogspot">Blogspot</option>
+            <option value="TrueID News">TrueID News</option>
+            <option value="YouTube">YouTube</option>
+            <option value="เกม Kahoot">เกม Kahoot</option>
+          </select>
+        </div>
+      </div>
+      <button class="submit-btn" onclick="submitMatch()">
+        <i class="fas fa-check-circle"></i> ตรวจคำตอบและส่งคะแนน
+      </button>
+      <div class="result-box" id="matchResult"></div>
+    </div>
+  </div>
+
+  <!-- Work Card 2: MCQ (Auto-graded) -->
+  <div class="work-card" id="wcard2">
+    <div class="work-card-header">
+      <div class="work-num">2</div>
+      <div class="work-title">
+        <h3>คำถามปรนัย: สื่อดิจิทัล</h3>
+        <div class="work-badges">
+          <span class="work-score-badge"><i class="fas fa-star"></i> 3 คะแนน</span>
+          <span class="work-type-badge"><i class="fas fa-list-check"></i> ปรนัย</span>
+          <span class="work-status-badge open"><i class="fas fa-circle-check"></i> เปิดรับงาน</span>
+        </div>
+      </div>
+    </div>
+    <div class="work-body">
+      <div class="mcq-item">
+        <div class="mcq-q">1. ข้อใดคือลักษณะสำคัญที่แตกต่างสื่อดิจิทัลจากสื่อดั้งเดิมมากที่สุด?</div>
+        <div class="mcq-options">
+          <label class="mcq-option"><input type="radio" name="q1" value="A"> มีสีสันสวยงามกว่า</label>
+          <label class="mcq-option"><input type="radio" name="q1" value="B"> ราคาถูกกว่าสื่อสิ่งพิมพ์</label>
+          <label class="mcq-option"><input type="radio" name="q1" value="C"> ผู้ใช้สามารถโต้ตอบและสร้างเนื้อหาเองได้</label>
+          <label class="mcq-option"><input type="radio" name="q1" value="D"> มีเฉพาะในอินเทอร์เน็ต</label>
+        </div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q">2. "Media Literacy" หมายถึงอะไร?</div>
+        <div class="mcq-options">
+          <label class="mcq-option"><input type="radio" name="q2" value="A"> การอ่านหนังสือพิมพ์ทุกวัน</label>
+          <label class="mcq-option"><input type="radio" name="q2" value="B"> ความสามารถในการเข้าถึง วิเคราะห์ ประเมิน และสร้างสรรค์สื่ออย่างมีวิจารณญาณ</label>
+          <label class="mcq-option"><input type="radio" name="q2" value="C"> การรู้จักใช้แอปพลิเคชันบนสมาร์ทโฟน</label>
+          <label class="mcq-option"><input type="radio" name="q2" value="D"> การอ่านออกเขียนได้ด้วยภาษาอังกฤษ</label>
+        </div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q">3. แพลตฟอร์มใดจัดเป็น "วิดีโอและเสียงดิจิทัล"?</div>
+        <div class="mcq-options">
+          <label class="mcq-option"><input type="radio" name="q3" value="A"> Facebook</label>
+          <label class="mcq-option"><input type="radio" name="q3" value="B"> Blogspot</label>
+          <label class="mcq-option"><input type="radio" name="q3" value="C"> YouTube</label>
+          <label class="mcq-option"><input type="radio" name="q3" value="D"> TrueID News</label>
+        </div>
+      </div>
+      <button class="submit-btn" onclick="submitMCQ()">
+        <i class="fas fa-check-circle"></i> ตรวจคำตอบและส่งคะแนน
+      </button>
+      <div class="result-box" id="mcqResult"></div>
+    </div>
+  </div>
+
+  <!-- Work Card 3: วิเคราะห์สถานการณ์ (Manual) -->
+  <div class="work-card" id="wcard3">
+    <div class="work-card-header">
+      <div class="work-num">3</div>
+      <div class="work-title">
+        <h3>วิเคราะห์สถานการณ์: ข่าวฝุ่น PM2.5</h3>
+        <div class="work-badges">
+          <span class="work-score-badge"><i class="fas fa-star"></i> 10 คะแนน</span>
+          <span class="work-type-badge"><i class="fas fa-pen-to-square"></i> เขียนวิเคราะห์</span>
+          <span class="work-status-badge open"><i class="fas fa-circle-check"></i> เปิดรับงาน</span>
+        </div>
+      </div>
+    </div>
+    <div class="work-body">
+      <div class="info-box" style="margin-bottom:1rem">
+        <p><strong>สถานการณ์:</strong> นักเรียนเห็นโพสต์บน TikTok ที่อ้างว่า "ฝุ่น PM2.5 ในเชียงรายวันนี้อันตรายถึงชีวิต ค่า AQI เกิน 500!" โพสต์มียอดแชร์กว่า 200,000 ครั้งในช่วงเวลา 2 ชั่วโมง แต่ไม่มีการระบุแหล่งที่มาของข้อมูล</p>
+      </div>
+      <label class="field-label">1. นักเรียนจะตรวจสอบข้อมูลนี้อย่างไร? (อธิบายอย่างน้อย 2 วิธี)</label>
+      <textarea class="work-textarea" id="analysis1" placeholder="พิมพ์คำตอบของนักเรียน..."></textarea>
+      <label class="field-label" style="margin-top:.8rem">2. ข้อมูลนี้มีสัญญาณอะไรที่บ่งบอกว่าอาจไม่น่าเชื่อถือ?</label>
+      <textarea class="work-textarea" id="analysis2" placeholder="พิมพ์คำตอบของนักเรียน..."></textarea>
+      <label class="field-label" style="margin-top:.8rem">3. ถ้าคุณแชร์ข้อมูลนี้ต่อไปโดยไม่ตรวจสอบ จะเกิดผลเสียอะไรบ้าง?</label>
+      <textarea class="work-textarea" id="analysis3" placeholder="พิมพ์คำตอบของนักเรียน..."></textarea>
+      <button class="submit-btn" onclick="submitAnalysis()" id="analysisBtn">
+        <i class="fas fa-paper-plane"></i> ส่งงานวิเคราะห์
+      </button>
+      <div class="result-box" id="analysisResult"></div>
+    </div>
+  </div>
+
+  <!-- Work Card 4: ใบงาน (Manual) -->
+  <div class="work-card" id="wcard4">
+    <div class="work-card-header">
+      <div class="work-num">4</div>
+      <div class="work-title">
+        <h3>ใบงาน: ฉันกับสื่อที่ใช้ประจำ</h3>
+        <div class="work-badges">
+          <span class="work-score-badge"><i class="fas fa-star"></i> 5 คะแนน</span>
+          <span class="work-type-badge"><i class="fas fa-clipboard"></i> ใบงาน</span>
+          <span class="work-status-badge open"><i class="fas fa-circle-check"></i> เปิดรับงาน</span>
+        </div>
+      </div>
+    </div>
+    <div class="work-body">
+      <p style="font-size:.88rem;color:#475569;margin-bottom:1rem">สำรวจพฤติกรรมการใช้สื่อของตนเองและสะท้อนคิด</p>
+      <label class="field-label">1. สื่อดิจิทัล 3 อันดับที่นักเรียนใช้มากที่สุดในแต่ละวัน</label>
+      <input type="text" class="work-input" id="ws1" placeholder="เช่น TikTok, YouTube, LINE">
+      <label class="field-label">2. นักเรียนใช้สื่อดิจิทัลประมาณกี่ชั่วโมงต่อวัน? และส่วนมากทำอะไร?</label>
+      <textarea class="work-textarea" style="min-height:70px" id="ws2" placeholder="เช่น ประมาณ 4 ชั่วโมง ส่วนมากดู TikTok และฟังเพลงบน YouTube..."></textarea>
+      <label class="field-label" style="margin-top:.8rem">3. สื่อที่ใช้อยู่นั้นจัดอยู่ในประเภทใด? (จากที่เรียนในบทที่ 1)</label>
+      <textarea class="work-textarea" style="min-height:70px" id="ws3" placeholder="ระบุประเภทและเหตุผล..."></textarea>
+      <label class="field-label" style="margin-top:.8rem">4. มีสื่อใดที่นักเรียนคิดว่าตนเองใช้มากเกินไปหรือไม่? อยากปรับอย่างไร?</label>
+      <textarea class="work-textarea" style="min-height:70px" id="ws4" placeholder="สะท้อนคิดอย่างตรงไปตรงมา..."></textarea>
+      <button class="submit-btn" onclick="submitWorksheet()" id="worksheetBtn">
+        <i class="fas fa-paper-plane"></i> ส่งใบงาน
+      </button>
+      <div class="result-box" id="worksheetResult"></div>
+    </div>
+  </div>
+
+</div><!-- /utab-exercises -->
+
+<!-- ===== TAB: คะแนนของฉัน ===== -->
+<div id="utab-scores" class="unit-tab-content">
+  <div class="student-score-header" id="scoreStudentHeader">
+    <i class="fas fa-spinner fa-spin"></i> กำลังโหลดข้อมูล...
+  </div>
+  <div id="scoreSummary" class="score-summary-chips" style="display:none"></div>
+  <div class="score-table-wrapper">
+    <table class="score-table">
+      <thead>
+        <tr>
+          <th>#</th><th>หัวข้อ/งาน</th><th>คะแนน</th><th>ประเภท</th><th>หมายเหตุ</th><th>วันที่</th>
+        </tr>
+      </thead>
+      <tbody id="scoreTableBody">
+        <tr><td colspan="6" style="text-align:center;padding:2rem;color:#64748b"><i class="fas fa-spinner fa-spin"></i> กำลังโหลด...</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="text-align:center;margin-top:1rem">
+    <button onclick="initStudentScoreTab('media-m1')" class="btn btn-outline">
+      <i class="fas fa-rotate-right"></i> โหลดใหม่
+    </button>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <p>&copy; 2569 <strong>ครูศิริศักดิ์ ปิลอง</strong> &mdash; รายวิชารู้เท่าทันสื่อ ม.1</p>
+</footer>
+
+<!-- ===== SCRIPTS ===== -->
+<script src="js/auth.js"></script>
+<script>requireAuth('1');</script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/app.js"></script>
+<script>
+/* ── Unit tab switching ── */
+document.querySelectorAll('.unit-tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = btn.dataset.utab;
+    document.querySelectorAll('.unit-tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.unit-tab-content').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    const pane = document.getElementById(target);
+    if (pane) pane.classList.add('active');
+    if (target === 'utab-scores') initStudentScoreTab('media-m1');
+  });
+});
+
+/* ── Section accordion ── */
+function toggleSection(header) {
+  const body = header.nextElementSibling;
+  header.classList.toggle('open');
+  if (body) body.classList.toggle('open');
+}
+
+/* ── Helper: get logged-in student ── */
+function getStudent() {
+  return typeof getCurrentStudent === 'function' ? getCurrentStudent() : null;
+}
+
+/* ── Work 1: Match ── */
+const MATCH_ANSWERS = { m1: 'TikTok', m2: 'Blogspot', m3: 'TrueID News', m4: 'YouTube', m5: 'เกม Kahoot' };
+
+async function submitMatch() {
+  const s = getStudent();
+  if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน', 'warning'); return; }
+
+  const answers = { m1: document.getElementById('m1').value, m2: document.getElementById('m2').value, m3: document.getElementById('m3').value, m4: document.getElementById('m4').value, m5: document.getElementById('m5').value };
+  const keys = Object.keys(answers);
+
+  if (keys.some(k => !answers[k])) { showToast('กรุณาเลือกคำตอบให้ครบทุกข้อ', 'warning'); return; }
+
+  const values = keys.map(k => answers[k]);
+  if (new Set(values).size !== values.length) { showToast('คำตอบซ้ำกัน — ตัวเลือกแต่ละข้อต้องไม่ซ้ำกัน', 'warning'); return; }
+
+  let correct = 0;
+  keys.forEach(k => { if (answers[k] === MATCH_ANSWERS[k]) correct++; });
+  const score = correct;
+  const max = 5;
+
+  const resultBox = document.getElementById('matchResult');
+  resultBox.className = 'result-box show ' + (score >= 3 ? 'pass' : 'fail');
+  resultBox.innerHTML = `ได้ ${score}/${max} คะแนน (ถูก ${correct} ข้อ จาก 5 ข้อ)`;
+
+  const res = await saveScore('media-m1',
+    { studentId: s.id, name: s.name, room: s.class },
+    { title: 'แบบฝึกหัดที่ 1: จับคู่ประเภทสื่อ', score, maxScore: max, type: 'exercise', note: '' }
+  );
+  if (res.ok) showToast('บันทึกคะแนนสำเร็จ', 'success');
+  else showToast('บันทึกไม่สำเร็จ: ' + res.error, 'error');
+}
+
+/* ── Work 2: MCQ ── */
+const MCQ_ANSWERS = { q1: 'C', q2: 'B', q3: 'C' };
+
+async function submitMCQ() {
+  const s = getStudent();
+  if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน', 'warning'); return; }
+
+  const resultBox = document.getElementById('mcqResult');
+  let correct = 0;
+  const total = Object.keys(MCQ_ANSWERS).length;
+
+  Object.keys(MCQ_ANSWERS).forEach(q => {
+    const chosen = document.querySelector(`input[name="${q}"]:checked`);
+    const options = document.querySelectorAll(`input[name="${q}"]`);
+    options.forEach(opt => {
+      const label = opt.closest('.mcq-option');
+      label.classList.remove('correct-ans', 'wrong-ans');
+      if (opt.value === MCQ_ANSWERS[q]) label.classList.add('correct-ans');
+      else if (chosen && opt === chosen && opt.value !== MCQ_ANSWERS[q]) label.classList.add('wrong-ans');
+    });
+    if (chosen && chosen.value === MCQ_ANSWERS[q]) correct++;
+  });
+
+  if (!document.querySelector('input[name="q1"]:checked') || !document.querySelector('input[name="q2"]:checked') || !document.querySelector('input[name="q3"]:checked')) {
+    showToast('กรุณาตอบให้ครบทุกข้อ', 'warning'); return;
+  }
+
+  const score = correct;
+  const max = 3;
+  resultBox.className = 'result-box show ' + (score >= 2 ? 'pass' : 'fail');
+  resultBox.innerHTML = `ได้ ${score}/${max} คะแนน (ถูก ${correct} ข้อ จาก ${total} ข้อ)`;
+
+  const res = await saveScore('media-m1',
+    { studentId: s.id, name: s.name, room: s.class },
+    { title: 'แบบฝึกหัดที่ 2: คำถามปรนัย', score, maxScore: max, type: 'quiz', note: '' }
+  );
+  if (res.ok) showToast('บันทึกคะแนนสำเร็จ', 'success');
+  else showToast('บันทึกไม่สำเร็จ: ' + res.error, 'error');
+}
+
+/* ── Work 3: Analysis ── */
+async function submitAnalysis() {
+  const s = getStudent();
+  if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน', 'warning'); return; }
+
+  const a1 = document.getElementById('analysis1').value.trim();
+  const a2 = document.getElementById('analysis2').value.trim();
+  const a3 = document.getElementById('analysis3').value.trim();
+  if (!a1 || !a2 || !a3) { showToast('กรุณาตอบให้ครบทั้ง 3 ข้อ', 'warning'); return; }
+
+  const btn = document.getElementById('analysisBtn');
+  btn.disabled = true; btn.textContent = 'กำลังส่ง...';
+
+  const note = `1)${a1.slice(0,80)} | 2)${a2.slice(0,60)} | 3)${a3.slice(0,60)}`;
+  const res = await saveScore('media-m1',
+    { studentId: s.id, name: s.name, room: s.class },
+    { title: 'แบบฝึกหัดที่ 3: วิเคราะห์สถานการณ์ PM2.5', score: 0, maxScore: 10, type: 'exercise', note }
+  );
+
+  btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> ส่งงานวิเคราะห์';
+
+  const resultBox = document.getElementById('analysisResult');
+  if (res.ok) {
+    resultBox.className = 'result-box show sent';
+    resultBox.innerHTML = '<i class="fas fa-check-circle"></i> ส่งงานสำเร็จแล้ว! ครูจะตรวจและให้คะแนน (0–10) ภายหลัง';
+    showToast('ส่งงานสำเร็จ', 'success');
+  } else {
+    resultBox.className = 'result-box show fail';
+    resultBox.innerHTML = 'เกิดข้อผิดพลาด: ' + res.error;
+  }
+}
+
+/* ── Work 4: Worksheet ── */
+async function submitWorksheet() {
+  const s = getStudent();
+  if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน', 'warning'); return; }
+
+  const w1 = document.getElementById('ws1').value.trim();
+  const w2 = document.getElementById('ws2').value.trim();
+  const w3 = document.getElementById('ws3').value.trim();
+  const w4 = document.getElementById('ws4').value.trim();
+  if (!w1 || !w2 || !w3 || !w4) { showToast('กรุณากรอกให้ครบทั้ง 4 ข้อ', 'warning'); return; }
+
+  const btn = document.getElementById('worksheetBtn');
+  btn.disabled = true; btn.textContent = 'กำลังส่ง...';
+
+  const note = `สื่อที่ใช้:${w1.slice(0,50)} | ชม/วัน:${w2.slice(0,40)}`;
+  const res = await saveScore('media-m1',
+    { studentId: s.id, name: s.name, room: s.class },
+    { title: 'แบบฝึกหัดที่ 4: ใบงาน ฉันกับสื่อที่ใช้ประจำ', score: 0, maxScore: 5, type: 'exercise', note }
+  );
+
+  btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> ส่งใบงาน';
+
+  const resultBox = document.getElementById('worksheetResult');
+  if (res.ok) {
+    resultBox.className = 'result-box show sent';
+    resultBox.innerHTML = '<i class="fas fa-check-circle"></i> ส่งใบงานสำเร็จแล้ว! ครูจะตรวจและให้คะแนน (0–5) ภายหลัง';
+    showToast('ส่งใบงานสำเร็จ', 'success');
+  } else {
+    resultBox.className = 'result-box show fail';
+    resultBox.innerHTML = 'เกิดข้อผิดพลาด: ' + res.error;
+  }
+}
+
+/* ── Auto-load score tab when switching to it ── */
+document.addEventListener('DOMContentLoaded', () => {
+  // Load score tab data on first visit if directly linked
+  if (location.hash === '#scores') {
+    document.querySelector('[data-utab="utab-scores"]')?.click();
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard ครู | ครูศิริศักดิ์ ปิลอง</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    /* ===== Dashboard Layout ===== */
+    .dash-header {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 60%, #1e40af 100%);
+      color: white;
+      padding: 1.75rem 1rem;
+    }
+
+    .dash-header-inner {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .dash-title h1 {
+      font-size: clamp(1.2rem, 3vw, 1.7rem);
+      font-weight: 700;
+    }
+
+    .dash-title p {
+      font-size: .85rem;
+      opacity: .75;
+      margin-top: .2rem;
+    }
+
+    .dash-meta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .dash-clock {
+      text-align: right;
+      font-size: .82rem;
+      opacity: .8;
+    }
+
+    #dashClock { font-size: 1.1rem; font-weight: 700; opacity: 1; }
+
+    .dash-refresh-btn {
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.25);
+      color: white;
+      padding: .5rem 1rem;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: .85rem;
+      cursor: pointer;
+      transition: all .2s;
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+    }
+
+    .dash-refresh-btn:hover { background: rgba(255,255,255,.25); }
+
+    /* ===== Dashboard Body ===== */
+    .dash-body {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 3rem;
+    }
+
+    /* ===== Firebase Status ===== */
+    .firebase-bar {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: .6rem 1rem;
+      font-size: .82rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    .fb-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #fbbf24;
+      animation: pulse 1.5s infinite;
+      flex-shrink: 0;
+    }
+
+    .fb-dot.ok  { background: #34d399; animation: none; }
+    .fb-dot.err { background: #f87171; animation: none; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .4; }
+    }
+
+    /* ===== Subject Filter Tabs ===== */
+    .subject-filter {
+      display: flex;
+      gap: .5rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .sf-btn {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .55rem 1rem;
+      border: 2px solid var(--border);
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: .85rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: var(--card);
+      color: var(--text-muted);
+      transition: all .2s;
+    }
+
+    .sf-btn:hover { border-color: var(--primary-light); color: var(--primary); }
+    .sf-btn.active-all { border-color: var(--primary); background: var(--primary); color: white; }
+    .sf-btn.active-s1  { border-color: var(--subject1); background: var(--subject1); color: white; }
+    .sf-btn.active-s2  { border-color: var(--subject2); background: var(--subject2); color: white; }
+    .sf-btn.active-s3  { border-color: var(--subject3); background: var(--subject3); color: white; }
+
+    /* ===== KPI Cards ===== */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .kpi-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      border-left: 4px solid var(--primary);
+      transition: var(--transition);
+    }
+
+    .kpi-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+    .kpi-card.c1 { border-color: var(--primary); }
+    .kpi-card.c2 { border-color: var(--subject1); }
+    .kpi-card.c3 { border-color: var(--subject2); }
+    .kpi-card.c4 { border-color: var(--subject3); }
+
+    .kpi-icon {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    .c1 .kpi-icon { background: #eff6ff; color: var(--primary); }
+    .c2 .kpi-icon { background: #f5f3ff; color: var(--subject1); }
+    .c3 .kpi-icon { background: #ecfdf5; color: var(--subject2); }
+    .c4 .kpi-icon { background: #fef2f2; color: var(--subject3); }
+
+    .kpi-info .kpi-value {
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .kpi-info .kpi-label {
+      font-size: .78rem;
+      color: var(--text-muted);
+      margin-top: .2rem;
+    }
+
+    /* ===== Section wrapper ===== */
+    .dash-section {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+
+    .dash-section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .dash-section-head h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .dash-section-body { padding: 1.25rem 1.5rem; }
+
+    /* ===== Charts ===== */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 860px) { .charts-grid { grid-template-columns: 1fr; } }
+
+    .chart-box {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.25rem;
+    }
+
+    .chart-box h3 {
+      font-size: .9rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      margin-bottom: 1rem;
+    }
+
+    .chart-wrap { position: relative; }
+
+    /* ===== Subject Summary Cards ===== */
+    .subject-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 700px) { .subject-summary-grid { grid-template-columns: 1fr; } }
+
+    .subj-card {
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .subj-card-top {
+      padding: 1rem 1.25rem;
+      color: white;
+    }
+
+    .s1 .subj-card-top { background: linear-gradient(135deg, var(--subject1), var(--subject1-light)); }
+    .s2 .subj-card-top { background: linear-gradient(135deg, var(--subject2), var(--subject2-light)); }
+    .s3 .subj-card-top { background: linear-gradient(135deg, var(--subject3), var(--subject3-light)); }
+
+    .subj-card-top .sc-grade {
+      font-size: .72rem;
+      opacity: .85;
+      margin-bottom: .3rem;
+    }
+
+    .subj-card-top h3 {
+      font-size: .95rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .subj-card-body {
+      background: var(--card);
+      padding: 1rem 1.25rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .75rem;
+    }
+
+    .sc-stat { text-align: center; }
+    .sc-stat .sc-val {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+    .sc-stat .sc-lbl {
+      font-size: .72rem;
+      color: var(--text-muted);
+      margin-top: .1rem;
+    }
+
+    .subj-card-footer {
+      padding: .6rem 1.25rem;
+      border-top: 1px solid var(--border);
+      background: var(--bg);
+    }
+
+    .subj-card-footer a {
+      font-size: .8rem;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* ===== Score Table ===== */
+    .dash-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .85rem;
+    }
+
+    .dash-table th {
+      background: #f8fafc;
+      color: var(--text-muted);
+      font-size: .75rem;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      padding: .7rem 1rem;
+      text-align: left;
+      border-bottom: 2px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .dash-table td {
+      padding: .7rem 1rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    .dash-table tr:last-child td { border-bottom: none; }
+    .dash-table tr:hover td { background: #f8fafc; }
+
+    .rank-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      font-size: .75rem;
+      font-weight: 700;
+      background: var(--bg);
+      color: var(--text-muted);
+    }
+
+    .rank-badge.gold   { background: #fef3c7; color: #92400e; }
+    .rank-badge.silver { background: #f1f5f9; color: #475569; }
+    .rank-badge.bronze { background: #fde8d8; color: #9a3412; }
+
+    .score-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      min-width: 120px;
+    }
+
+    .score-bar {
+      flex: 1;
+      height: 6px;
+      background: var(--bg);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .score-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      transition: width .6s ease;
+    }
+
+    .score-bar-fill.good   { background: linear-gradient(90deg, #059669, #34d399); }
+    .score-bar-fill.medium { background: linear-gradient(90deg, #d97706, #fbbf24); }
+    .score-bar-fill.low    { background: linear-gradient(90deg, #dc2626, #f87171); }
+
+    .score-pct {
+      font-size: .78rem;
+      font-weight: 700;
+      min-width: 36px;
+      text-align: right;
+    }
+
+    /* ===== Assignment Table ===== */
+    .assign-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .85rem;
+    }
+
+    .assign-table th {
+      background: #f8fafc;
+      color: var(--text-muted);
+      font-size: .75rem;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      padding: .65rem 1rem;
+      text-align: left;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .assign-table td {
+      padding: .7rem 1rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    .assign-table tr:last-child td { border-bottom: none; }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      padding: .25rem .7rem;
+      border-radius: 999px;
+      font-size: .75rem;
+      font-weight: 600;
+    }
+
+    .status-pill.ready    { background: #d1fae5; color: #065f46; }
+    .status-pill.coming   { background: #fef3c7; color: #92400e; }
+    .status-pill.disabled { background: #f1f5f9; color: #94a3b8; }
+
+    /* ===== Loading state ===== */
+    .loading-row td {
+      text-align: center;
+      padding: 2.5rem 1rem;
+      color: var(--text-muted);
+    }
+
+    /* ===== Empty state ===== */
+    .empty-row td {
+      text-align: center;
+      padding: 2.5rem 1rem;
+      color: var(--text-muted);
+    }
+
+    /* ===== Progress ring ===== */
+    .progress-wrap {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .progress-ring-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .3rem;
+    }
+
+    .ring-label {
+      font-size: .75rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    /* ===== Print ===== */
+    @media print {
+      .navbar, .dash-meta, .subject-filter, .dash-refresh-btn, footer { display: none !important; }
+      .dash-header { padding: 1rem; }
+      .dash-body { padding: .5rem 0; }
+      .kpi-card, .subj-card, .dash-section, .chart-box { break-inside: avoid; }
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 640px) {
+      .kpi-grid { grid-template-columns: 1fr 1fr; }
+      .dash-section-body { padding: 1rem; }
+      .dash-table th, .dash-table td { padding: .55rem .6rem; font-size: .78rem; }
+    }
+
+    @media (max-width: 400px) {
+      .kpi-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-icon"><i class="fas fa-chalkboard-user"></i></div>
+      <span>ครูศิริศักดิ์ ปิลอง</span>
+    </a>
+    <ul class="navbar-menu">
+      <li><a href="index.html"><i class="fas fa-home"></i> หน้าหลัก</a></li>
+      <li><a href="dashboard.html" class="active"><i class="fas fa-gauge-high"></i> Dashboard ครู</a></li>
+      <li><a href="scores.html"><i class="fas fa-chart-bar"></i> จัดการคะแนน</a></li>
+    </ul>
+    <button onclick="teacherLogout()" style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:white;padding:.4rem .85rem;border-radius:8px;font-family:inherit;font-size:.82rem;cursor:pointer;display:flex;align-items:center;gap:.4rem">
+      <i class="fas fa-right-from-bracket"></i> ออกจากระบบครู
+    </button>
+    <button class="hamburger" id="hamburger" aria-label="เมนู">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html"><i class="fas fa-home"></i> หน้าหลัก</a>
+    <a href="dashboard.html"><i class="fas fa-gauge-high"></i> Dashboard ครู</a>
+    <a href="scores.html"><i class="fas fa-chart-bar"></i> จัดการคะแนน</a>
+    <a href="#" onclick="teacherLogout()"><i class="fas fa-right-from-bracket"></i> ออกจากระบบครู</a>
+  </div>
+</nav>
+
+<!-- ===== DASHBOARD HEADER ===== -->
+<div class="dash-header">
+  <div class="dash-header-inner">
+    <div class="dash-title">
+      <h1><i class="fas fa-gauge-high"></i> Dashboard ครู</h1>
+      <p>ภาพรวมใบงาน แบบฝึกหัด และคะแนนแบบทดสอบทั้งหมด</p>
+    </div>
+    <div class="dash-meta">
+      <div class="dash-clock">
+        <div id="dashClock">--:--:--</div>
+        <div id="dashDate"></div>
+      </div>
+      <button class="dash-refresh-btn" id="refreshBtn">
+        <i class="fas fa-rotate-right"></i> รีเฟรช
+      </button>
+      <button class="dash-refresh-btn" onclick="window.print()">
+        <i class="fas fa-print"></i> พิมพ์
+      </button>
+      <button class="dash-refresh-btn" onclick="openChangePinModal()"
+              style="background:rgba(251,191,36,.15);border-color:rgba(251,191,36,.35)">
+        <i class="fas fa-key"></i> เปลี่ยน PIN
+      </button>
+      <button class="dash-refresh-btn" onclick="if(confirm('ออกจากระบบ?')) AUTH.logout()"
+              style="background:rgba(248,113,113,.15);border-color:rgba(248,113,113,.3)">
+        <i class="fas fa-lock"></i> ล็อก
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div class="dash-body">
+
+  <!-- Firebase status -->
+  <div class="firebase-bar">
+    <div class="fb-dot" id="fbDot"></div>
+    <span id="fbStatus">กำลังเชื่อมต่อ Firebase...</span>
+    <span style="margin-left:auto;font-size:.75rem" id="lastSync"></span>
+  </div>
+
+  <!-- Subject filter -->
+  <div class="subject-filter">
+    <button class="sf-btn active-all" data-filter="all">
+      <i class="fas fa-layer-group"></i> ทุกรายวิชา
+    </button>
+    <button class="sf-btn" data-filter="media-m1">
+      📱 รู้เท่าทันสื่อ ม.1
+    </button>
+    <button class="sf-btn" data-filter="programming-m2">
+      💻 โปรแกรมเบื้องต้น ม.2
+    </button>
+    <button class="sf-btn" data-filter="cs3-m6">
+      🖥️ วิทยาการคำนวณ 3 ม.6
+    </button>
+  </div>
+
+  <!-- ===== KPI Cards ===== -->
+  <div class="kpi-grid">
+    <div class="kpi-card c1">
+      <div class="kpi-icon"><i class="fas fa-id-card"></i></div>
+      <div class="kpi-info">
+        <div class="kpi-value" id="kpiRegistered">–</div>
+        <div class="kpi-label">นักเรียนลงทะเบียน (ทั้งหมด)</div>
+      </div>
+    </div>
+    <div class="kpi-card c2">
+      <div class="kpi-icon"><i class="fas fa-users"></i></div>
+      <div class="kpi-info">
+        <div class="kpi-value" id="kpiStudents">–</div>
+        <div class="kpi-label">นักเรียนที่ส่งคะแนนแล้ว</div>
+      </div>
+    </div>
+    <div class="kpi-card c3">
+      <div class="kpi-icon"><i class="fas fa-file-lines"></i></div>
+      <div class="kpi-info">
+        <div class="kpi-value" id="kpiEntries">–</div>
+        <div class="kpi-label">รายการคะแนนทั้งหมด</div>
+      </div>
+    </div>
+    <div class="kpi-card c4">
+      <div class="kpi-icon"><i class="fas fa-star-half-stroke"></i></div>
+      <div class="kpi-info">
+        <div class="kpi-value" id="kpiAvg">–</div>
+        <div class="kpi-label">คะแนนเฉลี่ยรวม (%)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Subject Summary Cards ===== -->
+  <div class="subject-summary-grid" id="subjectSummaryGrid">
+    <!-- S1 -->
+    <div class="subj-card s1" data-subject="media-m1">
+      <div class="subj-card-top">
+        <div class="sc-grade">📱 ม.1 — รู้เท่าทันสื่อ</div>
+        <h3>Media Literacy</h3>
+      </div>
+      <div class="subj-card-body">
+        <div class="sc-stat">
+          <div class="sc-val" id="s1-students">–</div>
+          <div class="sc-lbl">นักเรียน</div>
+        </div>
+        <div class="sc-stat">
+          <div class="sc-val" id="s1-avg">–%</div>
+          <div class="sc-lbl">เฉลี่ย</div>
+        </div>
+      </div>
+      <div class="subj-card-footer">
+        <a href="subject-media.html#scores"><i class="fas fa-arrow-right"></i> ดูรายวิชา</a>
+      </div>
+    </div>
+    <!-- S2 -->
+    <div class="subj-card s2" data-subject="programming-m2">
+      <div class="subj-card-top">
+        <div class="sc-grade">💻 ม.2 — โปรแกรมเบื้องต้น</div>
+        <h3>Introduction to Programming</h3>
+      </div>
+      <div class="subj-card-body">
+        <div class="sc-stat">
+          <div class="sc-val" id="s2-students">–</div>
+          <div class="sc-lbl">นักเรียน</div>
+        </div>
+        <div class="sc-stat">
+          <div class="sc-val" id="s2-avg">–%</div>
+          <div class="sc-lbl">เฉลี่ย</div>
+        </div>
+      </div>
+      <div class="subj-card-footer">
+        <a href="subject-programming.html#scores"><i class="fas fa-arrow-right"></i> ดูรายวิชา</a>
+      </div>
+    </div>
+    <!-- S3 -->
+    <div class="subj-card s3" data-subject="cs3-m6">
+      <div class="subj-card-top">
+        <div class="sc-grade">🖥️ ม.6 — วิทยาการคำนวณ 3</div>
+        <h3>Computing Science 3</h3>
+      </div>
+      <div class="subj-card-body">
+        <div class="sc-stat">
+          <div class="sc-val" id="s3-students">–</div>
+          <div class="sc-lbl">นักเรียน</div>
+        </div>
+        <div class="sc-stat">
+          <div class="sc-val" id="s3-avg">–%</div>
+          <div class="sc-lbl">เฉลี่ย</div>
+        </div>
+      </div>
+      <div class="subj-card-footer">
+        <a href="subject-cs3.html#scores"><i class="fas fa-arrow-right"></i> ดูรายวิชา</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Charts ===== -->
+  <div class="charts-grid">
+    <!-- Bar Chart -->
+    <div class="chart-box">
+      <h3><i class="fas fa-chart-bar"></i> คะแนนเฉลี่ยแยกตามรายวิชา</h3>
+      <div class="chart-wrap" style="height:240px">
+        <canvas id="avgBarChart"></canvas>
+      </div>
+    </div>
+    <!-- Donut Chart -->
+    <div class="chart-box">
+      <h3><i class="fas fa-chart-pie"></i> สัดส่วนนักเรียนตามระดับคะแนน</h3>
+      <div class="chart-wrap" style="height:240px">
+        <canvas id="gradeDonut"></canvas>
+      </div>
+      <div id="donutLegend" style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:.75rem;font-size:.78rem;color:var(--text-muted)"></div>
+    </div>
+  </div>
+
+  <!-- ===== Score Type Breakdown Chart ===== -->
+  <div class="dash-section" style="margin-bottom:1.5rem">
+    <div class="dash-section-head">
+      <h2><i class="fas fa-chart-line"></i> คะแนนแยกตามประเภทงาน</h2>
+    </div>
+    <div class="dash-section-body">
+      <div style="height:200px">
+        <canvas id="typeBarChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Assignments Overview ===== -->
+  <div class="dash-section">
+    <div class="dash-section-head">
+      <h2><i class="fas fa-clipboard-list"></i> สถานะใบงานและแบบฝึกหัด</h2>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <span class="status-pill ready"><i class="fas fa-circle-check"></i> พร้อมใช้งาน</span>
+        <span class="status-pill coming"><i class="fas fa-clock"></i> เร็ว ๆ นี้</span>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="assign-table" id="assignTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>รายวิชา</th>
+            <th>ชื่องาน / แบบฝึกหัด</th>
+            <th>ประเภท</th>
+            <th>คะแนนเต็ม</th>
+            <th>หน่วย</th>
+            <th>สถานะ</th>
+          </tr>
+        </thead>
+        <tbody id="assignTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== Score Leaderboard ===== -->
+  <div class="dash-section">
+    <div class="dash-section-head">
+      <h2><i class="fas fa-ranking-star"></i> ตารางคะแนนนักเรียน</h2>
+      <div style="display:flex;gap:.5rem;align-items:center">
+        <label style="font-size:.82rem;color:var(--text-muted)">เรียงโดย</label>
+        <select id="sortSelect" class="form-control" style="padding:.35rem .6rem;font-size:.82rem;width:auto">
+          <option value="desc">คะแนนสูงสุดก่อน</option>
+          <option value="asc">คะแนนน้อยสุดก่อน</option>
+          <option value="name">ชื่อ A-Z</option>
+        </select>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="dash-table">
+        <thead>
+          <tr>
+            <th style="width:48px">อันดับ</th>
+            <th>รหัส</th>
+            <th>ชื่อ-นามสกุล</th>
+            <th>ห้อง</th>
+            <th>รายวิชา</th>
+            <th>คะแนนรวม</th>
+            <th style="min-width:160px">สัดส่วน</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboardBody">
+          <tr class="loading-row"><td colspan="7"><div class="spinner"></div>กำลังโหลด...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== Recent Submissions ===== -->
+  <div class="dash-section">
+    <div class="dash-section-head">
+      <h2><i class="fas fa-clock-rotate-left"></i> รายการคะแนนล่าสุด</h2>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="dash-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>รหัสนักเรียน</th>
+            <th>ชื่อ</th>
+            <th>รายวิชา</th>
+            <th>หัวข้อ</th>
+            <th>คะแนน</th>
+            <th>ประเภท</th>
+            <th>วันที่บันทึก</th>
+          </tr>
+        </thead>
+        <tbody id="recentBody">
+          <tr class="loading-row"><td colspan="8"><div class="spinner"></div>กำลังโหลด...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== Admin: Upload Students ===== -->
+  <div class="dash-section">
+    <div class="dash-section-head">
+      <h2><i class="fas fa-cloud-arrow-up"></i> อัปโหลดรายชื่อนักเรียนไปยัง Firebase</h2>
+    </div>
+    <div style="background:#f8fafc;border-radius:10px;padding:1.25rem">
+      <p style="margin:0 0 .5rem;font-size:.9rem;color:#475569">
+        อัปโหลดรายชื่อนักเรียนทั้งหมด (442 คน) จาก students.js ไปยัง Firestore collection <code>students/</code><br>
+        <small style="color:#94a3b8">ทำครั้งเดียวพอ — หากอัปโหลดซ้ำจะ overwrite ข้อมูลเดิม</small>
+      </p>
+      <button id="uploadStudentsBtn" onclick="uploadAllStudents()"
+        style="background:linear-gradient(135deg,#1e40af,#2563eb);color:white;border:none;
+               padding:.7rem 1.5rem;border-radius:8px;font-family:inherit;font-size:.93rem;
+               font-weight:600;cursor:pointer;margin-top:.25rem">
+        <i class="fas fa-cloud-arrow-up"></i> เริ่มอัปโหลด
+      </button>
+      <div id="uploadStudentsStatus" style="margin-top:.75rem;font-size:.88rem;display:none"></div>
+    </div>
+  </div>
+
+</div><!-- /dash-body -->
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <p>&copy; 2569 <strong>ครูศิริศักดิ์ ปิลอง</strong> &mdash; Teacher Dashboard</p>
+</footer>
+
+<script src="js/auth.js"></script>
+<script>requireTeacherAuth();</script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/students.js"></script>
+<script src="js/app.js"></script>
+<script>
+/* =========================================================
+   Dashboard JS
+   ========================================================= */
+
+/* ----- Static assignments data ----- */
+const ASSIGNMENTS = [
+  // รู้เท่าทันสื่อ ม.1
+  { subject: 'media-m1',        subjectName: '📱 รู้เท่าทันสื่อ ม.1',       name: 'แบบฝึกหัดที่ 1: ประเภทของสื่อรอบตัว',    type: 'แบบฝึกหัด', max: 10, unit: 'หน่วยที่ 1', status: 'coming' },
+  { subject: 'media-m1',        subjectName: '📱 รู้เท่าทันสื่อ ม.1',       name: 'แบบฝึกหัดที่ 2: ตรวจสอบข่าวปลอม',         type: 'แบบฝึกหัด', max: 10, unit: 'หน่วยที่ 2', status: 'coming' },
+  { subject: 'media-m1',        subjectName: '📱 รู้เท่าทันสื่อ ม.1',       name: 'แบบฝึกหัดที่ 3: การป้องกันตัวออนไลน์',   type: 'แบบฝึกหัด', max: 10, unit: 'หน่วยที่ 3', status: 'coming' },
+  { subject: 'media-m1',        subjectName: '📱 รู้เท่าทันสื่อ ม.1',       name: 'แบบฝึกหัดที่ 4: สร้างสรรค์สื่อดิจิทัล',  type: 'โปรเจค',    max: 20, unit: 'หน่วยที่ 4', status: 'coming' },
+  { subject: 'media-m1',        subjectName: '📱 รู้เท่าทันสื่อ ม.1',       name: 'Pre-test หน่วยที่ 1-2',                   type: 'แบบทดสอบ',  max: 20, unit: '-',        status: 'coming' },
+  { subject: 'media-m1',        subjectName: '📱 รู้เท่าทันสื่อ ม.1',       name: 'Midterm Exam',                             type: 'แบบทดสอบ',  max: 30, unit: '-',        status: 'coming' },
+  { subject: 'media-m1',        subjectName: '📱 รู้เท่าทันสื่อ ม.1',       name: 'Final Exam',                               type: 'แบบทดสอบ',  max: 30, unit: '-',        status: 'coming' },
+  // โปรแกรมเบื้องต้น ม.2
+  { subject: 'programming-m2',  subjectName: '💻 โปรแกรมเบื้องต้น 1 ม.2',  name: 'แบบฝึกหัดที่ 1: คิดเชิงคำนวณในชีวิตประจำวัน', type: 'แบบฝึกหัด', max: 10, unit: 'หน่วยที่ 1', status: 'coming' },
+  { subject: 'programming-m2',  subjectName: '💻 โปรแกรมเบื้องต้น 1 ม.2',  name: 'แบบฝึกหัดที่ 2: เขียนผังงานแก้ปัญหา',        type: 'แบบฝึกหัด', max: 10, unit: 'หน่วยที่ 2', status: 'coming' },
+  { subject: 'programming-m2',  subjectName: '💻 โปรแกรมเบื้องต้น 1 ม.2',  name: 'แบบฝึกหัดที่ 3: โปรเจค Scratch',              type: 'โปรเจค',    max: 20, unit: 'หน่วยที่ 3', status: 'coming' },
+  { subject: 'programming-m2',  subjectName: '💻 โปรแกรมเบื้องต้น 1 ม.2',  name: 'แบบฝึกหัดที่ 4: เขียนโปรแกรม Python',         type: 'แบบฝึกหัด', max: 20, unit: 'หน่วยที่ 4', status: 'coming' },
+  { subject: 'programming-m2',  subjectName: '💻 โปรแกรมเบื้องต้น 1 ม.2',  name: 'Midterm — ผังงานและ Scratch',                  type: 'แบบทดสอบ',  max: 30, unit: '-',        status: 'coming' },
+  { subject: 'programming-m2',  subjectName: '💻 โปรแกรมเบื้องต้น 1 ม.2',  name: 'Final — Python เบื้องต้น',                     type: 'แบบทดสอบ',  max: 30, unit: '-',        status: 'coming' },
+  { subject: 'programming-m2',  subjectName: '💻 โปรแกรมเบื้องต้น 1 ม.2',  name: 'โปรเจคสร้างโปรแกรม',                           type: 'โปรเจค',    max: 30, unit: '-',        status: 'coming' },
+  // วิทยาการคำนวณ 3 ม.6
+  { subject: 'cs3-m6',          subjectName: '🖥️ วิทยาการคำนวณ 3 ม.6',    name: 'แบบฝึกหัดที่ 1: วิเคราะห์ข้อมูลด้วย Python', type: 'แบบฝึกหัด', max: 20, unit: 'หน่วยที่ 1', status: 'coming' },
+  { subject: 'cs3-m6',          subjectName: '🖥️ วิทยาการคำนวณ 3 ม.6',    name: 'แบบฝึกหัดที่ 2: สร้างโมเดล Machine Learning', type: 'แบบฝึกหัด', max: 20, unit: 'หน่วยที่ 2', status: 'coming' },
+  { subject: 'cs3-m6',          subjectName: '🖥️ วิทยาการคำนวณ 3 ม.6',    name: 'แบบฝึกหัดที่ 3: จัดการโค้ดด้วย Git',          type: 'แบบฝึกหัด', max: 10, unit: 'หน่วยที่ 3', status: 'coming' },
+  { subject: 'cs3-m6',          subjectName: '🖥️ วิทยาการคำนวณ 3 ม.6',    name: 'Midterm — Data Science & AI',                  type: 'แบบทดสอบ',  max: 30, unit: '-',        status: 'coming' },
+  { subject: 'cs3-m6',          subjectName: '🖥️ วิทยาการคำนวณ 3 ม.6',    name: 'Final — Software & Project',                   type: 'แบบทดสอบ',  max: 30, unit: '-',        status: 'coming' },
+  { subject: 'cs3-m6',          subjectName: '🖥️ วิทยาการคำนวณ 3 ม.6',    name: 'โครงงานคอมพิวเตอร์',                           type: 'โปรเจค',    max: 50, unit: 'หน่วยที่ 4', status: 'coming' },
+];
+
+/* ----- State ----- */
+let allStudentData = []; // [ { subjectId, ...studentFields, totalScore, totalMax, scores[] } ]
+let currentFilter = 'all';
+let charts = {};
+
+/* =========================================================
+   Clock
+   ========================================================= */
+function updateClock() {
+  const now = new Date();
+  document.getElementById('dashClock').textContent =
+    now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  document.getElementById('dashDate').textContent =
+    now.toLocaleDateString('th-TH', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+/* =========================================================
+   Firebase loader
+   ========================================================= */
+async function loadAllData() {
+  allStudentData = [];
+
+  const subjects = ['media-m1', 'programming-m2', 'cs3-m6'];
+  const subjectNames = {
+    'media-m1': '📱 รู้เท่าทันสื่อ ม.1',
+    'programming-m2': '💻 โปรแกรมเบื้องต้น ม.2',
+    'cs3-m6': '🖥️ วิทยาการคำนวณ 3 ม.6'
+  };
+
+  if (!firebaseReady) {
+    // Demo data when Firebase not configured
+    allStudentData = generateDemoData();
+    renderDashboard();
+    return;
+  }
+
+  try {
+    for (const subj of subjects) {
+      const res = await getAllStudentsScores(subj);
+      if (res.ok) {
+        res.data.forEach(s => {
+          allStudentData.push({ ...s, subjectId: subj, subjectName: subjectNames[subj] });
+        });
+      }
+    }
+    document.getElementById('lastSync').textContent =
+      'อัปเดตล่าสุด: ' + new Date().toLocaleTimeString('th-TH');
+  } catch (e) {
+    showToast('โหลดข้อมูลบางส่วนไม่สำเร็จ', 'warning');
+  }
+
+  renderDashboard();
+}
+
+/* =========================================================
+   Demo data (when Firebase not configured)
+   ========================================================= */
+function generateDemoData() {
+  const names = ['สมชาย ใจดี', 'สมหญิง รักเรียน', 'อภิชาติ สุขสม', 'วิภา สดใส', 'นรินทร์ มั่นคง',
+                 'กัญญา แก้วใส', 'พีระ วงศ์ดี', 'นุชนาถ บุญมา', 'ธนภัทร ทองดี', 'พิชชา สีดา'];
+  const rooms = ['ม.1/1', 'ม.1/2', 'ม.2/1', 'ม.6/1', 'ม.6/2'];
+  const subjects = [
+    { id: 'media-m1', name: '📱 รู้เท่าทันสื่อ ม.1' },
+    { id: 'programming-m2', name: '💻 โปรแกรมเบื้องต้น ม.2' },
+    { id: 'cs3-m6', name: '🖥️ วิทยาการคำนวณ 3 ม.6' }
+  ];
+
+  const data = [];
+  subjects.forEach(subj => {
+    names.slice(0, 6).forEach((name, i) => {
+      const scores = [
+        { title: 'แบบฝึกหัดที่ 1', score: 7 + (i % 3), maxScore: 10, type: 'exercise', submittedAt: { toDate: () => new Date(Date.now() - i * 86400000 * 3) } },
+        { title: 'แบบฝึกหัดที่ 2', score: 6 + (i % 4), maxScore: 10, type: 'exercise', submittedAt: { toDate: () => new Date(Date.now() - i * 86400000 * 2) } },
+        { title: 'Midterm Exam',  score: 22 + (i % 7), maxScore: 30, type: 'exam',     submittedAt: { toDate: () => new Date(Date.now() - i * 86400000) } },
+      ];
+      const totalScore = scores.reduce((s, x) => s + x.score, 0);
+      const totalMax   = scores.reduce((s, x) => s + x.maxScore, 0);
+      data.push({
+        subjectId: subj.id,
+        subjectName: subj.name,
+        studentId: `${30000 + (i + 1) * 100 + subjects.indexOf(subj)}`,
+        name,
+        room: rooms[i % rooms.length],
+        scores,
+        totalScore,
+        totalMax
+      });
+    });
+  });
+  return data;
+}
+
+/* =========================================================
+   Filter helper
+   ========================================================= */
+function getFiltered() {
+  if (currentFilter === 'all') return allStudentData;
+  return allStudentData.filter(s => s.subjectId === currentFilter);
+}
+
+/* =========================================================
+   Render entire dashboard
+   ========================================================= */
+function renderDashboard() {
+  const filtered = getFiltered();
+
+  renderKPIs(filtered);
+  renderSubjectSummary();
+  renderCharts(filtered);
+  renderLeaderboard(filtered);
+  renderRecent(filtered);
+  renderAssignTable();
+}
+
+/* ----- KPIs ----- */
+function renderKPIs(data) {
+  const registered    = typeof STUDENTS !== 'undefined' ? Object.keys(STUDENTS).length : '–';
+  const totalStudents = new Set(data.map(s => s.studentId + s.subjectId)).size;
+  const totalEntries  = data.reduce((s, x) => s + (x.scores ? x.scores.length : 0), 0);
+  const allPcts = data.filter(s => s.totalMax > 0).map(s => (s.totalScore / s.totalMax) * 100);
+  const avg = allPcts.length ? Math.round(allPcts.reduce((a, b) => a + b, 0) / allPcts.length) : 0;
+
+  document.getElementById('kpiRegistered').textContent = registered;
+  document.getElementById('kpiStudents').textContent = totalStudents;
+  document.getElementById('kpiAvg').textContent = avg ? avg + '%' : '–';
+  document.getElementById('kpiEntries').textContent = totalEntries;
+}
+
+/* ----- Subject summary ----- */
+function renderSubjectSummary() {
+  const subjects = ['media-m1', 'programming-m2', 'cs3-m6'];
+  const prefixes = ['s1', 's2', 's3'];
+
+  subjects.forEach((subj, i) => {
+    const sd = allStudentData.filter(s => s.subjectId === subj);
+    const uniqueStudents = new Set(sd.map(s => s.studentId)).size;
+    const pcts = sd.filter(s => s.totalMax > 0).map(s => (s.totalScore / s.totalMax) * 100);
+    const avg = pcts.length ? Math.round(pcts.reduce((a, b) => a + b, 0) / pcts.length) : 0;
+
+    const p = prefixes[i];
+    document.getElementById(`${p}-students`).textContent = uniqueStudents;
+    document.getElementById(`${p}-avg`).textContent = pcts.length ? avg + '%' : '–';
+  });
+}
+
+/* ----- Charts ----- */
+function renderCharts(data) {
+  // Destroy old charts
+  Object.values(charts).forEach(c => c.destroy());
+  charts = {};
+
+  const subjects = ['media-m1', 'programming-m2', 'cs3-m6'];
+  const subjectLabels = ['รู้เท่าทันสื่อ ม.1', 'โปรแกรมเบื้องต้น ม.2', 'วิทยาการคำนวณ 3 ม.6'];
+  const subjectColors = ['rgba(124,58,237,.85)', 'rgba(5,150,105,.85)', 'rgba(220,38,38,.85)'];
+  const subjectBorders = ['#7c3aed', '#059669', '#dc2626'];
+
+  /* Bar Chart — Average % per subject */
+  const avgs = subjects.map(subj => {
+    const sd = allStudentData.filter(s => s.subjectId === subj && s.totalMax > 0);
+    if (!sd.length) return 0;
+    return Math.round(sd.reduce((s, x) => s + (x.totalScore / x.totalMax) * 100, 0) / sd.length);
+  });
+
+  charts.bar = new Chart(document.getElementById('avgBarChart'), {
+    type: 'bar',
+    data: {
+      labels: subjectLabels,
+      datasets: [{
+        label: 'คะแนนเฉลี่ย (%)',
+        data: avgs,
+        backgroundColor: subjectColors,
+        borderColor: subjectBorders,
+        borderWidth: 2,
+        borderRadius: 6,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#f1f5f9' } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+
+  /* Donut — Score ranges */
+  const pcts = data.filter(s => s.totalMax > 0).map(s => (s.totalScore / s.totalMax) * 100);
+  const high = pcts.filter(p => p >= 70).length;
+  const mid  = pcts.filter(p => p >= 50 && p < 70).length;
+  const low  = pcts.filter(p => p < 50).length;
+
+  const donutData = [high, mid, low];
+  const donutLabels = ['ดี (70%+)', 'พอใช้ (50-69%)', 'ต้องปรับปรุง (<50%)'];
+  const donutColors = ['#34d399', '#fbbf24', '#f87171'];
+
+  charts.donut = new Chart(document.getElementById('gradeDonut'), {
+    type: 'doughnut',
+    data: {
+      labels: donutLabels,
+      datasets: [{ data: donutData, backgroundColor: donutColors, borderWidth: 0, hoverOffset: 4 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw} คน` } }
+      },
+      cutout: '65%'
+    }
+  });
+
+  // Custom legend
+  const legend = document.getElementById('donutLegend');
+  legend.innerHTML = donutLabels.map((l, i) =>
+    `<span style="display:flex;align-items:center;gap:.3rem">
+       <span style="width:10px;height:10px;border-radius:50%;background:${donutColors[i]};flex-shrink:0"></span>
+       ${l} <strong>(${donutData[i]})</strong>
+     </span>`
+  ).join('');
+
+  /* Type Bar — avg by score type */
+  const types = ['exercise', 'quiz', 'exam', 'project'];
+  const typeLabels = ['แบบฝึกหัด', 'แบบทดสอบย่อย', 'สอบ', 'โปรเจค'];
+  const typeColors = ['rgba(59,130,246,.8)', 'rgba(168,85,247,.8)', 'rgba(239,68,68,.8)', 'rgba(16,185,129,.8)'];
+
+  const typeAvgs = types.map(type => {
+    const entries = data.flatMap(s => (s.scores || []).filter(sc => sc.type === type && sc.maxScore > 0));
+    if (!entries.length) return 0;
+    return Math.round(entries.reduce((s, sc) => s + (sc.score / sc.maxScore) * 100, 0) / entries.length);
+  });
+
+  charts.typeBar = new Chart(document.getElementById('typeBarChart'), {
+    type: 'bar',
+    data: {
+      labels: typeLabels,
+      datasets: [{
+        label: 'คะแนนเฉลี่ย (%)',
+        data: typeAvgs,
+        backgroundColor: typeColors,
+        borderRadius: 6,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#f1f5f9' } },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+}
+
+/* ----- Leaderboard ----- */
+function renderLeaderboard(data) {
+  const tbody = document.getElementById('leaderboardBody');
+  const sort = document.getElementById('sortSelect').value;
+
+  const sorted = [...data].sort((a, b) => {
+    if (sort === 'asc')  return (a.totalScore / (a.totalMax || 1)) - (b.totalScore / (b.totalMax || 1));
+    if (sort === 'name') return (a.name || '').localeCompare(b.name || '');
+    return (b.totalScore / (b.totalMax || 1)) - (a.totalScore / (a.totalMax || 1));
+  });
+
+  if (!sorted.length) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="7"><i class="fas fa-database" style="font-size:1.5rem;display:block;margin-bottom:.5rem"></i>ยังไม่มีข้อมูลคะแนน — เชื่อมต่อ Firebase แล้วกด "รีเฟรช"</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = sorted.map((s, i) => {
+    const pct = s.totalMax > 0 ? Math.round((s.totalScore / s.totalMax) * 100) : 0;
+    const barClass = pct >= 70 ? 'good' : pct >= 50 ? 'medium' : 'low';
+    const rankClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
+    const rankLabel = i < 3 ? ['🥇', '🥈', '🥉'][i] : i + 1;
+
+    return `<tr>
+      <td><span class="rank-badge ${rankClass}">${rankLabel}</span></td>
+      <td>${s.studentId || '–'}</td>
+      <td>${s.name || '–'}</td>
+      <td>${s.room || '–'}</td>
+      <td style="font-size:.78rem">${s.subjectName || '–'}</td>
+      <td><span class="score-badge ${pct >= 70 ? 'high' : pct >= 50 ? 'mid' : 'low'}">${s.totalScore}/${s.totalMax}</span></td>
+      <td>
+        <div class="score-bar-wrap">
+          <div class="score-bar">
+            <div class="score-bar-fill ${barClass}" style="width:${pct}%"></div>
+          </div>
+          <span class="score-pct" style="color:${pct >= 70 ? '#059669' : pct >= 50 ? '#d97706' : '#dc2626'}">${pct}%</span>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+/* ----- Recent submissions ----- */
+function renderRecent(data) {
+  const tbody = document.getElementById('recentBody');
+  const allEntries = [];
+
+  data.forEach(s => {
+    (s.scores || []).forEach(sc => {
+      allEntries.push({ ...sc, studentId: s.studentId, studentName: s.name, subjectName: s.subjectName });
+    });
+  });
+
+  // Sort by date desc
+  allEntries.sort((a, b) => {
+    const da = a.submittedAt?.toDate ? a.submittedAt.toDate() : new Date(a.submittedAt || 0);
+    const db = b.submittedAt?.toDate ? b.submittedAt.toDate() : new Date(b.submittedAt || 0);
+    return db - da;
+  });
+
+  const recent = allEntries.slice(0, 20);
+
+  if (!recent.length) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="8">ยังไม่มีข้อมูล</td></tr>';
+    return;
+  }
+
+  const typeMap = { exercise: 'แบบฝึกหัด', quiz: 'แบบทดสอบย่อย', exam: 'สอบ', project: 'โปรเจค' };
+
+  tbody.innerHTML = recent.map((e, i) => {
+    const pct = e.maxScore > 0 ? Math.round((e.score / e.maxScore) * 100) : 0;
+    const d = e.submittedAt?.toDate ? e.submittedAt.toDate() : new Date(e.submittedAt || 0);
+    const dateStr = d.toLocaleDateString('th-TH', { day: '2-digit', month: 'short', year: 'numeric' });
+    return `<tr>
+      <td>${i + 1}</td>
+      <td>${e.studentId || '–'}</td>
+      <td>${e.studentName || '–'}</td>
+      <td style="font-size:.75rem">${e.subjectName || '–'}</td>
+      <td>${e.title || '–'}</td>
+      <td><span class="score-badge ${pct >= 70 ? 'high' : pct >= 50 ? 'mid' : 'low'}">${e.score}/${e.maxScore}</span></td>
+      <td>${typeMap[e.type] || e.type || '–'}</td>
+      <td style="font-size:.78rem;color:var(--text-muted)">${dateStr}</td>
+    </tr>`;
+  }).join('');
+}
+
+/* ----- Assignment table ----- */
+function renderAssignTable() {
+  const tbody = document.getElementById('assignTableBody');
+  const list = currentFilter === 'all'
+    ? ASSIGNMENTS
+    : ASSIGNMENTS.filter(a => a.subject === currentFilter);
+
+  if (!list.length) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="7">ไม่มีรายการ</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = list.map((a, i) => {
+    const pill = a.status === 'ready'
+      ? '<span class="status-pill ready"><i class="fas fa-circle-check"></i> พร้อมใช้งาน</span>'
+      : '<span class="status-pill coming"><i class="fas fa-clock"></i> เร็ว ๆ นี้</span>';
+    return `<tr>
+      <td>${i + 1}</td>
+      <td style="font-size:.78rem">${a.subjectName}</td>
+      <td>${a.name}</td>
+      <td>${a.type}</td>
+      <td>${a.max} คะแนน</td>
+      <td>${a.unit}</td>
+      <td>${pill}</td>
+    </tr>`;
+  }).join('');
+}
+
+/* =========================================================
+   Filter buttons
+   ========================================================= */
+document.querySelectorAll('.sf-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.sf-btn').forEach(b => {
+      b.className = 'sf-btn';
+    });
+    const f = btn.dataset.filter;
+    currentFilter = f;
+    if (f === 'all') btn.classList.add('active-all');
+    else if (f === 'media-m1') btn.classList.add('active-s1');
+    else if (f === 'programming-m2') btn.classList.add('active-s2');
+    else if (f === 'cs3-m6') btn.classList.add('active-s3');
+
+    renderDashboard();
+  });
+});
+
+/* ----- Sort ----- */
+document.getElementById('sortSelect').addEventListener('change', () => {
+  renderLeaderboard(getFiltered());
+});
+
+/* ----- Refresh ----- */
+document.getElementById('refreshBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('refreshBtn');
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังโหลด...';
+  btn.disabled = true;
+  await loadAllData();
+  btn.innerHTML = '<i class="fas fa-rotate-right"></i> รีเฟรช';
+  btn.disabled = false;
+  showToast('รีเฟรชข้อมูลสำเร็จ', 'success');
+});
+
+/* =========================================================
+   Init
+   ========================================================= */
+/* =========================================================
+   Upload Students to Firebase
+   ========================================================= */
+async function uploadAllStudents() {
+  const btn    = document.getElementById('uploadStudentsBtn');
+  const status = document.getElementById('uploadStudentsStatus');
+
+  if (typeof STUDENTS === 'undefined') {
+    status.style.display = 'block';
+    status.innerHTML = '<span style="color:#dc2626">❌ ไม่พบข้อมูล STUDENTS — ตรวจสอบว่าโหลด students.js แล้ว</span>';
+    return;
+  }
+
+  const total = Object.keys(STUDENTS).length;
+  if (!confirm('อัปโหลดรายชื่อนักเรียน ' + total + ' คน ไปยัง Firebase ใช่หรือไม่?')) return;
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังอัปโหลด ' + total + ' คน...';
+  status.style.display = 'block';
+  status.innerHTML = '⏳ กำลังอัปโหลด...';
+
+  const result = await uploadStudentsToFirestore(STUDENTS);
+
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fas fa-cloud-arrow-up"></i> เริ่มอัปโหลด';
+
+  if (result.ok) {
+    status.innerHTML = '<span style="color:#059669">✅ อัปโหลดสำเร็จ ' + result.count + ' คน — นักเรียนสามารถ login ผ่าน Firebase ได้แล้ว</span>';
+  } else {
+    status.innerHTML = '<span style="color:#dc2626">❌ เกิดข้อผิดพลาด: ' + result.error + '</span>';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  // Firebase status check
+  setTimeout(() => {
+    const dot = document.getElementById('fbDot');
+    const txt = document.getElementById('fbStatus');
+    if (firebaseReady) {
+      dot.classList.add('ok');
+      txt.textContent = 'เชื่อมต่อ Firebase สำเร็จ — กำลังโหลดข้อมูล...';
+    } else {
+      dot.classList.add('err');
+      txt.innerHTML = 'ยังไม่ได้ตั้งค่า Firebase — แสดงข้อมูลตัวอย่าง (<a href="js/firebase-config.js" style="color:var(--primary)">แก้ไข firebase-config.js</a>)';
+    }
+  }, 600);
+
+  await loadAllData();
+});
+</script>
+</body>
+</html>

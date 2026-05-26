@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>รู้เท่าทันสื่อ ม.1 | ครูศิริศักดิ์ ปิลอง</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-icon"><i class="fas fa-chalkboard-user"></i></div>
+      <span>ครูศิริศักดิ์ ปิลอง</span>
+    </a>
+    <ul class="navbar-menu">
+      <li><a href="home.html"><i class="fas fa-house"></i> หน้าหลัก</a></li>
+      <li><a href="subject-media.html" class="active"><i class="fas fa-tv"></i> รู้เท่าทันสื่อ ม.1</a></li>
+      <li><a href="subject-programming.html"><i class="fas fa-code"></i> โปรแกรมเบื้องต้น ม.2</a></li>
+      <li><a href="subject-cs3.html"><i class="fas fa-microchip"></i> วิทยาการคำนวณ 3 ม.6</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="เมนู">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="home.html"><i class="fas fa-house"></i> หน้าหลักนักเรียน</a>
+    <a href="subject-media.html"><i class="fas fa-tv"></i> รู้เท่าทันสื่อ ม.1</a>
+    <a href="subject-programming.html"><i class="fas fa-code"></i> โปรแกรมเบื้องต้น ม.2</a>
+    <a href="subject-cs3.html"><i class="fas fa-microchip"></i> วิทยาการคำนวณ 3 ม.6</a>
+  </div>
+</nav>
+
+<!-- ===== SUBJECT HERO + TABS ===== -->
+<div class="subject-hero s1">
+  <div class="subject-hero-content container">
+    <p style="opacity:.8;font-size:.85rem;margin-bottom:.4rem">
+      <a href="index.html" style="color:rgba(255,255,255,.8)">หน้าหลัก</a>
+      <i class="fas fa-chevron-right" style="font-size:.7rem;margin:0 .4rem"></i>
+      รู้เท่าทันสื่อ
+    </p>
+    <h1>📱 รู้เท่าทันสื่อ (Media Literacy)</h1>
+    <p>ชั้นมัธยมศึกษาปีที่ 1 &bull; ภาคเรียนที่ 1 ปีการศึกษา 2569</p>
+
+    <div class="subject-tabs">
+      <button class="tab-btn active" data-tab="content">
+        <i class="fas fa-book-open"></i> เนื้อหา
+      </button>
+      <button class="tab-btn" data-tab="exercises">
+        <i class="fas fa-pencil-alt"></i> แบบฝึกหัด
+      </button>
+      <button class="tab-btn" data-tab="tests">
+        <i class="fas fa-clipboard-check"></i> แบบทดสอบ
+      </button>
+      <button class="tab-btn" data-tab="scores">
+        <i class="fas fa-chart-bar"></i> คะแนน
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CONTENT TAB ===== -->
+<div id="content" class="tab-content active">
+  <div class="content-section">
+
+    <div class="alert alert-info">
+      <i class="fas fa-info-circle"></i>
+      <span>อยู่ระหว่างการเตรียมเนื้อหา ครูจะเพิ่มบทเรียนแต่ละหัวข้อทยอยตลอดภาคเรียน</span>
+    </div>
+
+    <!-- หน่วยที่ 1 -->
+    <div class="unit-card">
+      <div class="unit-header">
+        <div class="unit-title">
+          <div class="unit-number s1">1</div>
+          <div>
+            <h3>หน่วยที่ 1: สื่อรอบตัวเรา</h3>
+            <p>ความหมาย ประเภท และบทบาทของสื่อในชีวิตประจำวัน</p>
+          </div>
+        </div>
+        <span class="unit-badge">4 บทเรียน</span>
+        <i class="fas fa-chevron-down unit-toggle"></i>
+      </div>
+      <div class="unit-body">
+        <ul class="lesson-list">
+          <li class="lesson-item" style="cursor:pointer" onclick="location.href='unit1-media.html'">
+            <span class="lesson-icon">📖</span>
+            <div class="lesson-info">
+              <div class="lesson-title">บทที่ 1: รู้จักสื่อในยุคดิจิทัล</div>
+              <div class="lesson-meta">ความหมาย ประเภท วิวัฒนาการ บทบาท · มีแบบฝึกหัด 4 ชิ้นงาน</div>
+            </div>
+            <span class="lesson-status ready" style="background:#d1fae5;color:#065f46;border-radius:999px;padding:.2rem .8rem;font-size:.8rem;font-weight:700;white-space:nowrap">เปิดแล้ว</span>
+          </li>
+          <li class="lesson-item">
+            <span class="lesson-icon">📖</span>
+            <div class="lesson-info">
+              <div class="lesson-title">บทที่ 1.2 สื่อดิจิทัลในยุคปัจจุบัน</div>
+              <div class="lesson-meta">เนื้อหาทฤษฎี · เตรียมเพิ่ม</div>
+            </div>
+            <span class="lesson-status coming">เร็ว ๆ นี้</span>
+          </li>
+          <li class="lesson-item">
+            <span class="lesson-icon">📖</span>
+            <div class="lesson-info">
+              <div class="lesson-title">บทที่ 1.3 อิทธิพลของสื่อต่อสังคม</div>
+              <div class="lesson-meta">เนื้อหาทฤษฎี · เตรียมเพิ่ม</div>
+            </div>
+            <span class="lesson-status coming">เร็ว ๆ นี้</span>
+          </li>
+          <li class="lesson-item">
+            <span class="lesson-icon">📖</span>
+            <div class="lesson-info">
+              <div class="lesson-title">บทที่ 1.4 บทบาทของผู้รับสื่อ</div>
+              <div class="lesson-meta">เนื้อหาทฤษฎี · เตรียมเพิ่ม</div>
+            </div>
+            <span class="lesson-status coming">เร็ว ๆ นี้</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- หน่วยที่ 2 -->
+    <div class="unit-card">
+      <div class="unit-header">
+        <div class="unit-title">
+          <div class="unit-number s1">2</div>
+          <div>
+            <h3>หน่วยที่ 2: การวิเคราะห์สื่อ</h3>
+            <p>ทักษะการอ่านสื่ออย่างมีวิจารณญาณ</p>
+          </div>
+        </div>
+        <span class="unit-badge">4 บทเรียน</span>
+        <i class="fas fa-chevron-down unit-toggle"></i>
+      </div>
+      <div class="unit-body">
+        <ul class="lesson-list">
+          <li class="lesson-item">
+            <span class="lesson-icon">📖</span>
+            <div class="lesson-info">
+              <div class="lesson-title">บทที่ 2.1 การอ่านสื่ออย่างมีวิจารณญาณ</div>
+              <div class="lesson-meta">เนื้อหาทฤษฎี · เตรียมเพิ่ม</div>
+            </div>
+            <span class="lesson-status coming">เร็ว ๆ นี้</span>
+          </li>
+          <li class="lesson-item">
+            <span class="lesson-icon">📖</span>
+            <div class="lesson-info">
+              <div class="lesson-title">บทที่ 2.2 Fake News และวิธีตรวจสอบ</div>
+              <div class="lesson-meta">เนื้อหาทฤษฎี · เตรียมเพิ่ม</div>
+            </div>
+            <span class="lesson-status coming">เร็ว ๆ นี้</span>
+          </li>
+          <li class="lesson-item">
+            <span class="lesson-icon">📖</span>
+            <div class="lesson-info">
+              <div class="lesson-title">บทที่ 2.3 การตรวจสอบแหล่งข่าว</div>
+              <div class="lesson-meta">เนื้อหาทฤษฎี · เตรียมเพิ่ม</div>
+            </div>
+            <span class="lesson-status coming">เร็ว ๆ นี้</span>
+          </li>
+          <li class="lesson-item">
+            <span class="lesson-icon">📖</span>
+            <div class="lesson-info">
+              <div class="lesson-title">บทที่ 2.4 โฆษณาและการชักจูง</div>
+              <div class="lesson-meta">เนื้อหาทฤษฎี · เตรียมเพิ่ม</div>
+            </div>
+            <span class="lesson-status coming">เร็ว ๆ นี้</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- หน่วยที่ 3 -->
+    <div class="unit-card">
+      <div class="unit-header">
+        <div class="unit-title">
+          <div class="unit-number s1">3</div>
+          <div>
+            <h3>หน่วยที่ 3: ความปลอดภัยทางไซเบอร์</h3>
+            <p>ปกป้องตัวเองในโลกดิจิทัล</p>
+          </div>
+        </div>
+        <span class="unit-badge">4 บทเรียน</span>
+        <i class="fas fa-chevron-down unit-toggle"></i>
+      </div>
+      <div class="unit-body">
+        <ul class="lesson-list">
+          <li class="lesson-item">
+            <span class="lesson-icon">📖</span>
+            <div class="lesson-info">
+              <div class="lesson-title">บทที่ 3.1 ภัยออนไลน์และการป้องกัน</div>
+              <div class="lesson-meta">เนื้อหาทฤษฎี · เตรียมเพิ่ม</div>
+            </div>
+            <span class="lesson-status coming">เร็ว ๆ นี้</span>
+          </li>
+          <li class="lesson-item">
+            <span class="lesson-icon">📖</span>
+            <div class="lesson-info">
+              <div class="lesson-title">บทที่ 3.2 การดูแลข้อมูลส่วนตัว</div>
+              <div class="lesson-meta">เนื้อหาทฤษฎี · เตรียมเพิ่ม</div>
+            </div>
+            <span class="lesson-status coming">เร็ว ๆ นี้</span>
+          </li>
+          <li class="lesson-item">
+            <span class="lesson-icon">📖</span>
+            <div class="lesson-info">
+              <div class="lesson-title">บทที่ 3.3 Cyberbullying และการรับมือ</div>
+              <div class="lesson-meta">เนื้อหาทฤษฎี · เตรียมเพิ่ม</div>
+            </div>
+            <span class="lesson-status coming">เร็ว ๆ นี้</span>
+          </li>
+          <li class="lesson-item">
+            <span class="lesson-icon">📖</span>
+            <div class="lesson-info">
+              <div class="lesson-title">บทที่ 3.4 กฎหมายที่เกี่ยวข้องกับสื่อดิจิทัล</div>
+              <div class="lesson-meta">เนื้อหาทฤษฎี · เตรียมเพิ่ม</div>
+            </div>
+            <span class="lesson-status coming">เร็ว ๆ นี้</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- หน่วยที่ 4 -->
+    <div class="unit-card">
+      <div class="unit-header">
+        <div class="unit-title">
+          <div class="unit-number s1">4</div>
+          <div>
+            <h3>หน่วยที่ 4: การสร้างสรรค์สื่อ</h3>
+            <p>ผลิตและเผยแพร่สื่ออย่างมีความรับผิดชอบ</p>
+          </div>
+        </div>
+        <span class="unit-badge">3 บทเรียน</span>
+        <i class="fas fa-chevron-down unit-toggle"></i>
+      </div>
+      <div class="unit-body">
+        <ul class="lesson-list">
+          <li class="lesson-item">
+            <span class="lesson-icon">📖</span>
+            <div class="lesson-info">
+              <div class="lesson-title">บทที่ 4.1 การสร้างเนื้อหาดิจิทัล</div>
+              <div class="lesson-meta">เนื้อหาทฤษฎี · เตรียมเพิ่ม</div>
+            </div>
+            <span class="lesson-status coming">เร็ว ๆ นี้</span>
+          </li>
+          <li class="lesson-item">
+            <span class="lesson-icon">📖</span>
+            <div class="lesson-info">
+              <div class="lesson-title">บทที่ 4.2 ลิขสิทธิ์และทรัพย์สินทางปัญญา</div>
+              <div class="lesson-meta">เนื้อหาทฤษฎี · เตรียมเพิ่ม</div>
+            </div>
+            <span class="lesson-status coming">เร็ว ๆ นี้</span>
+          </li>
+          <li class="lesson-item">
+            <span class="lesson-icon">📖</span>
+            <div class="lesson-info">
+              <div class="lesson-title">บทที่ 4.3 จริยธรรมในการใช้สื่อ</div>
+              <div class="lesson-meta">เนื้อหาทฤษฎี · เตรียมเพิ่ม</div>
+            </div>
+            <span class="lesson-status coming">เร็ว ๆ นี้</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== EXERCISES TAB ===== -->
+<div id="exercises" class="tab-content">
+  <div class="content-section">
+
+    <div class="alert alert-warning">
+      <i class="fas fa-clock"></i>
+      <span>ครูจะเพิ่มแบบฝึกหัดตามลำดับบทเรียน นักเรียนสามารถเช็คได้ที่นี่</span>
+    </div>
+
+    <div class="exercise-grid">
+      <div class="exercise-card">
+        <div class="ex-type">แบบฝึกหัดที่ 1</div>
+        <h4>ประเภทของสื่อรอบตัว</h4>
+        <p>จำแนกและวิเคราะห์ประเภทสื่อที่พบในชีวิตประจำวัน พร้อมระบุคุณสมบัติเด่น</p>
+        <div class="ex-meta">
+          <span><i class="fas fa-star"></i> 10 คะแนน</span>
+          <span><i class="fas fa-clock"></i> หน่วยที่ 1</span>
+        </div>
+        <span class="lesson-status coming">เร็ว ๆ นี้</span>
+      </div>
+
+      <div class="exercise-card">
+        <div class="ex-type">แบบฝึกหัดที่ 2</div>
+        <h4>ตรวจสอบข่าวปลอม</h4>
+        <p>ฝึกทักษะการตรวจสอบความน่าเชื่อถือของข้อมูลข่าวสารจากแหล่งต่าง ๆ</p>
+        <div class="ex-meta">
+          <span><i class="fas fa-star"></i> 10 คะแนน</span>
+          <span><i class="fas fa-clock"></i> หน่วยที่ 2</span>
+        </div>
+        <span class="lesson-status coming">เร็ว ๆ นี้</span>
+      </div>
+
+      <div class="exercise-card">
+        <div class="ex-type">แบบฝึกหัดที่ 3</div>
+        <h4>การป้องกันตัวออนไลน์</h4>
+        <p>สถานการณ์จำลองการรับมือภัยออนไลน์และการดูแลข้อมูลส่วนตัว</p>
+        <div class="ex-meta">
+          <span><i class="fas fa-star"></i> 10 คะแนน</span>
+          <span><i class="fas fa-clock"></i> หน่วยที่ 3</span>
+        </div>
+        <span class="lesson-status coming">เร็ว ๆ นี้</span>
+      </div>
+
+      <div class="exercise-card">
+        <div class="ex-type">แบบฝึกหัดที่ 4</div>
+        <h4>สร้างสรรค์สื่อดิจิทัล</h4>
+        <p>ออกแบบและผลิตสื่อดิจิทัลอย่างมีจริยธรรมและความรับผิดชอบ</p>
+        <div class="ex-meta">
+          <span><i class="fas fa-star"></i> 20 คะแนน</span>
+          <span><i class="fas fa-clock"></i> หน่วยที่ 4</span>
+        </div>
+        <span class="lesson-status coming">เร็ว ๆ นี้</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== TESTS TAB ===== -->
+<div id="tests" class="tab-content">
+  <div class="content-section">
+
+    <div class="alert alert-info">
+      <i class="fas fa-info-circle"></i>
+      <span>แบบทดสอบจะเปิดใช้งานตามกำหนดการสอบ ให้นักเรียนติดตามจากครูในห้องเรียน</span>
+    </div>
+
+    <div class="exercise-grid">
+      <div class="exercise-card">
+        <div class="ex-type">แบบทดสอบก่อนเรียน</div>
+        <h4>Pre-test หน่วยที่ 1-2</h4>
+        <p>วัดความรู้พื้นฐานด้านสื่อและการวิเคราะห์สื่อก่อนเรียน</p>
+        <div class="ex-meta">
+          <span><i class="fas fa-star"></i> 20 คะแนน</span>
+          <span><i class="fas fa-question-circle"></i> 20 ข้อ</span>
+        </div>
+        <span class="lesson-status coming">เร็ว ๆ นี้</span>
+      </div>
+
+      <div class="exercise-card">
+        <div class="ex-type">แบบทดสอบกลางภาค</div>
+        <h4>Midterm Exam</h4>
+        <p>ทดสอบความรู้หน่วยที่ 1-2 ครอบคลุมสื่อรอบตัวและการวิเคราะห์สื่อ</p>
+        <div class="ex-meta">
+          <span><i class="fas fa-star"></i> 30 คะแนน</span>
+          <span><i class="fas fa-question-circle"></i> 30 ข้อ</span>
+        </div>
+        <span class="lesson-status coming">เร็ว ๆ นี้</span>
+      </div>
+
+      <div class="exercise-card">
+        <div class="ex-type">แบบทดสอบหลังเรียน</div>
+        <h4>Post-test หน่วยที่ 3-4</h4>
+        <p>วัดผลความรู้ความเข้าใจด้านความปลอดภัยทางไซเบอร์และการสร้างสรรค์สื่อ</p>
+        <div class="ex-meta">
+          <span><i class="fas fa-star"></i> 20 คะแนน</span>
+          <span><i class="fas fa-question-circle"></i> 20 ข้อ</span>
+        </div>
+        <span class="lesson-status coming">เร็ว ๆ นี้</span>
+      </div>
+
+      <div class="exercise-card">
+        <div class="ex-type">แบบทดสอบปลายภาค</div>
+        <h4>Final Exam</h4>
+        <p>ทดสอบความรู้ทั้งหมดตลอดภาคเรียน หน่วยที่ 1-4</p>
+        <div class="ex-meta">
+          <span><i class="fas fa-star"></i> 30 คะแนน</span>
+          <span><i class="fas fa-question-circle"></i> 40 ข้อ</span>
+        </div>
+        <span class="lesson-status coming">เร็ว ๆ นี้</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== SCORES TAB ===== -->
+<div id="scores" class="tab-content">
+  <div class="score-section">
+
+    <div class="student-score-header" id="scoreStudentHeader">
+      <i class="fas fa-spinner fa-spin"></i> กำลังโหลดข้อมูล...
+    </div>
+
+    <div id="scoreSummary" class="score-summary-chips" style="display:none"></div>
+
+    <div class="score-table-wrapper">
+      <table class="score-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>หัวข้อ/งาน</th>
+            <th>คะแนน</th>
+            <th>ประเภท</th>
+            <th>หมายเหตุ</th>
+            <th>วันที่</th>
+          </tr>
+        </thead>
+        <tbody id="scoreTableBody">
+          <tr>
+            <td colspan="6" style="text-align:center;padding:2rem;color:#64748b">
+              <i class="fas fa-spinner fa-spin"></i> กำลังโหลด...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="text-align:center;margin-top:1rem">
+      <button onclick="initStudentScoreTab('media-m1')" class="btn btn-outline">
+        <i class="fas fa-rotate-right"></i> โหลดใหม่
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <p>&copy; 2569 <strong>ครูศิริศักดิ์ ปิลอง</strong> &mdash; รายวิชารู้เท่าทันสื่อ ม.1</p>
+</footer>
+
+<script src="js/auth.js"></script>
+<script>requireAuth('1');</script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/app.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    initStudentScoreTab('media-m1');
+  });
+</script>
+</body>
+</html>

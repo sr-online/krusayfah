@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เข้าสู่ระบบนักเรียน | ครูศิริศักดิ์ ปิลอง</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ===== Login Page ===== */
+    .login-hero {
+      background: linear-gradient(135deg, #1e3a5f 0%, #1e40af 60%, #2563eb 100%);
+      color: white;
+      padding: 3rem 1rem;
+      text-align: center;
+    }
+    .login-hero h1 { font-size: 1.9rem; font-weight: 700; margin-bottom: .4rem; }
+    .login-hero p { opacity: .85; font-size: .95rem; }
+    .login-hero .school-badge {
+      display: inline-block;
+      margin-top: .75rem;
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.3);
+      border-radius: 999px;
+      padding: .35rem 1rem;
+      font-size: .85rem;
+    }
+
+    /* ===== Login Card ===== */
+    .login-wrap {
+      max-width: 480px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .login-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,.10);
+      overflow: hidden;
+    }
+    .login-card-header {
+      background: linear-gradient(135deg, #1e40af, #2563eb);
+      color: white;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+    .login-card-header .icon-circle {
+      width: 44px; height: 44px;
+      background: rgba(255,255,255,.2);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    .login-card-header h2 { font-size: 1.1rem; font-weight: 700; margin: 0; }
+    .login-card-header p { font-size: .82rem; opacity: .85; margin: 0; }
+    .login-card-body { padding: 1.75rem 1.5rem; }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 1rem;
+    }
+    .input-group .input-icon {
+      position: absolute;
+      left: .9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: .95rem;
+    }
+    .input-group input {
+      width: 100%;
+      padding: .75rem .9rem .75rem 2.5rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 1rem;
+      box-sizing: border-box;
+      transition: border-color .2s;
+      outline: none;
+    }
+    .input-group input:focus { border-color: #2563eb; }
+    .input-group input.error { border-color: #dc2626; }
+
+    .btn-login {
+      width: 100%;
+      padding: .8rem;
+      background: linear-gradient(135deg, #1e40af, #2563eb);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity .2s, transform .1s;
+    }
+    .btn-login:hover { opacity: .9; transform: translateY(-1px); }
+    .btn-login:active { transform: translateY(0); }
+    .btn-login:disabled { opacity: .6; cursor: not-allowed; }
+
+    .login-error {
+      background: #fef2f2;
+      border: 1px solid #fca5a5;
+      border-radius: 8px;
+      color: #dc2626;
+      padding: .65rem 1rem;
+      font-size: .88rem;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .login-error.show { display: flex; align-items: center; gap: .5rem; }
+
+    /* ===== Profile Card (after login) ===== */
+    #profileSection { display: none; }
+    .profile-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,.10);
+      overflow: hidden;
+    }
+    .profile-header {
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: white;
+    }
+    .profile-avatar {
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+    .profile-info h3 { font-size: 1.05rem; font-weight: 700; margin: 0 0 .2rem; }
+    .profile-info p { font-size: .88rem; opacity: .9; margin: 0; }
+    .profile-body { padding: 1.25rem 1.5rem; }
+
+    .info-row {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .65rem 0;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: .93rem;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-row .info-label {
+      color: #64748b;
+      width: 100px;
+      flex-shrink: 0;
+      font-size: .85rem;
+    }
+    .info-row .info-value { font-weight: 600; color: #1e293b; }
+
+    .subject-goto {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: 1rem 1.25rem;
+      border-radius: 12px;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 1rem;
+      transition: opacity .2s, transform .1s;
+    }
+    .subject-goto:hover { opacity: .9; transform: translateY(-1px); }
+    .subject-goto .subject-goto-icon {
+      width: 40px; height: 40px;
+      background: rgba(255,255,255,.2);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .subject-goto-text small { display: block; opacity: .85; font-size: .8rem; font-weight: 400; }
+
+    .btn-logout {
+      width: 100%;
+      margin-top: .75rem;
+      padding: .65rem;
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: .9rem;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .btn-logout:hover { background: #e2e8f0; }
+
+    /* Grade color themes */
+    .grade-1  { background: linear-gradient(135deg, #5b21b6, #7c3aed); }
+    .grade-2  { background: linear-gradient(135deg, #065f46, #059669); }
+    .grade-6  { background: linear-gradient(135deg, #991b1b, #dc2626); }
+
+    /* Hint list */
+    .hint-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin-top: 1rem;
+      font-size: .85rem;
+      color: #64748b;
+    }
+    .hint-box p { margin: 0 0 .4rem; font-weight: 600; color: #475569; }
+    .hint-box ul { margin: 0; padding-left: 1.25rem; line-height: 1.8; }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-icon"><i class="fas fa-chalkboard-user"></i></div>
+      <span>ครูศิริศักดิ์ ปิลอง</span>
+    </a>
+    <ul class="navbar-menu">
+      <li><a href="index.html"><i class="fas fa-home"></i> หน้าหลัก</a></li>
+      <li><a href="login.html" class="active"><i class="fas fa-user-graduate"></i> เข้าสู่ระบบ</a></li>
+      <li><a href="subject-media.html"><i class="fas fa-tv"></i> รู้เท่าทันสื่อ ม.1</a></li>
+      <li><a href="subject-programming.html"><i class="fas fa-code"></i> โปรแกรมเบื้องต้น ม.2</a></li>
+      <li><a href="subject-cs3.html"><i class="fas fa-microchip"></i> วิทยาการคำนวณ 3 ม.6</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="เมนู">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html"><i class="fas fa-home"></i> หน้าหลัก</a>
+    <a href="login.html"><i class="fas fa-user-graduate"></i> เข้าสู่ระบบ</a>
+    <a href="subject-media.html"><i class="fas fa-tv"></i> รู้เท่าทันสื่อ ม.1</a>
+    <a href="subject-programming.html"><i class="fas fa-code"></i> โปรแกรมเบื้องต้น ม.2</a>
+    <a href="subject-cs3.html"><i class="fas fa-microchip"></i> วิทยาการคำนวณ 3 ม.6</a>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="login-hero">
+  <div class="hero-avatar" style="width:64px;height:64px;margin:0 auto 1rem;background:rgba(255,255,255,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem">
+    <i class="fas fa-user-graduate"></i>
+  </div>
+  <h1>เข้าสู่ระบบนักเรียน</h1>
+  <p>กรอกรหัสประจำตัวนักเรียนเพื่อเข้าถึงบทเรียน</p>
+  <span class="school-badge"><i class="fas fa-school"></i> โรงเรียนสหราษฎร์รังสฤษดิ์ ภาคเรียนที่ 1/2569</span>
+</section>
+
+<!-- ===== MAIN ===== -->
+<div class="login-wrap">
+
+  <!-- ฟอร์ม Login -->
+  <div id="loginSection">
+    <div class="login-card">
+      <div class="login-card-header">
+        <div class="icon-circle"><i class="fas fa-id-card"></i></div>
+        <div>
+          <h2>กรอกรหัสประจำตัว</h2>
+          <p>ใช้เลขประจำตัวนักเรียน 5 หลัก</p>
+        </div>
+      </div>
+      <div class="login-card-body">
+        <div class="login-error" id="loginError">
+          <i class="fas fa-circle-exclamation"></i>
+          <span id="loginErrorMsg">ไม่พบรหัสประจำตัวนี้ในระบบ</span>
+        </div>
+        <div class="input-group">
+          <i class="fas fa-hashtag input-icon"></i>
+          <input type="text" id="studentIdInput" placeholder="รหัสประจำตัวนักเรียน เช่น 15809"
+            maxlength="6" inputmode="numeric" autocomplete="off"
+            onkeydown="if(event.key==='Enter') doLogin()">
+        </div>
+        <button class="btn-login" id="loginBtn" onclick="doLogin()">
+          <i class="fas fa-right-to-bracket"></i> เข้าสู่ระบบ
+        </button>
+
+        <div class="hint-box">
+          <p><i class="fas fa-circle-info"></i> วิชาที่สอนในระบบนี้</p>
+          <ul>
+            <li>ม.1 (ห้อง 9, 10, 11) — รู้เท่าทันสื่อ</li>
+            <li>ม.2 (ห้อง 8, 9, 10) — โปรแกรมเบื้องต้น 1</li>
+            <li>ม.6 (ห้อง 1–9) — วิทยาการคำนวณ 3</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end login-wrap -->
+
+<footer>
+  <p>&copy; 2569 <strong>ครูศิริศักดิ์ ปิลอง</strong> &mdash; ระบบการจัดการเรียนการสอน</p>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/students.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+<script>
+  /* ===== If already logged in, go straight to home ===== */
+  (function () {
+    if (getCurrentStudent()) { window.location.replace('home.html'); }
+  })();
+
+  /* ===== Login ===== */
+  async function doLogin() {
+    const input    = document.getElementById('studentIdInput');
+    const errorBox = document.getElementById('loginError');
+    const errorMsg = document.getElementById('loginErrorMsg');
+    const btn      = document.getElementById('loginBtn');
+    const id = input.value.trim();
+
+    input.classList.remove('error');
+    errorBox.classList.remove('show');
+
+    if (!id) {
+      input.classList.add('error');
+      errorMsg.textContent = 'กรุณากรอกรหัสประจำตัวนักเรียน';
+      errorBox.classList.add('show');
+      input.focus();
+      return;
+    }
+
+    // Show loading
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังตรวจสอบ...';
+
+    let student = null;
+
+    // 1. Try Firebase first
+    if (firebaseReady) {
+      const result = await getStudentById(id);
+      if (result.ok) student = result.data;
+    }
+
+    // 2. Fallback to local students.js
+    if (!student && typeof STUDENTS !== 'undefined' && STUDENTS[id]) {
+      student = STUDENTS[id];
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-right-to-bracket"></i> เข้าสู่ระบบ';
+
+    if (!student) {
+      input.classList.add('error');
+      errorMsg.textContent = 'ไม่พบรหัส "' + id + '" ในระบบ — กรุณาตรวจสอบอีกครั้ง';
+      errorBox.classList.add('show');
+      input.focus();
+      return;
+    }
+
+    // Save session (localStorage) then redirect
+    saveSession(id, student);
+    window.location.href = 'home.html';
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('studentIdInput').focus();
+  });
+</script>
+</body>
+</html>

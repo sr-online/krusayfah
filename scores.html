@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบจัดการคะแนน | ครูศิริศักดิ์ ปิลอง</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .scores-hero {
+      background: linear-gradient(135deg, #1e3a8a, #1e40af);
+      color: white;
+      padding: 2.5rem 1rem;
+      text-align: center;
+    }
+    .scores-hero h1 { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 700; margin-bottom: .4rem; }
+    .scores-hero p  { opacity: .85; font-size: .95rem; }
+
+    .scores-page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1rem 3rem;
+    }
+
+    .mode-tabs {
+      display: flex; gap: .5rem;
+      margin-bottom: 1.5rem;
+      background: var(--card);
+      padding: .4rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .mode-tab {
+      flex: 1; padding: .65rem .75rem;
+      text-align: center;
+      border: none; background: transparent;
+      border-radius: var(--radius-sm);
+      font-family: inherit; font-size: .875rem; font-weight: 600;
+      cursor: pointer; color: var(--text-muted);
+      transition: var(--transition);
+      display: flex; align-items: center; justify-content: center; gap: .4rem;
+    }
+
+    .mode-tab:hover { background: var(--bg); color: var(--text); }
+    .mode-tab.active { background: var(--primary); color: white; }
+
+    .score-panel { display: none; }
+    .score-panel.active { display: block; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 600px) {
+      .form-row { grid-template-columns: 1fr; }
+      .mode-tab span { display: none; }
+    }
+
+    .card-section {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-section h3 {
+      font-size: 1.05rem; font-weight: 700;
+      margin-bottom: 1.25rem;
+      display: flex; align-items: center; gap: .6rem;
+      color: var(--primary-dark);
+      padding-bottom: .75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .subject-selector {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .subject-opt {
+      padding: .75rem .5rem;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      text-align: center;
+      font-size: .82rem; font-weight: 600;
+      transition: var(--transition);
+      color: var(--text-muted);
+    }
+
+    .subject-opt:hover { border-color: var(--primary-light); color: var(--primary); }
+
+    .subject-opt.active.s1 { border-color: var(--subject1); background: #f5f3ff; color: var(--subject1); }
+    .subject-opt.active.s2 { border-color: var(--subject2); background: #ecfdf5; color: var(--subject2); }
+    .subject-opt.active.s3 { border-color: var(--subject3); background: #fef2f2; color: var(--subject3); }
+
+    .subject-opt .sopt-icon { font-size: 1.4rem; display: block; margin-bottom: .25rem; }
+
+    @media (max-width: 480px) {
+      .subject-selector { grid-template-columns: 1fr; }
+    }
+
+    .firebase-status {
+      display: flex; align-items: center; gap: .5rem;
+      padding: .6rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: .83rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #fbbf24;
+      flex-shrink: 0;
+    }
+
+    .status-dot.connected { background: #34d399; }
+    .status-dot.error     { background: #f87171; }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-icon"><i class="fas fa-chalkboard-user"></i></div>
+      <span>ครูศิริศักดิ์ ปิลอง</span>
+    </a>
+    <ul class="navbar-menu">
+      <li><a href="dashboard.html"><i class="fas fa-gauge-high"></i> Dashboard ครู</a></li>
+      <li><a href="scores.html" class="active"><i class="fas fa-chart-bar"></i> จัดการคะแนน</a></li>
+      <li><a href="#" onclick="teacherLogout();return false;" style="color:#dc2626"><i class="fas fa-right-from-bracket"></i> ออกจากระบบ</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="เมนู">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="dashboard.html"><i class="fas fa-gauge-high"></i> Dashboard ครู</a>
+    <a href="scores.html"><i class="fas fa-chart-bar"></i> จัดการคะแนน</a>
+    <a href="#" onclick="teacherLogout();return false;" style="color:#dc2626"><i class="fas fa-right-from-bracket"></i> ออกจากระบบ</a>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<div class="scores-hero">
+  <h1><i class="fas fa-chart-bar"></i> ระบบจัดการคะแนน</h1>
+  <p>บันทึกและติดตามคะแนนนักเรียนทั้ง 3 รายวิชา ผ่าน Firebase</p>
+  <div style="margin-top:1rem;display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap">
+    <button onclick="openChangePinModal()"
+      style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:white;
+             padding:.45rem 1rem;border-radius:8px;font-family:inherit;font-size:.85rem;cursor:pointer">
+      <i class="fas fa-key"></i> เปลี่ยน PIN
+    </button>
+    <button onclick="if(confirm('ออกจากระบบ?')) AUTH.logout()"
+      style="background:rgba(248,113,113,0.2);border:1px solid rgba(248,113,113,0.4);color:#fca5a5;
+             padding:.45rem 1rem;border-radius:8px;font-family:inherit;font-size:.85rem;cursor:pointer">
+      <i class="fas fa-lock"></i> ล็อกระบบ
+    </button>
+  </div>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div class="scores-page">
+
+  <!-- Firebase status -->
+  <div class="firebase-status" id="firebaseStatus">
+    <div class="status-dot" id="statusDot"></div>
+    <span id="statusText">กำลังเชื่อมต่อ Firebase...</span>
+  </div>
+
+  <!-- Mode Tabs -->
+  <div class="mode-tabs">
+    <button class="mode-tab active" data-mode="add">
+      <i class="fas fa-plus-circle"></i> <span>บันทึกคะแนน</span>
+    </button>
+    <button class="mode-tab" data-mode="view">
+      <i class="fas fa-search"></i> <span>ค้นหาคะแนน</span>
+    </button>
+    <button class="mode-tab" data-mode="all">
+      <i class="fas fa-table"></i> <span>ดูทั้งหมด</span>
+    </button>
+  </div>
+
+  <!-- ===== PANEL: ADD SCORE ===== -->
+  <div id="panel-add" class="score-panel active">
+
+    <!-- Subject Select -->
+    <div class="card-section">
+      <h3><i class="fas fa-book"></i> เลือกรายวิชา</h3>
+      <div class="subject-selector">
+        <div class="subject-opt s1 active" data-subject="media-m1">
+          <span class="sopt-icon">📱</span>
+          รู้เท่าทันสื่อ<br><small>ม.1</small>
+        </div>
+        <div class="subject-opt s2" data-subject="programming-m2">
+          <span class="sopt-icon">💻</span>
+          โปรแกรมเบื้องต้น<br><small>ม.2</small>
+        </div>
+        <div class="subject-opt s3" data-subject="cs3-m6">
+          <span class="sopt-icon">🖥️</span>
+          วิทยาการคำนวณ 3<br><small>ม.6</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Form -->
+    <div class="card-section">
+      <h3><i class="fas fa-user-graduate"></i> ข้อมูลนักเรียน</h3>
+      <form id="addScoreForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">รหัสนักเรียน <span style="color:#ef4444">*</span></label>
+            <input type="text" name="studentId" class="form-control" placeholder="เช่น 30101" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">ห้องเรียน</label>
+            <input type="text" name="room" class="form-control" placeholder="เช่น ม.1/1">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">ชื่อ-นามสกุล <span style="color:#ef4444">*</span></label>
+          <input type="text" name="studentName" class="form-control" placeholder="เช่น สมชาย ใจดี" required>
+        </div>
+
+        <h3 style="margin-top:1.5rem"><i class="fas fa-star"></i> ข้อมูลคะแนน</h3>
+        <div class="form-group">
+          <label class="form-label">หัวข้อ / งาน <span style="color:#ef4444">*</span></label>
+          <input type="text" name="scoreTitle" class="form-control" placeholder="เช่น แบบฝึกหัดที่ 1, Midterm" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">คะแนนที่ได้ <span style="color:#ef4444">*</span></label>
+            <input type="number" name="score" class="form-control" placeholder="0" min="0" step="0.5" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">คะแนนเต็ม <span style="color:#ef4444">*</span></label>
+            <input type="number" name="maxScore" class="form-control" placeholder="100" min="1" step="0.5" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">ประเภทงาน</label>
+          <select name="scoreType" class="form-control">
+            <option value="exercise">แบบฝึกหัด</option>
+            <option value="quiz">แบบทดสอบย่อย</option>
+            <option value="exam">สอบ (Exam)</option>
+            <option value="project">โปรเจค / งาน</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">หมายเหตุ (ถ้ามี)</label>
+          <input type="text" name="note" class="form-control" placeholder="หมายเหตุเพิ่มเติม">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:.75rem">
+          <i class="fas fa-save"></i> บันทึกคะแนน
+        </button>
+      </form>
+    </div>
+
+  </div>
+
+  <!-- ===== PANEL: VIEW SCORE ===== -->
+  <div id="panel-view" class="score-panel">
+
+    <div class="card-section">
+      <h3><i class="fas fa-search"></i> ค้นหาคะแนนนักเรียน</h3>
+
+      <div class="subject-selector" id="viewSubjectSelector">
+        <div class="subject-opt s1 active" data-subject="media-m1">
+          <span class="sopt-icon">📱</span>
+          รู้เท่าทันสื่อ<br><small>ม.1</small>
+        </div>
+        <div class="subject-opt s2" data-subject="programming-m2">
+          <span class="sopt-icon">💻</span>
+          โปรแกรมเบื้องต้น<br><small>ม.2</small>
+        </div>
+        <div class="subject-opt s3" data-subject="cs3-m6">
+          <span class="sopt-icon">🖥️</span>
+          วิทยาการคำนวณ 3<br><small>ม.6</small>
+        </div>
+      </div>
+
+      <div class="form-row" style="align-items:flex-end">
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">รหัสนักเรียน</label>
+          <input type="text" id="viewStudentId" class="form-control" placeholder="กรอกรหัสนักเรียน">
+        </div>
+        <div>
+          <button id="viewSearchBtn" class="btn btn-primary" style="width:100%;justify-content:center">
+            <i class="fas fa-search"></i> ค้นหา
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="viewResult" style="display:none">
+      <div class="card-section" style="padding:0;overflow:hidden">
+        <div style="padding:1rem 1.5rem;background:var(--bg);border-bottom:1px solid var(--border)">
+          <strong id="viewStudentName">ผลคะแนน</strong>
+          <span id="viewStudentInfo" style="color:var(--text-muted);font-size:.85rem;margin-left:.75rem"></span>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="score-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>หัวข้อ</th>
+                <th>คะแนน</th>
+                <th>ประเภท</th>
+                <th>หมายเหตุ</th>
+                <th>วันที่</th>
+              </tr>
+            </thead>
+            <tbody id="viewTableBody"></tbody>
+          </table>
+        </div>
+        <div style="padding:.75rem 1.5rem;background:var(--bg);border-top:1px solid var(--border);font-size:.85rem;color:var(--text-muted)">
+          รวม: <strong id="viewTotal" style="color:var(--text)">-</strong>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== PANEL: ALL SCORES ===== -->
+  <div id="panel-all" class="score-panel">
+
+    <div class="card-section">
+      <h3><i class="fas fa-table"></i> คะแนนทั้งหมดตามรายวิชา</h3>
+
+      <div class="subject-selector" id="allSubjectSelector">
+        <div class="subject-opt s1 active" data-subject="media-m1">
+          <span class="sopt-icon">📱</span>
+          รู้เท่าทันสื่อ<br><small>ม.1</small>
+        </div>
+        <div class="subject-opt s2" data-subject="programming-m2">
+          <span class="sopt-icon">💻</span>
+          โปรแกรมเบื้องต้น<br><small>ม.2</small>
+        </div>
+        <div class="subject-opt s3" data-subject="cs3-m6">
+          <span class="sopt-icon">🖥️</span>
+          วิทยาการคำนวณ 3<br><small>ม.6</small>
+        </div>
+      </div>
+
+      <button id="loadAllScoresBtn" class="btn btn-primary" style="width:100%;justify-content:center">
+        <i class="fas fa-download"></i> โหลดคะแนนทั้งหมด
+      </button>
+    </div>
+
+    <div class="card-section" style="padding:0;overflow:hidden">
+      <div style="overflow-x:auto">
+        <table class="score-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>รหัส</th>
+              <th>ชื่อ-นามสกุล</th>
+              <th>ห้อง</th>
+              <th>คะแนนรวม</th>
+            </tr>
+          </thead>
+          <tbody id="allTableBody">
+            <tr>
+              <td colspan="5" style="text-align:center;padding:2rem;color:#64748b">
+                <i class="fas fa-table" style="font-size:1.5rem;margin-bottom:.5rem;display:block"></i>
+                เลือกรายวิชาแล้วกด "โหลดคะแนนทั้งหมด"
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <p>&copy; 2569 <strong>ครูศิริศักดิ์ ปิลอง</strong> &mdash; ระบบจัดการคะแนน</p>
+</footer>
+
+<script src="js/auth.js"></script>
+<script>requireTeacherAuth();</script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/app.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+
+  /* ---------- Firebase status ---------- */
+  const dot  = document.getElementById('statusDot');
+  const statusText = document.getElementById('statusText');
+
+  setTimeout(() => {
+    if (firebaseReady) {
+      dot.classList.add('connected');
+      statusText.textContent = 'เชื่อมต่อ Firebase สำเร็จ';
+    } else {
+      dot.classList.add('error');
+      statusText.textContent = 'ยังไม่ได้ตั้งค่า Firebase — กรุณาแก้ไข js/firebase-config.js';
+    }
+  }, 800);
+
+  /* ---------- Mode tabs ---------- */
+  let currentAddSubject  = 'media-m1';
+  let currentViewSubject = 'media-m1';
+  let currentAllSubject  = 'media-m1';
+
+  document.querySelectorAll('.mode-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.score-panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(`panel-${tab.dataset.mode}`).classList.add('active');
+    });
+  });
+
+  /* ---------- Subject selectors ---------- */
+  function initSubjectSelector(containerSelector, onChange) {
+    document.querySelectorAll(`${containerSelector} .subject-opt`).forEach(opt => {
+      opt.addEventListener('click', () => {
+        document.querySelectorAll(`${containerSelector} .subject-opt`).forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+        onChange(opt.dataset.subject);
+      });
+    });
+  }
+
+  initSubjectSelector('.card-section:first-child .subject-selector', s => { currentAddSubject = s; });
+  initSubjectSelector('#viewSubjectSelector', s => { currentViewSubject = s; });
+  initSubjectSelector('#allSubjectSelector', s => { currentAllSubject = s; });
+
+  /* ---------- Add Score Form ---------- */
+  const addForm = document.getElementById('addScoreForm');
+  addForm.addEventListener('submit', async e => {
+    e.preventDefault();
+
+    const fd = new FormData(addForm);
+    const studentData = {
+      studentId: fd.get('studentId').trim(),
+      name:      fd.get('studentName').trim(),
+      room:      fd.get('room').trim()
+    };
+
+    const scoreData = {
+      title:    fd.get('scoreTitle').trim(),
+      score:    parseFloat(fd.get('score')),
+      maxScore: parseFloat(fd.get('maxScore')),
+      type:     fd.get('scoreType'),
+      note:     fd.get('note').trim()
+    };
+
+    const btn = addForm.querySelector('[type=submit]');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังบันทึก...';
+
+    const result = await saveScore(currentAddSubject, studentData, scoreData);
+
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-save"></i> บันทึกคะแนน';
+
+    if (result.ok) {
+      showToast('บันทึกคะแนนสำเร็จ ✅', 'success');
+      addForm.reset();
+    } else {
+      showToast(`เกิดข้อผิดพลาด: ${result.error}`, 'error');
+    }
+  });
+
+  /* ---------- View Score ---------- */
+  document.getElementById('viewSearchBtn').addEventListener('click', async () => {
+    const sid = document.getElementById('viewStudentId').value.trim();
+    if (!sid) { showToast('กรุณาระบุรหัสนักเรียน', 'warning'); return; }
+
+    const btn = document.getElementById('viewSearchBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+    const result = await getStudentScores(currentViewSubject, sid);
+
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-search"></i> ค้นหา';
+
+    if (!result.ok) { showToast(result.error, 'error'); return; }
+
+    const viewResult = document.getElementById('viewResult');
+    viewResult.style.display = 'block';
+
+    document.getElementById('viewStudentInfo').textContent = `รหัส: ${sid}`;
+
+    const tbody = document.getElementById('viewTableBody');
+    renderScoreTable(result.data, tbody);
+
+    const total = result.data.reduce((s, x) => s + (x.score || 0), 0);
+    const max   = result.data.reduce((s, x) => s + (x.maxScore || 0), 0);
+    const cls   = getScoreBadgeClass(total, max);
+    document.getElementById('viewTotal').innerHTML =
+      `<span class="score-badge ${cls}">${total} / ${max}</span>`;
+  });
+
+  /* ---------- All Scores ---------- */
+  document.getElementById('loadAllScoresBtn').addEventListener('click', async () => {
+    const btn = document.getElementById('loadAllScoresBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังโหลด...';
+
+    const result = await getAllStudentsScores(currentAllSubject);
+
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-download"></i> โหลดคะแนนทั้งหมด';
+
+    if (!result.ok) { showToast(result.error, 'error'); return; }
+
+    renderAllStudentsTable(result.data, document.getElementById('allTableBody'));
+  });
+
+  /* ---------- Auto-select from URL param ---------- */
+  const params = new URLSearchParams(window.location.search);
+  const subjectParam = params.get('subject');
+  if (subjectParam) {
+    document.querySelectorAll('.subject-opt').forEach(opt => {
+      if (opt.dataset.subject === subjectParam) opt.click();
+    });
+  }
+
+});
+</script>
+</body>
+</html>

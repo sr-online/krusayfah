@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>หน้าหลักนักเรียน | ครูศิริศักดิ์ ปิลอง</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Auth check: redirect to login if not logged in -->
+  <script src="js/auth.js"></script>
+  <script>
+    var _student = requireAuth(null); // null = any grade OK
+  </script>
+
+  <style>
+    /* ===== Student Home ===== */
+    .home-hero {
+      padding: 2.5rem 1rem;
+      color: white;
+      text-align: center;
+    }
+    .home-hero h1 { font-size: 1.6rem; font-weight: 700; margin: .75rem 0 .3rem; }
+    .home-hero p  { opacity: .88; font-size: .95rem; }
+    .home-hero .class-badge {
+      display: inline-block;
+      margin-top: .6rem;
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.3);
+      border-radius: 999px;
+      padding: .3rem 1rem;
+      font-size: .85rem;
+    }
+
+    /* ===== Home wrap ===== */
+    .home-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    /* ===== Info card ===== */
+    .info-card-home {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .card-head {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .9rem 1.25rem;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border);
+    }
+    .card-head h3 { font-size: 1rem; font-weight: 700; color: var(--text); margin: 0; }
+    .card-head-icon {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .85rem;
+      color: white;
+    }
+    .card-body { padding: 1rem 1.25rem; }
+
+    /* ===== Profile rows ===== */
+    .profile-row {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .55rem 0;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: .93rem;
+    }
+    .profile-row:last-child { border-bottom: none; }
+    .profile-row .lbl { color: var(--text-muted); width: 90px; flex-shrink: 0; font-size: .83rem; }
+    .profile-row .val { font-weight: 600; color: var(--text); }
+
+    /* ===== Subject goto button ===== */
+    .subject-goto-btn {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.25rem;
+      border-radius: 12px;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      transition: opacity .2s, transform .12s;
+    }
+    .subject-goto-btn:hover { opacity: .9; transform: translateY(-2px); }
+    .subject-goto-icon {
+      width: 44px; height: 44px;
+      background: rgba(255,255,255,.2);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .subject-goto-text span { display: block; font-size: 1rem; }
+    .subject-goto-text small { display: block; opacity: .8; font-weight: 400; font-size: .82rem; }
+
+    /* ===== Score history ===== */
+    .score-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+    .score-table th {
+      background: #f8fafc;
+      padding: .55rem .75rem;
+      text-align: left;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: .8rem;
+      border-bottom: 2px solid var(--border);
+    }
+    .score-table td {
+      padding: .6rem .75rem;
+      border-bottom: 1px solid #f1f5f9;
+      color: var(--text);
+    }
+    .score-table tr:last-child td { border-bottom: none; }
+    .score-badge-home {
+      display: inline-block;
+      padding: .2rem .65rem;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: .82rem;
+    }
+    .score-badge-home.high { background: #d1fae5; color: #065f46; }
+    .score-badge-home.mid  { background: #fef3c7; color: #92400e; }
+    .score-badge-home.low  { background: #fee2e2; color: #991b1b; }
+
+    .empty-state {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--text-muted);
+      font-size: .9rem;
+    }
+    .empty-state i { font-size: 2rem; opacity: .3; display: block; margin-bottom: .5rem; }
+
+    .score-loading { text-align: center; padding: 1.5rem; color: var(--text-muted); font-size: .9rem; }
+
+    /* ===== Logout button ===== */
+    .btn-logout-home {
+      width: 100%;
+      padding: .75rem;
+      background: #f1f5f9;
+      color: #dc2626;
+      border: 1px solid #fca5a5;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: .95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .btn-logout-home:hover { background: #fee2e2; }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="home.html" class="navbar-brand">
+      <div class="brand-icon"><i class="fas fa-chalkboard-user"></i></div>
+      <span>ครูศิริศักดิ์ ปิลอง</span>
+    </a>
+    <ul class="navbar-menu">
+      <li><a href="home.html" class="active"><i class="fas fa-house"></i> หน้าหลัก</a></li>
+      <li><a href="#scores" id="navScoreLink"><i class="fas fa-chart-bar"></i> คะแนนของฉัน</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="เมนู"><i class="fas fa-bars"></i></button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="home.html"><i class="fas fa-house"></i> หน้าหลัก</a>
+    <a href="#scores"><i class="fas fa-chart-bar"></i> คะแนนของฉัน</a>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="home-hero" id="homeHero">
+  <div style="width:64px;height:64px;background:rgba(255,255,255,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto">
+    <i class="fas fa-user-graduate"></i>
+  </div>
+  <h1 id="heroName">กำลังโหลด...</h1>
+  <p id="heroSub">—</p>
+  <span class="class-badge" id="heroBadge">—</span>
+</section>
+
+<!-- ===== CONTENT ===== -->
+<div class="home-wrap">
+
+  <!-- โปรไฟล์ -->
+  <div class="info-card-home">
+    <div class="card-head">
+      <div class="card-head-icon" id="profileIconWrap"><i class="fas fa-id-card"></i></div>
+      <h3>ข้อมูลนักเรียน</h3>
+    </div>
+    <div class="card-body">
+      <div class="profile-row">
+        <span class="lbl"><i class="fas fa-id-badge"></i> รหัส</span>
+        <span class="val" id="profId">—</span>
+      </div>
+      <div class="profile-row">
+        <span class="lbl"><i class="fas fa-user"></i> ชื่อ</span>
+        <span class="val" id="profName">—</span>
+      </div>
+      <div class="profile-row">
+        <span class="lbl"><i class="fas fa-school"></i> ชั้น</span>
+        <span class="val" id="profClass">—</span>
+      </div>
+      <div class="profile-row">
+        <span class="lbl"><i class="fas fa-list-ol"></i> เลขที่</span>
+        <span class="val" id="profNo">—</span>
+      </div>
+      <div class="profile-row">
+        <span class="lbl"><i class="fas fa-book"></i> วิชา</span>
+        <span class="val" id="profSubject">—</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ปุ่มไปยังวิชา -->
+  <a href="#" id="gotoSubject" class="subject-goto-btn">
+    <div class="subject-goto-icon"><i class="fas fa-arrow-right" id="gotoIcon"></i></div>
+    <div class="subject-goto-text">
+      <span id="gotoLabel">เข้าเรียน</span>
+      <small id="gotoSub">คลิกเพื่อเข้าสู่บทเรียน</small>
+    </div>
+  </a>
+
+  <!-- คะแนน -->
+  <div class="info-card-home" id="scores">
+    <div class="card-head">
+      <div class="card-head-icon" style="background:#f59e0b"><i class="fas fa-trophy"></i></div>
+      <h3>ประวัติคะแนนของฉัน</h3>
+    </div>
+    <div class="card-body" id="scoreCardBody">
+      <div class="score-loading"><i class="fas fa-spinner fa-spin"></i> กำลังโหลดคะแนน...</div>
+    </div>
+  </div>
+
+  <!-- ออกจากระบบ -->
+  <button class="btn-logout-home" onclick="logout()">
+    <i class="fas fa-right-from-bracket"></i> ออกจากระบบ
+  </button>
+
+</div>
+
+<footer>
+  <p>&copy; 2569 <strong>ครูศิริศักดิ์ ปิลอง</strong> &mdash; ระบบการจัดการเรียนการสอน</p>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/app.js"></script>
+<script>
+  /* ===== Fill profile from session ===== */
+  const _COLORS = {
+    '1': { bg: 'linear-gradient(135deg,#4c1d95,#7c3aed)', color: '#7c3aed', icon: 'fa-tv' },
+    '2': { bg: 'linear-gradient(135deg,#065f46,#059669)', color: '#059669', icon: 'fa-code' },
+    '6': { bg: 'linear-gradient(135deg,#991b1b,#dc2626)', color: '#dc2626', icon: 'fa-microchip' }
+  };
+  const _SUBJECT = {
+    '1': { name: 'รู้เท่าทันสื่อ',      page: 'subject-media.html' },
+    '2': { name: 'โปรแกรมเบื้องต้น 1',  page: 'subject-programming.html' },
+    '6': { name: 'วิทยาการคำนวณ 3',     page: 'subject-cs3.html' }
+  };
+  const _SUBJECT_ID = { '1': 'media-m1', '2': 'programming-m2', '6': 'cs3-m6' };
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const s = getCurrentStudent();
+    if (!s) return;
+
+    const theme = _COLORS[s.grade] || _COLORS['6'];
+    const sub   = _SUBJECT[s.grade];
+
+    // Hero
+    document.getElementById('homeHero').style.background = theme.bg;
+    document.getElementById('heroName').textContent = s.name;
+    document.getElementById('heroSub').textContent  = sub ? sub.name : '—';
+    document.getElementById('heroBadge').textContent = s.class + '  เลขที่ ' + s.no;
+
+    // Profile
+    document.getElementById('profId').textContent      = s.id;
+    document.getElementById('profName').textContent    = s.name;
+    document.getElementById('profClass').textContent   = s.class;
+    document.getElementById('profNo').textContent      = s.no;
+    document.getElementById('profSubject').textContent = sub ? sub.name : '—';
+    document.getElementById('profileIconWrap').style.background = theme.color;
+
+    // Subject button
+    const btn = document.getElementById('gotoSubject');
+    if (sub) {
+      btn.href = sub.page;
+      btn.style.background = theme.bg;
+      document.getElementById('gotoLabel').textContent = 'เข้าเรียน: ' + sub.name;
+      document.getElementById('gotoIcon').className = 'fas ' + theme.icon;
+      document.getElementById('gotoSub').textContent = 'คลิกเพื่อเข้าสู่บทเรียน ' + s.class;
+    } else {
+      btn.style.display = 'none';
+    }
+
+    // Load scores
+    loadMyScores(s.id, s.grade);
+  });
+
+  /* ===== Load score history via shared helper ===== */
+  function _renderNote(note) {
+    if (!note) return '-';
+    if (note.startsWith('http')) {
+      return '<a href="' + note + '" target="_blank" style="color:#2563eb;word-break:break-all">' +
+             '<i class="fas fa-external-link-alt" style="font-size:.75rem;margin-right:.3rem"></i>' +
+             note.replace(/^https?:\/\//, '') + '</a>';
+    }
+    return note;
+  }
+
+  async function loadMyScores(studentId, grade) {
+    const body      = document.getElementById('scoreCardBody');
+    const subjectId = _SUBJECT_ID[grade];
+    if (!subjectId) {
+      body.innerHTML = '<div class="empty-state"><i class="fas fa-chart-bar"></i>ยังไม่มีข้อมูลคะแนน</div>';
+      return;
+    }
+    if (!firebaseReady) {
+      body.innerHTML = '<div class="empty-state"><i class="fas fa-wifi-slash"></i>ไม่สามารถเชื่อมต่อ Firebase ได้</div>';
+      return;
+    }
+
+    const result = await getStudentScores(subjectId, studentId);
+    if (!result.ok) {
+      body.innerHTML = '<div class="empty-state"><i class="fas fa-triangle-exclamation"></i>เกิดข้อผิดพลาด: ' + result.error + '</div>';
+      return;
+    }
+    if (!result.data.length) {
+      body.innerHTML = '<div class="empty-state"><i class="fas fa-clipboard-list"></i>ยังไม่มีประวัติการทำแบบทดสอบ<br><small>คะแนนจะปรากฏที่นี่หลังส่งแบบทดสอบ</small></div>';
+      return;
+    }
+
+    const rows = result.data.map(function(sc, i) {
+      const pct = sc.maxScore > 0 ? Math.round((sc.score / sc.maxScore) * 100) : 0;
+      const cls = pct >= 70 ? 'high' : pct >= 50 ? 'mid' : 'low';
+      const date = sc.submittedAt ? sc.submittedAt.toDate().toLocaleDateString('th-TH', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
+      return '<tr>' +
+        '<td>' + (i + 1) + '</td>' +
+        '<td>' + (sc.title || '—') + '</td>' +
+        '<td><span class="score-badge-home ' + cls + '">' + sc.score + ' / ' + sc.maxScore + '</span></td>' +
+        '<td>' + pct + '%</td>' +
+        '<td style="color:#64748b;font-size:.82rem">' + _renderNote(sc.note) + '</td>' +
+        '<td>' + date + '</td>' +
+        '</tr>';
+    }).join('');
+
+    body.innerHTML =
+      '<table class="score-table">' +
+        '<thead><tr><th>#</th><th>งาน/แบบทดสอบ</th><th>คะแนน</th><th>%</th><th>หมายเหตุ</th><th>วันที่</th></tr></thead>' +
+        '<tbody>' + rows + '</tbody>' +
+      '</table>';
+  }
+</script>
+</body>
+</html>
