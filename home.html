@@ -282,8 +282,9 @@
   const _SUBJECT_ID = { '1': 'media-m1', '2': 'programming-m2', '6': 'cs3-m6' };
 
   document.addEventListener('DOMContentLoaded', function () {
-    const s = getCurrentStudent();
-    // Session หาย หรือรูปแบบเก่า — ล้างแล้ว redirect ใหม่
+    // อ่าน session โดยตรง ไม่พึ่ง auth.js
+    var s = null;
+    try { s = JSON.parse(localStorage.getItem('srr_student_2569')); } catch(e) {}
     if (!s || !s.name || !s.grade) {
       localStorage.removeItem('srr_student_2569');
       window.location.replace('login.html');
@@ -339,6 +340,10 @@
     const subjectId = _SUBJECT_ID[grade];
     if (!subjectId) {
       body.innerHTML = '<div class="empty-state"><i class="fas fa-chart-bar"></i>ยังไม่มีข้อมูลคะแนน</div>';
+      return;
+    }
+    if (typeof getStudentScores !== 'function' || typeof firebaseReady === 'undefined') {
+      body.innerHTML = '<div class="empty-state"><i class="fas fa-plug-circle-xmark"></i>โหลด Firebase ไม่สำเร็จ — ตรวจสอบการเชื่อมต่อ</div>';
       return;
     }
     if (!firebaseReady) {
