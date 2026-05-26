@@ -61,6 +61,22 @@
       .mode-tab span { display: none; }
     }
 
+    /* ── Student Search Autocomplete ── */
+    .student-search-wrap { position: relative; }
+    .student-dropdown { position: absolute; top: calc(100% + 2px); left: 0; right: 0; z-index: 200; background: white; border: 1.5px solid #2563eb; border-radius: 0 0 10px 10px; max-height: 240px; overflow-y: auto; box-shadow: 0 8px 24px rgba(0,0,0,.13); }
+    .student-dropdown-item { padding: .6rem 1rem; cursor: pointer; display: flex; align-items: center; gap: .75rem; border-bottom: 1px solid #f1f5f9; transition: background .1s; }
+    .student-dropdown-item:last-child { border-bottom: none; }
+    .student-dropdown-item:hover, .student-dropdown-item.focused { background: #eff6ff; }
+    .std-id-pill { background: #dbeafe; color: #1e40af; font-size: .75rem; font-weight: 700; padding: .18rem .6rem; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
+    .std-dd-name { font-weight: 600; font-size: .88rem; color: #1e293b; }
+    .std-dd-meta { font-size: .76rem; color: #64748b; margin-top: .1rem; }
+    .dd-msg { padding: 1rem; text-align: center; font-size: .87rem; color: #94a3b8; }
+    .selected-student-card { display: flex; align-items: center; justify-content: space-between; background: #eff6ff; border: 1.5px solid #93c5fd; border-radius: 10px; padding: .75rem 1rem; margin-bottom: .5rem; }
+    .selected-student-info .s-name { font-weight: 700; font-size: .92rem; color: #1e293b; }
+    .selected-student-info .s-meta { font-size: .8rem; color: #475569; margin-top: .15rem; }
+    .clear-student-btn { background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 1rem; padding: .25rem .4rem; border-radius: 6px; transition: color .15s; }
+    .clear-student-btn:hover { color: #dc2626; }
+
     .card-section {
       background: var(--card);
       border-radius: var(--radius);
@@ -221,19 +237,32 @@
     <div class="card-section">
       <h3><i class="fas fa-user-graduate"></i> ข้อมูลนักเรียน</h3>
       <form id="addScoreForm">
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">รหัสนักเรียน <span style="color:#ef4444">*</span></label>
-            <input type="text" name="studentId" class="form-control" placeholder="เช่น 30101" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">ห้องเรียน</label>
-            <input type="text" name="room" class="form-control" placeholder="เช่น ม.1/1">
-          </div>
-        </div>
+
+        <!-- Student picker -->
         <div class="form-group">
-          <label class="form-label">ชื่อ-นามสกุล <span style="color:#ef4444">*</span></label>
-          <input type="text" name="studentName" class="form-control" placeholder="เช่น สมชาย ใจดี" required>
+          <label class="form-label">ค้นหานักเรียน <span style="color:#ef4444">*</span></label>
+
+          <!-- Selected card (hidden until a student is picked) -->
+          <div id="selectedStudentCard" class="selected-student-card" style="display:none">
+            <div class="selected-student-info">
+              <div class="s-name" id="selName">-</div>
+              <div class="s-meta"><span id="selId" class="std-id-pill">-</span>&ensp;<span id="selRoom"></span></div>
+            </div>
+            <button type="button" class="clear-student-btn" title="เปลี่ยนนักเรียน" onclick="clearStudentPicker()">
+              <i class="fas fa-times-circle"></i>
+            </button>
+          </div>
+
+          <!-- Search input + dropdown -->
+          <div class="student-search-wrap" id="studentSearchWrap">
+            <input type="text" id="studentSearchInput" class="form-control" placeholder="พิมพ์ชื่อ หรือรหัสนักเรียน..." autocomplete="off">
+            <div id="studentDropdown" class="student-dropdown" style="display:none"></div>
+          </div>
+
+          <!-- Hidden form values -->
+          <input type="hidden" id="hStudentId"   name="studentId">
+          <input type="hidden" id="hStudentName" name="studentName">
+          <input type="hidden" id="hRoom"        name="room">
         </div>
 
         <h3 style="margin-top:1.5rem"><i class="fas fa-star"></i> ข้อมูลคะแนน</h3>
@@ -447,18 +476,137 @@ document.addEventListener('DOMContentLoaded', async () => {
   initSubjectSelector('#viewSubjectSelector', s => { currentViewSubject = s; });
   initSubjectSelector('#allSubjectSelector', s => { currentAllSubject = s; });
 
+  /* ---------- Student Search Autocomplete ---------- */
+  let _studentsCache  = null;
+  let _filteredList   = [];
+  let _focusedIdx     = -1;
+
+  async function ensureStudentsCache() {
+    if (_studentsCache) return;
+    const snap = await db.collection('students').get();
+    _studentsCache = snap.docs.map(d => d.data()).sort((a, b) => String(a.studentId).localeCompare(String(b.studentId)));
+  }
+
+  function filterStudents(q) {
+    if (!_studentsCache || !q.trim()) return [];
+    const lower = q.trim().toLowerCase();
+    return _studentsCache.filter(s =>
+      String(s.studentId).includes(lower) ||
+      (s.name && s.name.toLowerCase().includes(lower))
+    ).slice(0, 15);
+  }
+
+  function renderDropdown(results, query) {
+    const dd = document.getElementById('studentDropdown');
+    if (!results.length) {
+      dd.innerHTML = `<div class="dd-msg"><i class="fas fa-search"></i> ไม่พบ "${query}"</div>`;
+      dd.style.display = 'block';
+      return;
+    }
+    _filteredList = results;
+    _focusedIdx   = -1;
+    dd.innerHTML = results.map((s, i) =>
+      `<div class="student-dropdown-item" data-idx="${i}">
+        <span class="std-id-pill">${s.studentId}</span>
+        <div>
+          <div class="std-dd-name">${s.name || '-'}</div>
+          <div class="std-dd-meta">${s.class || ''} ${s.no ? '· เลขที่ ' + s.no : ''}</div>
+        </div>
+      </div>`
+    ).join('');
+    dd.style.display = 'block';
+
+    dd.querySelectorAll('.student-dropdown-item').forEach(el => {
+      el.addEventListener('mousedown', e => {
+        e.preventDefault();
+        pickStudent(_filteredList[parseInt(el.dataset.idx)]);
+      });
+    });
+  }
+
+  function pickStudent(s) {
+    document.getElementById('hStudentId').value   = s.studentId || '';
+    document.getElementById('hStudentName').value = s.name || '';
+    document.getElementById('hRoom').value        = s.class || '';
+
+    document.getElementById('selName').textContent  = s.name || '-';
+    document.getElementById('selId').textContent    = s.studentId || '-';
+    document.getElementById('selRoom').textContent  = s.class ? s.class + (s.no ? ' เลขที่ ' + s.no : '') : '';
+
+    document.getElementById('selectedStudentCard').style.display = 'flex';
+    document.getElementById('studentSearchWrap').style.display   = 'none';
+    document.getElementById('studentSearchInput').value = '';
+    document.getElementById('studentDropdown').style.display = 'none';
+  }
+
+  function clearStudentPicker() {
+    document.getElementById('hStudentId').value   = '';
+    document.getElementById('hStudentName').value = '';
+    document.getElementById('hRoom').value        = '';
+    document.getElementById('selectedStudentCard').style.display = 'none';
+    document.getElementById('studentSearchWrap').style.display   = 'block';
+    document.getElementById('studentSearchInput').focus();
+  }
+  window.clearStudentPicker = clearStudentPicker;
+
+  const searchInput = document.getElementById('studentSearchInput');
+
+  searchInput.addEventListener('input', async () => {
+    const q  = searchInput.value;
+    const dd = document.getElementById('studentDropdown');
+    if (!q.trim()) { dd.style.display = 'none'; return; }
+
+    if (!_studentsCache) {
+      dd.innerHTML = '<div class="dd-msg"><i class="fas fa-spinner fa-spin"></i> กำลังโหลดรายชื่อจาก Firebase...</div>';
+      dd.style.display = 'block';
+      if (!firebaseReady) { dd.innerHTML = '<div class="dd-msg" style="color:#dc2626"><i class="fas fa-wifi-slash"></i> Firebase ไม่พร้อม</div>'; return; }
+      await ensureStudentsCache();
+    }
+    renderDropdown(filterStudents(q), q);
+  });
+
+  searchInput.addEventListener('keydown', e => {
+    const items = document.querySelectorAll('#studentDropdown .student-dropdown-item');
+    if (!items.length) return;
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      _focusedIdx = Math.min(_focusedIdx + 1, items.length - 1);
+      items.forEach((el, i) => el.classList.toggle('focused', i === _focusedIdx));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      _focusedIdx = Math.max(_focusedIdx - 1, 0);
+      items.forEach((el, i) => el.classList.toggle('focused', i === _focusedIdx));
+    } else if (e.key === 'Enter' && _focusedIdx >= 0) {
+      e.preventDefault();
+      pickStudent(_filteredList[_focusedIdx]);
+    } else if (e.key === 'Escape') {
+      document.getElementById('studentDropdown').style.display = 'none';
+    }
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('#studentSearchWrap')) {
+      document.getElementById('studentDropdown').style.display = 'none';
+    }
+  });
+
   /* ---------- Add Score Form ---------- */
   const addForm = document.getElementById('addScoreForm');
   addForm.addEventListener('submit', async e => {
     e.preventDefault();
 
-    const fd = new FormData(addForm);
     const studentData = {
-      studentId: fd.get('studentId').trim(),
-      name:      fd.get('studentName').trim(),
-      room:      fd.get('room').trim()
+      studentId: document.getElementById('hStudentId').value.trim(),
+      name:      document.getElementById('hStudentName').value.trim(),
+      room:      document.getElementById('hRoom').value.trim()
     };
 
+    if (!studentData.studentId || !studentData.name) {
+      showToast('กรุณาเลือกนักเรียนก่อนบันทึกคะแนน', 'warning');
+      return;
+    }
+
+    const fd = new FormData(addForm);
     const scoreData = {
       title:    fd.get('scoreTitle').trim(),
       score:    parseFloat(fd.get('score')),
@@ -478,6 +626,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (result.ok) {
       showToast('บันทึกคะแนนสำเร็จ ✅', 'success');
+      clearStudentPicker();
       addForm.reset();
     } else {
       showToast(`เกิดข้อผิดพลาด: ${result.error}`, 'error');

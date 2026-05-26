@@ -338,9 +338,12 @@
 
     let student = null;
 
-    // 1. Try Firebase first
+    // 1. Try Firebase first (5-second timeout — fallback to local if slow/blocked)
     if (firebaseReady) {
-      const result = await getStudentById(id);
+      const result = await Promise.race([
+        getStudentById(id),
+        new Promise(resolve => setTimeout(() => resolve({ ok: false, error: 'timeout' }), 5000))
+      ]);
       if (result.ok) student = result.data;
     }
 
