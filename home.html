@@ -9,7 +9,14 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
 
-  <!-- Auth check: redirect to login if not logged in -->
+  <!-- Inline auth guard — runs instantly, no external deps -->
+  <script>
+  (function(){
+    try { var s=JSON.parse(localStorage.getItem('srr_student_2569'));
+      if(!s||!s.grade||!s.name) { localStorage.removeItem('srr_student_2569'); window.location.replace('login.html'); }
+    } catch(e){ window.location.replace('login.html'); }
+  })();
+  </script>
   <script src="js/auth.js"></script>
   <script>
     var _student = requireAuth(null); // null = any grade OK
