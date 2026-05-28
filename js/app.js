@@ -232,13 +232,20 @@ async function initStudentScoreTab(subjectId) {
   }
 
   if (summaryEl && result.data.length > 0) {
+    const exercises = result.data.filter(function(sc) { return sc.type === 'exercise' || sc.type === 'quiz' || sc.type === 'project'; });
+    const tests     = result.data.filter(function(sc) { return sc.type === 'exam'; });
+    const exScore   = exercises.reduce(function(a, x) { return a + (x.score || 0); }, 0);
+    const exMax     = exercises.reduce(function(a, x) { return a + (x.maxScore || 0); }, 0);
+    const tstScore  = tests.reduce(function(a, x) { return a + (x.score || 0); }, 0);
+    const tstMax    = tests.reduce(function(a, x) { return a + (x.maxScore || 0); }, 0);
     const tot    = result.data.reduce(function(a, x) { return a + (x.score || 0); }, 0);
     const totMax = result.data.reduce(function(a, x) { return a + (x.maxScore || 0); }, 0);
     const pct = totMax > 0 ? Math.round(tot / totMax * 100) : 0;
     const cls = pct >= 70 ? 'high' : pct >= 50 ? 'mid' : 'low';
     summaryEl.innerHTML =
-      '<span class="summary-chip"><i class="fas fa-list-check"></i> งานทั้งหมด <strong>' + result.data.length + ' รายการ</strong></span>' +
-      '<span class="summary-chip"><i class="fas fa-trophy"></i> รวม <span class="score-badge ' + cls + '">' + tot + '/' + totMax + ' (' + pct + '%)</span></span>';
+      (exMax > 0 ? '<span class="summary-chip"><i class="fas fa-pen-to-square"></i> แบบฝึกหัด <span class="score-badge ' + getScoreBadgeClass(exScore, exMax) + '">' + exScore + '/' + exMax + '</span></span>' : '') +
+      (tstMax > 0 ? '<span class="summary-chip"><i class="fas fa-file-alt"></i> แบบทดสอบ <span class="score-badge ' + getScoreBadgeClass(tstScore, tstMax) + '">' + tstScore + '/' + tstMax + '</span></span>' : '') +
+      '<span class="summary-chip"><i class="fas fa-trophy"></i> รวมทั้งหมด <span class="score-badge ' + cls + '">' + tot + '/' + totMax + ' (' + pct + '%)</span></span>';
     summaryEl.style.display = 'flex';
   }
 
@@ -248,11 +255,17 @@ async function initStudentScoreTab(subjectId) {
 function renderAllStudentsTable(students, container) {
   if (!container) return;
   if (!students.length) {
-    container.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:2rem;color:#64748b">ยังไม่มีข้อมูลนักเรียน</td></tr>`;
+    container.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:2rem;color:#64748b">ยังไม่มีข้อมูลนักเรียน</td></tr>`;
     return;
   }
 
   container.innerHTML = students.map((s, i) => {
+    const exercises = (s.scores || []).filter(sc => sc.type === 'exercise' || sc.type === 'quiz' || sc.type === 'project');
+    const tests     = (s.scores || []).filter(sc => sc.type === 'exam');
+    const exScore   = exercises.reduce((a, b) => a + (b.score || 0), 0);
+    const exMax     = exercises.reduce((a, b) => a + (b.maxScore || 0), 0);
+    const tstScore  = tests.reduce((a, b) => a + (b.score || 0), 0);
+    const tstMax    = tests.reduce((a, b) => a + (b.maxScore || 0), 0);
     const cls = getScoreBadgeClass(s.totalScore, s.totalMax);
     const pct = s.totalMax > 0 ? Math.round((s.totalScore / s.totalMax) * 100) : 0;
     return `
@@ -261,6 +274,8 @@ function renderAllStudentsTable(students, container) {
         <td>${s.studentId || '-'}</td>
         <td>${s.name || '-'}</td>
         <td>${s.room || '-'}</td>
+        <td>${exMax > 0 ? `<span class="score-badge ${getScoreBadgeClass(exScore, exMax)}">${exScore}/${exMax}</span>` : '<span style="color:#94a3b8">—</span>'}</td>
+        <td>${tstMax > 0 ? `<span class="score-badge ${getScoreBadgeClass(tstScore, tstMax)}">${tstScore}/${tstMax}</span>` : '<span style="color:#94a3b8">—</span>'}</td>
         <td><span class="score-badge ${cls}">${s.totalScore}/${s.totalMax} (${pct}%)</span></td>
       </tr>`;
   }).join('');

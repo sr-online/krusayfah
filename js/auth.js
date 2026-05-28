@@ -78,8 +78,14 @@ function _showGradeMismatch(student) {
 }
 
 /* ---------- Teacher Auth ---------- */
-const TEACHER_PIN = 'ครู2569';   // ← เปลี่ยนรหัสครูได้ที่นี่
-const TEACHER_KEY = 'srr_teacher_2569';
+const _DEFAULT_TEACHER_PIN = 'ครู2569';
+const TEACHER_KEY     = 'srr_teacher_2569';
+const TEACHER_PIN_KEY = 'srr_teacher_pin';
+
+// Active PIN: localStorage override if set, otherwise default
+function _getTeacherPin() {
+  return localStorage.getItem(TEACHER_PIN_KEY) || _DEFAULT_TEACHER_PIN;
+}
 
 function isTeacherLoggedIn() {
   const t = sessionStorage.getItem(TEACHER_KEY);
@@ -88,11 +94,60 @@ function isTeacherLoggedIn() {
 }
 
 function teacherLogin(pin) {
-  if (pin === TEACHER_PIN) {
+  if (pin === _getTeacherPin()) {
     sessionStorage.setItem(TEACHER_KEY, Date.now().toString());
     return true;
   }
   return false;
+}
+
+/* ---------- Change Teacher PIN ---------- */
+function openChangePinModal() {
+  var overlay = document.createElement('div');
+  overlay.id = 'changePinOverlay';
+  overlay.innerHTML =
+    '<div style="background:white;border-radius:16px;padding:2rem;max-width:360px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.35)">' +
+      '<h3 style="margin:0 0 1.25rem;font-size:1.15rem;color:#1e293b"><i class="fas fa-key" style="color:#f59e0b;margin-right:.5rem"></i>เปลี่ยน PIN ครู</h3>' +
+      '<label style="display:block;font-size:.85rem;color:#64748b;margin-bottom:.3rem">PIN ปัจจุบัน</label>' +
+      '<input id="cpOld" type="password" maxlength="30" placeholder="ใส่ PIN ปัจจุบัน"' +
+        ' style="width:100%;padding:.65rem .85rem;border:2px solid #e2e8f0;border-radius:9px;font-family:inherit;font-size:.95rem;box-sizing:border-box;margin-bottom:.85rem;outline:none">' +
+      '<label style="display:block;font-size:.85rem;color:#64748b;margin-bottom:.3rem">PIN ใหม่</label>' +
+      '<input id="cpNew" type="password" maxlength="30" placeholder="ใส่ PIN ใหม่"' +
+        ' style="width:100%;padding:.65rem .85rem;border:2px solid #e2e8f0;border-radius:9px;font-family:inherit;font-size:.95rem;box-sizing:border-box;margin-bottom:.4rem;outline:none">' +
+      '<label style="display:block;font-size:.85rem;color:#64748b;margin-bottom:.3rem">ยืนยัน PIN ใหม่</label>' +
+      '<input id="cpNew2" type="password" maxlength="30" placeholder="ยืนยัน PIN ใหม่"' +
+        ' style="width:100%;padding:.65rem .85rem;border:2px solid #e2e8f0;border-radius:9px;font-family:inherit;font-size:.95rem;box-sizing:border-box;margin-bottom:.5rem;outline:none"' +
+        ' onkeydown="if(event.key===\'Enter\')_doChangePin()">' +
+      '<p id="cpErr" style="color:#dc2626;font-size:.83rem;min-height:1.1rem;margin:.2rem 0 .9rem"></p>' +
+      '<div style="display:flex;gap:.65rem">' +
+        '<button onclick="_doChangePin()"' +
+          ' style="flex:1;padding:.65rem;background:#1e40af;color:white;border:none;border-radius:9px;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer">บันทึก</button>' +
+        '<button onclick="document.getElementById(\'changePinOverlay\').remove()"' +
+          ' style="flex:1;padding:.65rem;background:#f1f5f9;color:#475569;border:none;border-radius:9px;font-family:inherit;font-size:.9rem;font-weight:600;cursor:pointer">ยกเลิก</button>' +
+      '</div>' +
+    '</div>';
+  Object.assign(overlay.style, {
+    position: 'fixed', inset: '0', background: 'rgba(0,0,0,.55)',
+    zIndex: '9999', display: 'flex', alignItems: 'center', justifyContent: 'center',
+    fontFamily: 'Sarabun, sans-serif', backdropFilter: 'blur(3px)'
+  });
+  document.body.appendChild(overlay);
+  setTimeout(function(){ var el = document.getElementById('cpOld'); if (el) el.focus(); }, 80);
+}
+
+function _doChangePin() {
+  var old   = (document.getElementById('cpOld')  || {}).value || '';
+  var n1    = (document.getElementById('cpNew')  || {}).value || '';
+  var n2    = (document.getElementById('cpNew2') || {}).value || '';
+  var errEl = document.getElementById('cpErr');
+  if (old !== _getTeacherPin()) { if (errEl) errEl.textContent = 'PIN ปัจจุบันไม่ถูกต้อง'; return; }
+  if (!n1 || n1.length < 4)    { if (errEl) errEl.textContent = 'PIN ใหม่ต้องมีอย่างน้อย 4 ตัวอักษร'; return; }
+  if (n1 !== n2)                { if (errEl) errEl.textContent = 'PIN ใหม่ทั้งสองช่องไม่ตรงกัน'; return; }
+  localStorage.setItem(TEACHER_PIN_KEY, n1);
+  var overlay = document.getElementById('changePinOverlay');
+  if (overlay) overlay.remove();
+  if (typeof showToast === 'function') showToast('เปลี่ยน PIN สำเร็จ', 'success');
+  else alert('เปลี่ยน PIN สำเร็จแล้ว');
 }
 
 function teacherLogout() {

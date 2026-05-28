@@ -145,6 +145,73 @@ async function getAllStudentsScores(subjectId) {
   }
 }
 
+// Update an existing score (e.g. after teacher grades a pending submission)
+async function updateScore(subjectId, studentId, scoreId, newScore) {
+  if (!firebaseReady) return { ok: false, error: "Firebase ไม่พร้อมใช้งาน" };
+  try {
+    await db
+      .collection("scores").doc(subjectId)
+      .collection("students").doc(studentId)
+      .collection("scores").doc(scoreId)
+      .update({
+        score: newScore,
+        status: 'graded',
+        gradedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e.message };
+  }
+}
+
+// Get all pending submissions (status == 'pending') across all 3 subjects
+async function getPendingSubmissions() {
+  if (!firebaseReady) return { ok: false, data: [], error: "Firebase ไม่พร้อมใช้งาน" };
+  const subjects = ['media-m1', 'programming-m2', 'cs3-m6'];
+  const subjectNames = {
+    'media-m1':       '📱 รู้เท่าทันสื่อ ม.1',
+    'programming-m2': '💻 โปรแกรมเบื้องต้น ม.2',
+    'cs3-m6':         '🖥️ วิทยาการคำนวณ 3 ม.6'
+  };
+  try {
+    const results = [];
+    for (const subj of subjects) {
+      const stdSnap = await db.collection("scores").doc(subj).collection("students").get();
+      for (const stdDoc of stdSnap.docs) {
+        const student = stdDoc.data();
+        const allSnap = await stdDoc.ref.collection("scores").get();
+        // Include: new submissions (status:'pending') OR old submissions saved before
+        // the status field was added (score==0, has a note, no status field).
+        // The note check excludes auto-graded exercises that legitimately scored 0.
+        allSnap.docs.forEach(d => {
+          const data = d.data();
+          const isPending = data.status === 'pending';
+          const isLegacyUngraded = !data.status && data.score === 0 && data.maxScore > 0 && data.note;
+          if (!isPending && !isLegacyUngraded) return;
+          results.push({
+            scoreId:     d.id,
+            studentId:   stdDoc.id,
+            studentName: student.name  || '',
+            room:        student.room  || '',
+            subjectId:   subj,
+            subjectName: subjectNames[subj],
+            ...data
+          });
+        });
+      }
+    }
+    // Sort: newest first
+    results.sort((a, b) => {
+      const da = a.submittedAt?.toDate ? a.submittedAt.toDate() : new Date(0);
+      const db2 = b.submittedAt?.toDate ? b.submittedAt.toDate() : new Date(0);
+      return db2 - da;
+    });
+    return { ok: true, data: results };
+  } catch (e) {
+    return { ok: false, data: [], error: e.message };
+  }
+}
+
 async function deleteScore(subjectId, studentId, scoreId) {
   if (!firebaseReady) return { ok: false, error: "Firebase ไม่พร้อมใช้งาน" };
   try {
