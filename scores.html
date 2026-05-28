@@ -181,7 +181,7 @@
              padding:.45rem 1rem;border-radius:8px;font-family:inherit;font-size:.85rem;cursor:pointer">
       <i class="fas fa-key"></i> เปลี่ยน PIN
     </button>
-    <button onclick="if(confirm('ออกจากระบบ?')) AUTH.logout()"
+    <button onclick="if(confirm('ออกจากระบบ?')) teacherLogout()"
       style="background:rgba(248,113,113,0.2);border:1px solid rgba(248,113,113,0.4);color:#fca5a5;
              padding:.45rem 1rem;border-radius:8px;font-family:inherit;font-size:.85rem;cursor:pointer">
       <i class="fas fa-lock"></i> ล็อกระบบ
@@ -357,8 +357,11 @@
             <tbody id="viewTableBody"></tbody>
           </table>
         </div>
-        <div style="padding:.75rem 1.5rem;background:var(--bg);border-top:1px solid var(--border);font-size:.85rem;color:var(--text-muted)">
-          รวม: <strong id="viewTotal" style="color:var(--text)">-</strong>
+        <!-- Score breakdown summary -->
+        <div style="padding:.75rem 1.5rem;background:var(--bg);border-top:1px solid var(--border);font-size:.85rem;display:flex;gap:1.5rem;flex-wrap:wrap;align-items:center">
+          <span style="color:var(--text-muted)">แบบฝึกหัด: <strong id="viewExTotal" style="color:var(--text)">-</strong></span>
+          <span style="color:var(--text-muted)">แบบทดสอบ: <strong id="viewTestTotal" style="color:var(--text)">-</strong></span>
+          <span style="color:var(--text-muted)">รวมทั้งหมด: <strong id="viewTotal" style="color:var(--text)">-</strong></span>
         </div>
       </div>
     </div>
@@ -386,9 +389,15 @@
         </div>
       </div>
 
-      <button id="loadAllScoresBtn" class="btn btn-primary" style="width:100%;justify-content:center">
-        <i class="fas fa-download"></i> โหลดคะแนนทั้งหมด
-      </button>
+      <div style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:center">
+        <button id="loadAllScoresBtn" class="btn btn-primary" style="flex:1;min-width:160px;justify-content:center">
+          <i class="fas fa-download"></i> โหลดคะแนนทั้งหมด
+        </button>
+        <select id="allRoomFilter" class="form-control" style="width:auto;min-width:130px">
+          <option value="">ทุกห้อง</option>
+        </select>
+        <span id="allStudentCount" style="font-size:.82rem;color:var(--text-muted)"></span>
+      </div>
     </div>
 
     <div class="card-section" style="padding:0;overflow:hidden">
@@ -400,12 +409,14 @@
               <th>รหัส</th>
               <th>ชื่อ-นามสกุล</th>
               <th>ห้อง</th>
-              <th>คะแนนรวม</th>
+              <th>แบบฝึกหัด</th>
+              <th>แบบทดสอบ</th>
+              <th>รวมทั้งหมด</th>
             </tr>
           </thead>
           <tbody id="allTableBody">
             <tr>
-              <td colspan="5" style="text-align:center;padding:2rem;color:#64748b">
+              <td colspan="7" style="text-align:center;padding:2rem;color:#64748b">
                 <i class="fas fa-table" style="font-size:1.5rem;margin-bottom:.5rem;display:block"></i>
                 เลือกรายวิชาแล้วกด "โหลดคะแนนทั้งหมด"
               </td>
@@ -612,7 +623,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       score:    parseFloat(fd.get('score')),
       maxScore: parseFloat(fd.get('maxScore')),
       type:     fd.get('scoreType'),
-      note:     fd.get('note').trim()
+      note:     fd.get('note').trim(),
+      status:   'graded'   // ครูบันทึกเองถือว่า graded ทันที
     };
 
     const btn = addForm.querySelector('[type=submit]');
@@ -649,22 +661,36 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (!result.ok) { showToast(result.error, 'error'); return; }
 
-    const viewResult = document.getElementById('viewResult');
-    viewResult.style.display = 'block';
-
+    document.getElementById('viewResult').style.display = 'block';
     document.getElementById('viewStudentInfo').textContent = `รหัส: ${sid}`;
 
-    const tbody = document.getElementById('viewTableBody');
-    renderScoreTable(result.data, tbody);
+    renderScoreTable(result.data, document.getElementById('viewTableBody'));
 
-    const total = result.data.reduce((s, x) => s + (x.score || 0), 0);
-    const max   = result.data.reduce((s, x) => s + (x.maxScore || 0), 0);
-    const cls   = getScoreBadgeClass(total, max);
-    document.getElementById('viewTotal').innerHTML =
-      `<span class="score-badge ${cls}">${total} / ${max}</span>`;
+    const exercises = result.data.filter(x => x.type === 'exercise' || x.type === 'quiz' || x.type === 'project');
+    const tests     = result.data.filter(x => x.type === 'exam');
+    const exS  = exercises.reduce((s, x) => s + (x.score || 0), 0);
+    const exM  = exercises.reduce((s, x) => s + (x.maxScore || 0), 0);
+    const tstS = tests.reduce((s, x) => s + (x.score || 0), 0);
+    const tstM = tests.reduce((s, x) => s + (x.maxScore || 0), 0);
+    const tot  = exS + tstS, max = exM + tstM;
+
+    document.getElementById('viewExTotal').innerHTML   = exM  > 0 ? `<span class="score-badge ${getScoreBadgeClass(exS, exM)}">${exS}/${exM}</span>` : '—';
+    document.getElementById('viewTestTotal').innerHTML = tstM > 0 ? `<span class="score-badge ${getScoreBadgeClass(tstS, tstM)}">${tstS}/${tstM}</span>` : '—';
+    document.getElementById('viewTotal').innerHTML     = max  > 0 ? `<span class="score-badge ${getScoreBadgeClass(tot, max)}">${tot}/${max}</span>` : '—';
   });
 
   /* ---------- All Scores ---------- */
+  let _allScoresData = [];
+
+  function _renderAllWithFilter() {
+    const room = document.getElementById('allRoomFilter').value;
+    const filtered = room ? _allScoresData.filter(s => s.room === room) : _allScoresData;
+    document.getElementById('allStudentCount').textContent = filtered.length + ' คน';
+    renderAllStudentsTable(filtered, document.getElementById('allTableBody'));
+  }
+
+  document.getElementById('allRoomFilter').addEventListener('change', _renderAllWithFilter);
+
   document.getElementById('loadAllScoresBtn').addEventListener('click', async () => {
     const btn = document.getElementById('loadAllScoresBtn');
     btn.disabled = true;
@@ -677,7 +703,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (!result.ok) { showToast(result.error, 'error'); return; }
 
-    renderAllStudentsTable(result.data, document.getElementById('allTableBody'));
+    _allScoresData = result.data;
+
+    // Populate room filter
+    const rooms = [...new Set(result.data.map(s => s.room).filter(Boolean))].sort();
+    const roomSel = document.getElementById('allRoomFilter');
+    roomSel.innerHTML = '<option value="">ทุกห้อง</option>' +
+      rooms.map(r => `<option value="${r}">${r}</option>`).join('');
+
+    _renderAllWithFilter();
   });
 
   /* ---------- Auto-select from URL param ---------- */

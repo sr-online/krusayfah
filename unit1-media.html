@@ -828,7 +828,7 @@ async function submitAnalysis() {
   const note = `1)${a1.slice(0,80)} | 2)${a2.slice(0,60)} | 3)${a3.slice(0,60)}`;
   const res = await saveScore('media-m1',
     { studentId: s.id, name: s.name, room: s.class },
-    { title: 'แบบฝึกหัดที่ 3: วิเคราะห์สถานการณ์ PM2.5', score: 0, maxScore: 10, type: 'exercise', note }
+    { title: 'แบบฝึกหัดที่ 3: วิเคราะห์สถานการณ์ PM2.5', score: 0, maxScore: 10, type: 'exercise', status: 'pending', note }
   );
 
   btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> ส่งงานวิเคราะห์';
@@ -861,7 +861,7 @@ async function submitWorksheet() {
   const note = `สื่อที่ใช้:${w1.slice(0,50)} | ชม/วัน:${w2.slice(0,40)}`;
   const res = await saveScore('media-m1',
     { studentId: s.id, name: s.name, room: s.class },
-    { title: 'แบบฝึกหัดที่ 4: ใบงาน ฉันกับสื่อที่ใช้ประจำ', score: 0, maxScore: 5, type: 'exercise', note }
+    { title: 'แบบฝึกหัดที่ 4: ใบงาน ฉันกับสื่อที่ใช้ประจำ', score: 0, maxScore: 5, type: 'exercise', status: 'pending', note }
   );
 
   btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> ส่งใบงาน';
