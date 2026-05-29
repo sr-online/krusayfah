@@ -212,6 +212,42 @@ async function getPendingSubmissions() {
   }
 }
 
+async function getSubmissionByTitle(subjectId, studentId, title) {
+  if (!firebaseReady) return { ok: false, data: null, error: "Firebase ไม่พร้อมใช้งาน" };
+  try {
+    const snap = await db
+      .collection("scores").doc(subjectId)
+      .collection("students").doc(studentId)
+      .collection("scores")
+      .where("title", "==", title)
+      .get();
+    if (snap.empty) return { ok: true, data: null };
+    const docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    docs.sort((a, b) => {
+      const ta = a.submittedAt?.toDate ? a.submittedAt.toDate() : new Date(0);
+      const tb = b.submittedAt?.toDate ? b.submittedAt.toDate() : new Date(0);
+      return tb - ta;
+    });
+    return { ok: true, data: docs[0] };
+  } catch (e) {
+    return { ok: false, data: null, error: e.message };
+  }
+}
+
+async function editPendingNote(subjectId, studentId, scoreId, newNote) {
+  if (!firebaseReady) return { ok: false, error: "Firebase ไม่พร้อมใช้งาน" };
+  try {
+    await db
+      .collection("scores").doc(subjectId)
+      .collection("students").doc(studentId)
+      .collection("scores").doc(scoreId)
+      .update({ note: newNote, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: e.message };
+  }
+}
+
 async function deleteScore(subjectId, studentId, scoreId) {
   if (!firebaseReady) return { ok: false, error: "Firebase ไม่พร้อมใช้งาน" };
   try {
@@ -227,6 +263,26 @@ async function deleteScore(subjectId, studentId, scoreId) {
   } catch (e) {
     return { ok: false, error: e.message };
   }
+}
+
+// ============================================================
+//  Subject Settings (open/close exercises & tests per unit)
+// ============================================================
+
+async function getSubjectSettings(subjectId) {
+  if (!firebaseReady) return {};
+  try {
+    const doc = await db.collection('settings').doc(subjectId).get();
+    return doc.exists ? doc.data() : {};
+  } catch (e) { return {}; }
+}
+
+async function saveSubjectSettings(subjectId, updates) {
+  if (!firebaseReady) return { ok: false, error: 'Firebase ไม่พร้อมใช้งาน' };
+  try {
+    await db.collection('settings').doc(subjectId).set(updates, { merge: true });
+    return { ok: true };
+  } catch (e) { return { ok: false, error: e.message }; }
 }
 
 // ============================================================

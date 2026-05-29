@@ -296,6 +296,44 @@ function typeLabel(type) {
   return map[type] || type || '-';
 }
 
+/* ---------- Work Card State Manager ---------- */
+async function setupWorkCard({ subjectId, title, formEl, pendingBoxEl, gradedBoxEl, editBtnEl, noteInputEl, onPending, onGraded }) {
+  const s = typeof getCurrentStudent === 'function' ? getCurrentStudent() : null;
+  if (!s || !firebaseReady) return;
+
+  const result = await getSubmissionByTitle(subjectId, s.id, title);
+
+  formEl.style.display = '';
+  if (pendingBoxEl) pendingBoxEl.style.display = 'none';
+  if (gradedBoxEl)  gradedBoxEl.style.display  = 'none';
+  delete formEl.dataset.editScoreId;
+
+  if (!result.ok || !result.data) return;
+
+  const sub = result.data;
+  formEl.style.display = 'none';
+
+  if (sub.status === 'pending') {
+    if (pendingBoxEl) {
+      pendingBoxEl.style.display = '';
+      if (onPending) onPending(sub);
+    }
+    if (editBtnEl) {
+      editBtnEl.onclick = () => {
+        if (pendingBoxEl) pendingBoxEl.style.display = 'none';
+        formEl.style.display = '';
+        formEl.dataset.editScoreId = sub.id;
+        if (noteInputEl) noteInputEl.value = sub.note || '';
+      };
+    }
+  } else {
+    if (gradedBoxEl) {
+      gradedBoxEl.style.display = '';
+      if (onGraded) onGraded(sub);
+    }
+  }
+}
+
 /* ---------- Init on DOM ready ---------- */
 document.addEventListener('DOMContentLoaded', () => {
   initMobileMenu();
