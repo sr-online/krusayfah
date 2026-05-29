@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>บทที่ 2: การวิเคราะห์และประเมินสื่อ | รู้เท่าทันสื่อ ม.1</title>
+  <script>(function(){try{var s=JSON.parse(localStorage.getItem('srr_student_2569'));if(!s||!s.grade||!s.name)window.location.replace('login.html');}catch(e){window.location.replace('login.html');}})();</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    :root { --unit-accent: #7c3aed; --unit-accent-dark: #4c1d95; --unit-accent-light: #ede9fe; }
+    .unit-hero { background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%); color: white; padding: 2.5rem 0 0; }
+    .unit-hero-content { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+    .unit-hero h1 { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 700; margin: .5rem 0 .4rem; }
+    .unit-hero p { opacity: .85; font-size: .95rem; margin-bottom: 1.5rem; }
+    .unit-breadcrumb { opacity: .8; font-size: .82rem; margin-bottom: .5rem; }
+    .unit-breadcrumb a { color: rgba(255,255,255,.85); text-decoration: none; }
+    .unit-breadcrumb a:hover { text-decoration: underline; }
+    .unit-tabs { display: flex; gap: .5rem; padding-top: .5rem; flex-wrap: wrap; }
+    .unit-tab-btn { background: rgba(255,255,255,.15); color: white; border: none; border-radius: 8px 8px 0 0; padding: .6rem 1.2rem; font-family: inherit; font-size: .9rem; cursor: pointer; display: flex; align-items: center; gap: .4rem; transition: background .2s; }
+    .unit-tab-btn.active { background: white; color: #7c3aed; font-weight: 700; }
+    .unit-tab-btn:hover:not(.active) { background: rgba(255,255,255,.25); }
+    .unit-tab-content { display: none; max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; }
+    .unit-tab-content.active { display: block; }
+    .section-card { background: white; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,.07); margin-bottom: 1.5rem; overflow: hidden; border: 1px solid #e2e8f0; }
+    .section-card-header { display: flex; align-items: center; gap: 1rem; padding: 1.1rem 1.4rem; background: #f8fafc; border-bottom: 1px solid #e2e8f0; cursor: pointer; user-select: none; }
+    .section-card-header:hover { background: #f1f5f9; }
+    .section-num { min-width: 38px; height: 38px; background: linear-gradient(135deg, #7c3aed, #4c1d95); color: white; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: 700; flex-shrink: 0; }
+    .section-card-header h3 { flex: 1; font-size: 1rem; font-weight: 700; color: #1e293b; margin: 0; }
+    .section-toggle { color: #94a3b8; transition: transform .25s; font-size: .85rem; }
+    .section-card-header.open .section-toggle { transform: rotate(180deg); }
+    .section-body { display: none; padding: 1.4rem; }
+    .section-body.open { display: block; }
+    .info-box { background: #f5f3ff; border-left: 4px solid #7c3aed; border-radius: 0 8px 8px 0; padding: 1rem 1.2rem; margin-bottom: 1rem; }
+    .info-box p { margin: 0; color: #1e293b; line-height: 1.75; font-size: .95rem; }
+    .def-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: .8rem; margin-top: .8rem; }
+    .def-chip { background: white; border: 1px solid #ddd6fe; border-radius: 10px; padding: .8rem 1rem; text-align: center; }
+    .def-chip .def-icon { font-size: 1.5rem; }
+    .def-chip .def-label { font-size: .82rem; font-weight: 600; color: #5b21b6; margin-top: .3rem; }
+    .def-chip .def-desc { font-size: .78rem; color: #64748b; margin-top: .15rem; }
+    .type-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+    .type-table th { background: #7c3aed; color: white; padding: .6rem .9rem; text-align: left; }
+    .type-table td { padding: .55rem .9rem; border-bottom: 1px solid #f1f5f9; }
+    .type-table tr:nth-child(even) td { background: #faf5ff; }
+    .type-badge { display: inline-block; background: #ede9fe; color: #7c3aed; border-radius: 999px; padding: .15rem .7rem; font-size: .78rem; font-weight: 600; }
+    .timeline { display: flex; flex-direction: column; gap: .8rem; margin-top: .6rem; }
+    .tl-item { display: flex; gap: .9rem; align-items: flex-start; }
+    .tl-dot { min-width: 32px; height: 32px; background: #7c3aed; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-size: .72rem; font-weight: 700; flex-shrink: 0; margin-top: .1rem; }
+    .tl-content h4 { margin: 0 0 .15rem; font-size: .9rem; color: #1e293b; }
+    .tl-content p { margin: 0; font-size: .82rem; color: #64748b; line-height: 1.5; }
+    .criteria-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: .8rem; margin-top: .8rem; }
+    .criteria-card { background: white; border: 1px solid #ddd6fe; border-radius: 12px; padding: 1rem; }
+    .criteria-card .cc-icon { font-size: 1.6rem; margin-bottom: .4rem; }
+    .criteria-card h4 { font-size: .88rem; font-weight: 700; color: #5b21b6; margin: 0 0 .3rem; }
+    .criteria-card p { font-size: .8rem; color: #64748b; margin: 0; line-height: 1.5; }
+    .example-box { background: #faf5ff; border: 1px solid #ddd6fe; border-radius: 10px; padding: 1rem 1.2rem; margin: .8rem 0; }
+    .example-box .ex-label { font-size: .75rem; font-weight: 700; color: #7c3aed; text-transform: uppercase; letter-spacing: .05em; margin-bottom: .35rem; }
+    .example-box p { margin: 0; font-size: .88rem; color: #1e293b; line-height: 1.6; }
+    .steps-list { counter-reset: step; }
+    .steps-list li { counter-increment: step; display: flex; align-items: flex-start; gap: .8rem; margin-bottom: .9rem; list-style: none; font-size: .9rem; color: #1e293b; line-height: 1.6; }
+    .steps-list li::before { content: counter(step); min-width: 28px; height: 28px; background: #7c3aed; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .78rem; font-weight: 700; flex-shrink: 0; }
+    .work-card { background: white; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,.07); margin-bottom: 1.5rem; overflow: hidden; border: 1px solid #e2e8f0; }
+    .work-card-header { display: flex; align-items: flex-start; gap: 1rem; padding: 1.25rem; border-bottom: 1px solid #e2e8f0; background: #f8fafc; }
+    .work-num { min-width: 42px; height: 42px; background: linear-gradient(135deg, #7c3aed, #4c1d95); color: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 700; flex-shrink: 0; }
+    .work-title { flex: 1; min-width: 0; }
+    .work-title h3 { font-size: 1rem; font-weight: 700; color: #1e293b; margin: 0 0 .35rem; }
+    .work-badges { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .work-score-badge { background: #dbeafe; color: #1e40af; padding: .2rem .75rem; border-radius: 999px; font-size: .78rem; font-weight: 700; }
+    .work-type-badge { background: #ede9fe; color: #6d28d9; padding: .2rem .75rem; border-radius: 999px; font-size: .78rem; font-weight: 700; }
+    .work-status-badge { padding: .2rem .75rem; border-radius: 999px; font-size: .78rem; font-weight: 700; }
+    .work-status-badge.open { background: #d1fae5; color: #065f46; }
+    .work-status-badge.locked { background: #fee2e2; color: #991b1b; }
+    .work-body { padding: 1.4rem; }
+    .match-grid { display: grid; gap: .8rem; margin: 1rem 0; }
+    .match-row { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
+    .match-label { flex: 1; min-width: 160px; font-size: .9rem; color: #1e293b; font-weight: 500; }
+    .match-label .match-num { display: inline-block; width: 22px; height: 22px; background: #7c3aed; color: white; border-radius: 50%; font-size: .72rem; font-weight: 700; text-align: center; line-height: 22px; margin-right: .5rem; }
+    .match-select { flex: 1; min-width: 160px; padding: .5rem .8rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: .88rem; color: #1e293b; background: white; }
+    .match-select:focus { outline: none; border-color: #7c3aed; box-shadow: 0 0 0 3px rgba(124,58,237,.15); }
+    .mcq-item { margin-bottom: 1.2rem; }
+    .mcq-q { font-size: .92rem; font-weight: 600; color: #1e293b; margin-bottom: .6rem; }
+    .mcq-options { display: flex; flex-direction: column; gap: .4rem; }
+    .mcq-option { display: flex; align-items: center; gap: .7rem; padding: .55rem .9rem; border: 1.5px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all .15s; font-size: .88rem; }
+    .mcq-option:hover { border-color: #7c3aed; background: #f5f3ff; }
+    .mcq-option input { accent-color: #7c3aed; width: 16px; height: 16px; flex-shrink: 0; }
+    .mcq-option.correct-ans { border-color: #059669; background: #d1fae5; }
+    .mcq-option.wrong-ans { border-color: #dc2626; background: #fee2e2; }
+    .work-textarea { width: 100%; box-sizing: border-box; padding: .75rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 10px; font-family: inherit; font-size: .88rem; resize: vertical; min-height: 90px; transition: border .15s; color: #1e293b; }
+    .work-textarea:focus { outline: none; border-color: #7c3aed; box-shadow: 0 0 0 3px rgba(124,58,237,.15); }
+    .work-input { width: 100%; box-sizing: border-box; padding: .6rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: .88rem; margin-bottom: .6rem; }
+    .work-input:focus { outline: none; border-color: #7c3aed; box-shadow: 0 0 0 3px rgba(124,58,237,.15); }
+    .field-label { font-size: .85rem; font-weight: 600; color: #475569; margin-bottom: .35rem; display: block; }
+    .submit-btn { display: inline-flex; align-items: center; gap: .5rem; background: linear-gradient(135deg, #7c3aed, #6d28d9); color: white; border: none; border-radius: 10px; padding: .7rem 1.6rem; font-family: inherit; font-size: .92rem; font-weight: 700; cursor: pointer; margin-top: 1rem; transition: opacity .15s; }
+    .submit-btn:hover { opacity: .9; }
+    .submit-btn:disabled { opacity: .55; cursor: not-allowed; }
+    .result-box { margin-top: 1rem; padding: 1rem 1.2rem; border-radius: 10px; font-weight: 600; display: none; }
+    .result-box.show { display: block; }
+    .result-box.pass { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+    .result-box.fail { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+    .result-box.sent { background: #ede9fe; color: #5b21b6; border: 1px solid #c4b5fd; }
+    .divider { height: 1px; background: #e2e8f0; margin: 1.2rem 0; }
+    /* Test tab */
+    .test-locked-box { text-align: center; padding: 3rem 1.5rem; color: #94a3b8; }
+    .test-locked-box i { font-size: 3rem; color: #cbd5e1; display: block; margin-bottom: 1rem; }
+    .test-start-box { text-align: center; padding: 2rem; }
+    .test-timer { font-size: 2rem; font-weight: 700; color: #7c3aed; font-variant-numeric: tabular-nums; margin: 1rem 0; }
+    .test-timer.warning { color: #dc2626; animation: blink .8s step-start infinite; }
+    @keyframes blink { 50% { opacity: .4; } }
+    .test-progress { font-size: .85rem; color: #64748b; margin-bottom: 1.5rem; }
+    .test-submit-btn { background: linear-gradient(135deg, #7c3aed, #4c1d95); color: white; border: none; border-radius: 10px; padding: .8rem 2rem; font-family: inherit; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 1.5rem; }
+    .test-result-box { background: #f5f3ff; border: 2px solid #7c3aed; border-radius: 14px; padding: 2rem; text-align: center; margin-top: 1.5rem; display: none; }
+    .test-result-box.show { display: block; }
+    @media (max-width: 600px) {
+      .def-grid, .criteria-grid { grid-template-columns: 1fr 1fr; }
+      .match-row { flex-direction: column; align-items: stretch; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-icon"><i class="fas fa-chalkboard-user"></i></div>
+      <span>ครูศิริศักดิ์ ปิลอง</span>
+    </a>
+    <ul class="navbar-menu">
+      <li><a href="home.html"><i class="fas fa-house"></i> หน้าหลัก</a></li>
+      <li><a href="subject-media.html" class="active"><i class="fas fa-tv"></i> รู้เท่าทันสื่อ ม.1</a></li>
+      <li><a href="subject-programming.html"><i class="fas fa-code"></i> โปรแกรมเบื้องต้น ม.2</a></li>
+      <li><a href="subject-cs3.html"><i class="fas fa-microchip"></i> วิทยาการคำนวณ 3 ม.6</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="เมนู"><i class="fas fa-bars"></i></button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="home.html"><i class="fas fa-house"></i> หน้าหลักนักเรียน</a>
+    <a href="subject-media.html"><i class="fas fa-tv"></i> รู้เท่าทันสื่อ ม.1</a>
+    <a href="subject-programming.html"><i class="fas fa-code"></i> โปรแกรมเบื้องต้น ม.2</a>
+    <a href="subject-cs3.html"><i class="fas fa-microchip"></i> วิทยาการคำนวณ 3 ม.6</a>
+  </div>
+</nav>
+
+<!-- ===== UNIT HERO ===== -->
+<div class="unit-hero">
+  <div class="unit-hero-content">
+    <p class="unit-breadcrumb">
+      <a href="index.html">หน้าหลัก</a>
+      <i class="fas fa-chevron-right" style="font-size:.7rem;margin:0 .4rem"></i>
+      <a href="subject-media.html">รู้เท่าทันสื่อ ม.1</a>
+      <i class="fas fa-chevron-right" style="font-size:.7rem;margin:0 .4rem"></i>
+      บทที่ 2
+    </p>
+    <h1>🔍 บทที่ 2 : การวิเคราะห์และประเมินสื่อ</h1>
+    <p>ทักษะการถามคำถาม ตรวจสอบแหล่งที่มา ประเมินความน่าเชื่อถือ และอ่านสื่ออย่างมีวิจารณญาณ</p>
+    <div class="unit-tabs">
+      <button class="unit-tab-btn active" data-utab="utab-lesson"><i class="fas fa-book-open"></i> เนื้อหาบทเรียน</button>
+      <button class="unit-tab-btn" data-utab="utab-exercises"><i class="fas fa-pencil-alt"></i> แบบฝึกหัด</button>
+      <button class="unit-tab-btn" data-utab="utab-test"><i class="fas fa-file-alt"></i> แบบทดสอบ</button>
+      <button class="unit-tab-btn" data-utab="utab-scores"><i class="fas fa-chart-bar"></i> คะแนนของฉัน</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB: เนื้อหาบทเรียน ===== -->
+<div id="utab-lesson" class="unit-tab-content active">
+
+  <!-- Section 1 -->
+  <div class="section-card">
+    <div class="section-card-header open" onclick="toggleSection(this)">
+      <div class="section-num">1</div>
+      <h3>ทำไมต้องวิเคราะห์สื่อ?</h3>
+      <i class="fas fa-chevron-down section-toggle"></i>
+    </div>
+    <div class="section-body open">
+      <div class="info-box">
+        <p>ในยุคที่ข้อมูลข่าวสารหลั่งไหลมาทุกทิศทุกทาง ทุกคนสามารถเป็น <strong>"ผู้สร้างสื่อ"</strong> ได้ในพริบตา ดังนั้น <strong>การวิเคราะห์สื่อ (Media Analysis)</strong> จึงเป็นทักษะจำเป็น เหมือนกับที่นักสืบตรวจสอบหลักฐาน — เราต้องตั้งคำถาม ไม่ใช่เชื่อทันที</p>
+      </div>
+      <p style="font-size:.9rem;color:#475569;margin-bottom:.8rem">สถิติที่น่าตกใจ: งานวิจัยปี 2565 พบว่า</p>
+      <div class="def-grid">
+        <div class="def-chip">
+          <div class="def-icon">📲</div>
+          <div class="def-label">72%</div>
+          <div class="def-desc">ของวัยรุ่นรับข่าวจากโซเชียลมีเดียเป็นหลัก</div>
+        </div>
+        <div class="def-chip">
+          <div class="def-icon">⚠️</div>
+          <div class="def-label">56%</div>
+          <div class="def-desc">เคยแชร์ข้อมูลที่ภายหลังพบว่าผิดพลาด</div>
+        </div>
+        <div class="def-chip">
+          <div class="def-icon">🔍</div>
+          <div class="def-label">น้อยกว่า 30%</div>
+          <div class="def-desc">ตรวจสอบแหล่งที่มาก่อนแชร์</div>
+        </div>
+        <div class="def-chip">
+          <div class="def-icon">⏱️</div>
+          <div class="def-label">3 วินาที</div>
+          <div class="def-desc">เวลาเฉลี่ยที่ใช้ตัดสินใจว่า "น่าเชื่อถือ"</div>
+        </div>
+      </div>
+      <div class="example-box" style="margin-top:1rem">
+        <div class="ex-label">ตัวอย่างในชีวิตจริง</div>
+        <p>เมื่อปี 2563 มีคลิปวิดีโอที่อ้างว่า "ดื่มน้ำร้อนฆ่าเชื้อโควิดได้" แพร่กระจายในกลุ่มไลน์ผู้ปกครองทั่วประเทศ ก่อนที่กรมควบคุมโรคจะออกมาชี้แจงว่าเป็นข้อมูลเท็จ แต่กว่าจะหยุดการแพร่กระจายได้ก็มีผู้ป่วยจากการลวกปากและคอเพราะทำตามแล้ว</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2 -->
+  <div class="section-card">
+    <div class="section-card-header open" onclick="toggleSection(this)">
+      <div class="section-num">2</div>
+      <h3>เกณฑ์การประเมินความน่าเชื่อถือ (SIFT)</h3>
+      <i class="fas fa-chevron-down section-toggle"></i>
+    </div>
+    <div class="section-body open">
+      <div class="info-box">
+        <p><strong>SIFT</strong> คือกระบวนการ 4 ขั้นตอนที่นักวิจัยจาก WebLiteracy.org พัฒนาขึ้นเพื่อช่วยประเมินข้อมูลในยุคดิจิทัล</p>
+      </div>
+      <div class="criteria-grid">
+        <div class="criteria-card">
+          <div class="cc-icon">🛑</div>
+          <h4>S — Stop (หยุด)</h4>
+          <p>หยุดก่อนแชร์หรือเชื่อ ตั้งสติ อย่าให้อารมณ์ (โกรธ, กลัว, ตื่นเต้น) นำ</p>
+        </div>
+        <div class="criteria-card">
+          <div class="cc-icon">🔍</div>
+          <h4>I — Investigate (ตรวจสอบ)</h4>
+          <p>ตรวจสอบแหล่งที่มา: ใครเป็นคนสร้าง? มีแรงจูงใจอะไร? เว็บนี้คือใคร?</p>
+        </div>
+        <div class="criteria-card">
+          <div class="cc-icon">🔗</div>
+          <h4>F — Find (หาข้อมูลเพิ่ม)</h4>
+          <p>หาบทความ/ข่าวอื่น ๆ ที่รายงานเรื่องเดียวกัน แหล่งที่เชื่อถือได้บอกว่าอย่างไร?</p>
+        </div>
+        <div class="criteria-card">
+          <div class="cc-icon">↩️</div>
+          <h4>T — Trace (ย้อนรอย)</h4>
+          <p>ย้อนรอยข้ออ้างสู่แหล่งต้นทาง อย่าเชื่อแค่ "นักวิทยาศาสตร์บอกว่า..." โดยไม่รู้ว่าใคร</p>
+        </div>
+      </div>
+      <div class="example-box" style="margin-top:1rem">
+        <div class="ex-label">ตัวอย่างการใช้ SIFT</div>
+        <p><strong>สถานการณ์:</strong> เพื่อนส่งข้อความมาว่า "ปลาหมอสีกินได้บำรุงสมอง มีงานวิจัยพิสูจน์แล้ว!" <br><strong>S:</strong> หยุด — รู้สึก "อยากเชื่อ" แต่ยังไม่แชร์ <br><strong>I:</strong> ตรวจ — เพจที่โพสต์คือร้านขายอาหารปลา <br><strong>F:</strong> ค้นหาใน Google — ไม่พบงานวิจัยจริง <br><strong>T:</strong> ย้อนรอย — "งานวิจัย" ที่อ้างถึงไม่มีชื่อนักวิจัยหรือสถาบันจริง<br>→ <strong>สรุป:</strong> ไม่แชร์ เพราะขาดหลักฐานน่าเชื่อถือ</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3 -->
+  <div class="section-card">
+    <div class="section-card-header open" onclick="toggleSection(this)">
+      <div class="section-num">3</div>
+      <h3>คำถาม 5 ข้อ สำหรับวิเคราะห์สื่อทุกชิ้น</h3>
+      <i class="fas fa-chevron-down section-toggle"></i>
+    </div>
+    <div class="section-body open">
+      <p style="font-size:.9rem;color:#475569;margin-bottom:1rem">ไม่ว่าจะเป็นโฆษณา ข่าว คลิปวิดีโอ หรือโพสต์บนโซเชียลมีเดีย ลองถามตัวเองด้วย 5 คำถามนี้</p>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot">1</div>
+          <div class="tl-content">
+            <h4>ใครสร้างสื่อชิ้นนี้?</h4>
+            <p>บุคคล องค์กร หรือบริษัทอะไร? มีประวัติน่าเชื่อถือไหม? เช่น มติชน vs เพจนิรนาม</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot">2</div>
+          <div class="tl-content">
+            <h4>สื่อนี้ต้องการสื่ออะไร?</h4>
+            <p>ข้อความ/ภาพ/เสียงที่ใช้ ต้องการให้ผู้รับสื่อรู้สึก คิด หรือทำอะไร?</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot">3</div>
+          <div class="tl-content">
+            <h4>มุมมองอะไรถูกนำเสนอ? มุมมองอะไรถูกละเว้น?</h4>
+            <p>สื่อทุกชิ้นมี "เลนส์" ของตัวเอง มองหาสิ่งที่ไม่ถูกพูดถึง</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot">4</div>
+          <div class="tl-content">
+            <h4>ใช้เทคนิคอะไรดึงดูดความสนใจ?</h4>
+            <p>หัวข้อเกินจริง (Clickbait)? ภาพที่กระตุ้นอารมณ์? สีสดใส? ดาราดัง?</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot">5</div>
+          <div class="tl-content">
+            <h4>คุณรู้สึกอย่างไรเมื่อดูสื่อนี้?</h4>
+            <p>ถ้ารู้สึกโกรธ, กลัว, หรือตื่นเต้นมาก — นั่นคือสัญญาณเตือนว่าสื่อกำลังควบคุมอารมณ์คุณอยู่</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 4 -->
+  <div class="section-card">
+    <div class="section-card-header open" onclick="toggleSection(this)">
+      <div class="section-num">4</div>
+      <h3>สัญญาณเตือนของสื่อไม่น่าเชื่อถือ</h3>
+      <i class="fas fa-chevron-down section-toggle"></i>
+    </div>
+    <div class="section-body open">
+      <div class="info-box">
+        <p>นักล่าข้อมูลเท็จมืออาชีพรู้จัก <strong>"ธงแดง"</strong> — สัญญาณที่บอกว่าสื่อชิ้นนี้น่าสงสัย</p>
+      </div>
+      <table class="type-table">
+        <thead>
+          <tr><th>สัญญาณ</th><th>ตัวอย่าง</th><th>ควรทำอะไร</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>หัวข้อเกินจริง/ตกใจ</td><td>"ช็อก! นักวิทย์พบ..."</td><td>ตรวจสอบเนื้อหาจริง</td></tr>
+          <tr><td>ไม่ระบุแหล่งที่มา</td><td>"นักวิทยาศาสตร์บอกว่า"</td><td>ค้นหาชื่อนักวิทยาศาสตร์จริง</td></tr>
+          <tr><td>URL แปลกหรือผิดปกติ</td><td>abcnews.com.co (ไม่ใช่ abcnews.com)</td><td>ตรวจ URL อย่างละเอียด</td></tr>
+          <tr><td>วันที่เก่าแต่แชร์ใหม่</td><td>ข่าว 2558 ถูกแชร์ว่าเกิดวันนี้</td><td>ตรวจวันที่เผยแพร่</td></tr>
+          <tr><td>ภาพถูกตัดต่อหรือเอาออกนอกบริบท</td><td>ภาพน้ำท่วม "วันนี้" จริงๆ จากต่างประเทศ</td><td>ค้นภาพด้วย Google Images</td></tr>
+          <tr><td>ข้อมูลสร้างอารมณ์รุนแรง</td><td>ให้รู้สึกโกรธ กลัว หรือเกลียด</td><td>หายใจ แล้วตรวจสอบก่อน</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Section 5 -->
+  <div class="section-card">
+    <div class="section-card-header open" onclick="toggleSection(this)">
+      <div class="section-num">5</div>
+      <h3>การประเมินเว็บไซต์และแหล่งข้อมูล</h3>
+      <i class="fas fa-chevron-down section-toggle"></i>
+    </div>
+    <div class="section-body open">
+      <p style="font-size:.9rem;color:#475569;margin-bottom:.8rem">ใช้เกณฑ์ <strong>CRAAP Test</strong> ประเมินแหล่งข้อมูลออนไลน์</p>
+      <div class="criteria-grid">
+        <div class="criteria-card">
+          <div class="cc-icon">📅</div>
+          <h4>C — Currency (ปัจจุบัน)</h4>
+          <p>ข้อมูลนี้เผยแพร่เมื่อไหร่? ยังทันสมัยอยู่ไหม?</p>
+        </div>
+        <div class="criteria-card">
+          <div class="cc-icon">🎯</div>
+          <h4>R — Relevance (เกี่ยวข้อง)</h4>
+          <p>ข้อมูลนี้ตรงกับที่ต้องการหรือไม่? เขียนสำหรับกลุ่มเป้าหมายใด?</p>
+        </div>
+        <div class="criteria-card">
+          <div class="cc-icon">👤</div>
+          <h4>A — Authority (ผู้มีอำนาจ)</h4>
+          <p>ใครเขียน? มีคุณวุฒิ/ความเชี่ยวชาญไหม? สังกัดองค์กรอะไร?</p>
+        </div>
+        <div class="criteria-card">
+          <div class="cc-icon">✅</div>
+          <h4>A — Accuracy (ถูกต้อง)</h4>
+          <p>มีหลักฐาน/อ้างอิงไหม? ตรวจสอบจากแหล่งอื่นได้ไหม?</p>
+        </div>
+        <div class="criteria-card">
+          <div class="cc-icon">💡</div>
+          <h4>P — Purpose (วัตถุประสงค์)</h4>
+          <p>สร้างเพื่ออะไร? ให้ข้อมูล? โน้มน้าว? ขาย? บันเทิง?</p>
+        </div>
+      </div>
+      <div class="example-box" style="margin-top:1rem">
+        <div class="ex-label">ลองประเมิน: สองเว็บที่ข่าวเหมือนกัน</div>
+        <p>
+          <strong>เว็บ A:</strong> หน้าเว็บของกรมควบคุมโรค (ddc.moph.go.th) มีวันที่ ผู้รับผิดชอบชัดเจน อ้างอิงงานวิจัย<br>
+          <strong>เว็บ B:</strong> เพจ Facebook "สุขภาพดีทุกวัน" ไม่มีผู้เขียน ไม่มีวันที่ ลิงก์ไปสู่การขายอาหารเสริม<br>
+          → <strong>สรุป:</strong> เว็บ A ผ่านทุกเกณฑ์ CRAAP, เว็บ B น่าสงสัยในทุกเกณฑ์
+        </p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /utab-lesson -->
+
+<!-- ===== TAB: แบบฝึกหัด ===== -->
+<div id="utab-exercises" class="unit-tab-content">
+
+  <div id="exerciseLockBanner" style="display:none;background:#fee2e2;border:1px solid #fca5a5;border-radius:10px;padding:1rem 1.2rem;margin-bottom:1.5rem;display:none">
+    <p style="margin:0;color:#991b1b;font-weight:600"><i class="fas fa-lock"></i> แบบฝึกหัดบทที่ 2 ยังไม่เปิดรับงาน — รอครูเปิด</p>
+  </div>
+
+  <!-- Work 1: Match (4pt) -->
+  <div class="work-card">
+    <div class="work-card-header">
+      <div class="work-num">1</div>
+      <div class="work-title">
+        <h3>จับคู่: สัญญาณเตือนสื่อไม่น่าเชื่อถือ</h3>
+        <div class="work-badges">
+          <span class="work-score-badge"><i class="fas fa-star"></i> 4 คะแนน</span>
+          <span class="work-type-badge"><i class="fas fa-puzzle-piece"></i> จับคู่</span>
+          <span id="badge_w1" class="work-status-badge open"><i class="fas fa-circle-check"></i> เปิดรับงาน</span>
+        </div>
+      </div>
+    </div>
+    <div class="work-body">
+      <p style="font-size:.88rem;color:#475569;margin-bottom:1rem">จับคู่สัญญาณเตือนกับคำอธิบายที่ถูกต้อง (ตัวเลือกไม่ซ้ำกัน)</p>
+      <div class="match-grid">
+        <div class="match-row">
+          <div class="match-label"><span class="match-num">1</span>หัวข้อเกินจริง (Clickbait)</div>
+          <select class="match-select" id="m2_1">
+            <option value="">-- เลือก --</option>
+            <option value="A">ตรวจ URL อย่างละเอียดก่อนเชื่อ</option>
+            <option value="B">ออกแบบให้สร้างความตื่นเต้นมากกว่าให้ข้อมูลจริง</option>
+            <option value="C">ข้อมูลเก่าถูกนำมาแชร์ใหม่ราวกับเพิ่งเกิด</option>
+            <option value="D">ขาดชื่อผู้เขียนหรือสถาบันที่ชัดเจน</option>
+          </select>
+        </div>
+        <div class="match-row">
+          <div class="match-label"><span class="match-num">2</span>URL หลอกลวง</div>
+          <select class="match-select" id="m2_2">
+            <option value="">-- เลือก --</option>
+            <option value="A">ตรวจ URL อย่างละเอียดก่อนเชื่อ</option>
+            <option value="B">ออกแบบให้สร้างความตื่นเต้นมากกว่าให้ข้อมูลจริง</option>
+            <option value="C">ข้อมูลเก่าถูกนำมาแชร์ใหม่ราวกับเพิ่งเกิด</option>
+            <option value="D">ขาดชื่อผู้เขียนหรือสถาบันที่ชัดเจน</option>
+          </select>
+        </div>
+        <div class="match-row">
+          <div class="match-label"><span class="match-num">3</span>ข้อมูลเก่าแชร์ใหม่</div>
+          <select class="match-select" id="m2_3">
+            <option value="">-- เลือก --</option>
+            <option value="A">ตรวจ URL อย่างละเอียดก่อนเชื่อ</option>
+            <option value="B">ออกแบบให้สร้างความตื่นเต้นมากกว่าให้ข้อมูลจริง</option>
+            <option value="C">ข้อมูลเก่าถูกนำมาแชร์ใหม่ราวกับเพิ่งเกิด</option>
+            <option value="D">ขาดชื่อผู้เขียนหรือสถาบันที่ชัดเจน</option>
+          </select>
+        </div>
+        <div class="match-row">
+          <div class="match-label"><span class="match-num">4</span>ไม่ระบุแหล่งที่มา</div>
+          <select class="match-select" id="m2_4">
+            <option value="">-- เลือก --</option>
+            <option value="A">ตรวจ URL อย่างละเอียดก่อนเชื่อ</option>
+            <option value="B">ออกแบบให้สร้างความตื่นเต้นมากกว่าให้ข้อมูลจริง</option>
+            <option value="C">ข้อมูลเก่าถูกนำมาแชร์ใหม่ราวกับเพิ่งเกิด</option>
+            <option value="D">ขาดชื่อผู้เขียนหรือสถาบันที่ชัดเจน</option>
+          </select>
+        </div>
+      </div>
+      <button class="submit-btn" id="matchBtn2" onclick="submitMatch2()"><i class="fas fa-check-circle"></i> ตรวจคำตอบและส่งคะแนน</button>
+      <div class="result-box" id="matchResult2"></div>
+    </div>
+  </div>
+
+  <!-- Work 2: MCQ (4pt) -->
+  <div class="work-card">
+    <div class="work-card-header">
+      <div class="work-num">2</div>
+      <div class="work-title">
+        <h3>ปรนัย: SIFT และเกณฑ์ประเมินสื่อ</h3>
+        <div class="work-badges">
+          <span class="work-score-badge"><i class="fas fa-star"></i> 4 คะแนน</span>
+          <span class="work-type-badge"><i class="fas fa-list-check"></i> ปรนัย</span>
+          <span id="badge_w2" class="work-status-badge open"><i class="fas fa-circle-check"></i> เปิดรับงาน</span>
+        </div>
+      </div>
+    </div>
+    <div class="work-body">
+      <div class="mcq-item">
+        <div class="mcq-q">1. "S" ใน SIFT หมายถึงอะไร?</div>
+        <div class="mcq-options">
+          <label class="mcq-option"><input type="radio" name="q2_1" value="A"> Search (ค้นหา)</label>
+          <label class="mcq-option"><input type="radio" name="q2_1" value="B"> Stop (หยุด)</label>
+          <label class="mcq-option"><input type="radio" name="q2_1" value="C"> Share (แชร์)</label>
+          <label class="mcq-option"><input type="radio" name="q2_1" value="D"> Scan (สแกน)</label>
+        </div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q">2. "A — Authority" ใน CRAAP Test คือการตรวจสอบอะไร?</div>
+        <div class="mcq-options">
+          <label class="mcq-option"><input type="radio" name="q2_2" value="A"> ความสวยงามของเว็บไซต์</label>
+          <label class="mcq-option"><input type="radio" name="q2_2" value="B"> ความถูกต้องของไวยากรณ์</label>
+          <label class="mcq-option"><input type="radio" name="q2_2" value="C"> ความน่าเชื่อถือของผู้เขียน/องค์กร</label>
+          <label class="mcq-option"><input type="radio" name="q2_2" value="D"> จำนวนผู้ติดตาม</label>
+        </div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q">3. ข้อใดคือสัญญาณเตือนที่ชัดเจนที่สุดว่าสื่อนั้น "อาจไม่น่าเชื่อถือ"?</div>
+        <div class="mcq-options">
+          <label class="mcq-option"><input type="radio" name="q2_3" value="A"> มีรูปภาพประกอบสวยงาม</label>
+          <label class="mcq-option"><input type="radio" name="q2_3" value="B"> เขียนด้วยภาษาไทยถูกต้อง</label>
+          <label class="mcq-option"><input type="radio" name="q2_3" value="C"> ไม่ระบุผู้เขียนและไม่มีแหล่งอ้างอิง</label>
+          <label class="mcq-option"><input type="radio" name="q2_3" value="D"> มียอดแชร์สูง</label>
+        </div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q">4. ขั้นตอนแรกของ SIFT คือ "Stop" เพราะเหตุใด?</div>
+        <div class="mcq-options">
+          <label class="mcq-option"><input type="radio" name="q2_4" value="A"> เพราะการหยุดทำให้ประหยัดเวลา</label>
+          <label class="mcq-option"><input type="radio" name="q2_4" value="B"> เพราะอารมณ์ที่รุนแรงทำให้ตัดสินใจผิดพลาดง่ายขึ้น</label>
+          <label class="mcq-option"><input type="radio" name="q2_4" value="C"> เพราะข้อมูลทุกชิ้นเป็นเท็จ</label>
+          <label class="mcq-option"><input type="radio" name="q2_4" value="D"> เพราะการค้นหาข้อมูลใช้เวลานาน</label>
+        </div>
+      </div>
+      <button class="submit-btn" id="mcqBtn2" onclick="submitMCQ2()"><i class="fas fa-check-circle"></i> ตรวจคำตอบและส่งคะแนน</button>
+      <div class="result-box" id="mcqResult2"></div>
+    </div>
+  </div>
+
+  <!-- Work 3: T/F MCQ (3pt) -->
+  <div class="work-card">
+    <div class="work-card-header">
+      <div class="work-num">3</div>
+      <div class="work-title">
+        <h3>ถูก/ผิด: ประเมินความน่าเชื่อถือของสื่อ</h3>
+        <div class="work-badges">
+          <span class="work-score-badge"><i class="fas fa-star"></i> 3 คะแนน</span>
+          <span class="work-type-badge"><i class="fas fa-toggle-on"></i> ถูก/ผิด</span>
+          <span id="badge_w3" class="work-status-badge open"><i class="fas fa-circle-check"></i> เปิดรับงาน</span>
+        </div>
+      </div>
+    </div>
+    <div class="work-body">
+      <p style="font-size:.88rem;color:#475569;margin-bottom:1rem">เลือก <strong>ถูก</strong> หรือ <strong>ผิด</strong> สำหรับแต่ละข้อความ</p>
+      <div class="mcq-item">
+        <div class="mcq-q">1. ถ้าโพสต์มียอดแชร์มากกว่า 100,000 ครั้ง แสดงว่าข้อมูลนั้นถูกต้องแน่นอน</div>
+        <div class="mcq-options">
+          <label class="mcq-option"><input type="radio" name="tf2_1" value="T"> ถูก</label>
+          <label class="mcq-option"><input type="radio" name="tf2_1" value="F"> ผิด</label>
+        </div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q">2. การค้นหาภาพด้วย Google Images ช่วยตรวจสอบได้ว่าภาพนั้นถูกนำมาออกนอกบริบทหรือไม่</div>
+        <div class="mcq-options">
+          <label class="mcq-option"><input type="radio" name="tf2_2" value="T"> ถูก</label>
+          <label class="mcq-option"><input type="radio" name="tf2_2" value="F"> ผิด</label>
+        </div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q">3. เว็บไซต์ที่มี ".go.th" ในโดเมนมักเป็นเว็บของหน่วยงานรัฐบาลไทยที่น่าเชื่อถือ</div>
+        <div class="mcq-options">
+          <label class="mcq-option"><input type="radio" name="tf2_3" value="T"> ถูก</label>
+          <label class="mcq-option"><input type="radio" name="tf2_3" value="F"> ผิด</label>
+        </div>
+      </div>
+      <button class="submit-btn" id="tfBtn2" onclick="submitTF2()"><i class="fas fa-check-circle"></i> ตรวจคำตอบและส่งคะแนน</button>
+      <div class="result-box" id="tfResult2"></div>
+    </div>
+  </div>
+
+  <!-- Work 4: Analysis (5pt, manual) -->
+  <div class="work-card">
+    <div class="work-card-header">
+      <div class="work-num">4</div>
+      <div class="work-title">
+        <h3>วิเคราะห์สื่อ: โฆษณาอาหารเสริมบนโซเชียล</h3>
+        <div class="work-badges">
+          <span class="work-score-badge"><i class="fas fa-star"></i> 5 คะแนน</span>
+          <span class="work-type-badge"><i class="fas fa-pen-to-square"></i> เขียนวิเคราะห์</span>
+          <span id="badge_w4" class="work-status-badge open"><i class="fas fa-circle-check"></i> เปิดรับงาน</span>
+        </div>
+      </div>
+    </div>
+    <div class="work-body">
+      <div class="info-box" style="margin-bottom:1rem">
+        <p><strong>สถานการณ์:</strong> มีโฆษณาบน Facebook อ้างว่า "กินวิตามิน X แล้วน้ำหนักลด 10 กก. ใน 2 สัปดาห์! มีผู้ใช้กว่า 500,000 คนแล้ว!" โพสต์มีรูปก่อน-หลังที่น่าประทับใจ มีบทวิจารณ์จากผู้ใช้จริง แต่ไม่มีชื่อแพทย์หรือหน่วยงานรับรอง</p>
+      </div>
+      <div id="analysisFormArea2">
+        <label class="field-label">1. ใช้ SIFT วิเคราะห์โฆษณานี้ (อธิบายทุกขั้นตอน)</label>
+        <textarea class="work-textarea" id="an2_1" placeholder="S-Stop: รู้สึกอย่างไร? I-Investigate: ตรวจอะไร? F-Find: หาข้อมูลเพิ่มอย่างไร? T-Trace: ย้อนรอยไปที่ใด?"></textarea>
+        <label class="field-label" style="margin-top:.8rem">2. โฆษณานี้มี "ธงแดง" (สัญญาณเตือน) อะไรบ้าง?</label>
+        <textarea class="work-textarea" id="an2_2" placeholder="ระบุสัญญาณเตือนพร้อมอธิบาย..."></textarea>
+        <label class="field-label" style="margin-top:.8rem">3. ถ้าเพื่อนจะซื้อผลิตภัณฑ์นี้ นักเรียนจะแนะนำอย่างไร?</label>
+        <textarea class="work-textarea" id="an2_3" placeholder="คำแนะนำพร้อมเหตุผล..."></textarea>
+        <button class="submit-btn" id="analysisBtn2" onclick="submitAnalysis2()"><i class="fas fa-paper-plane"></i> ส่งงานวิเคราะห์</button>
+        <div class="result-box" id="analysisResult2"></div>
+      </div>
+      <div id="analysisPendingBox2" style="display:none;margin-top:1rem;background:#fffbeb;border:1px solid #fcd34d;border-radius:12px;padding:1.25rem">
+        <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem">
+          <i class="fas fa-clock" style="color:#d97706;font-size:1.3rem"></i>
+          <p style="font-weight:700;color:#92400e;margin:0">ส่งงานแล้ว — รอครูตรวจ</p>
+        </div>
+        <button id="editAnalysisBtn2" style="background:#fff;border:1px solid #fcd34d;color:#b45309;padding:.4rem .9rem;border-radius:8px;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer"><i class="fas fa-pen"></i> แก้ไขคำตอบ</button>
+      </div>
+      <div id="analysisGradedBox2" style="display:none;margin-top:1rem;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:1.25rem;text-align:center">
+        <i class="fas fa-circle-check" style="color:#16a34a;font-size:2rem;margin-bottom:.4rem;display:block"></i>
+        <p style="font-weight:700;color:#166534;margin:0 0 .25rem">ครูตรวจแล้ว!</p>
+        <p id="analysisGradedScore2" style="font-size:.9rem;color:#166534;margin:0"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Work 5: Worksheet (4pt, manual) -->
+  <div class="work-card">
+    <div class="work-card-header">
+      <div class="work-num">5</div>
+      <div class="work-title">
+        <h3>ใบงาน: ล่าสัญญาณเตือนในสื่อ 2 ชิ้น</h3>
+        <div class="work-badges">
+          <span class="work-score-badge"><i class="fas fa-star"></i> 4 คะแนน</span>
+          <span class="work-type-badge"><i class="fas fa-clipboard"></i> ใบงาน</span>
+          <span id="badge_w5" class="work-status-badge open"><i class="fas fa-circle-check"></i> เปิดรับงาน</span>
+        </div>
+      </div>
+    </div>
+    <div class="work-body">
+      <p style="font-size:.88rem;color:#475569;margin-bottom:1rem">ค้นหาสื่อ 2 ชิ้นจากโซเชียลมีเดีย แล้วประเมินด้วย CRAAP Test</p>
+      <div id="worksheetFormArea2">
+        <label class="field-label">สื่อชิ้นที่ 1: (ชื่อ/URL/ลิงก์)</label>
+        <input type="text" class="work-input" id="ws2_1" placeholder="ชื่อโพสต์ หรือ URL...">
+        <label class="field-label">ผลการประเมิน CRAAP Test ของสื่อชิ้นที่ 1</label>
+        <textarea class="work-textarea" style="min-height:70px" id="ws2_2" placeholder="Currency: ... / Relevance: ... / Authority: ... / Accuracy: ... / Purpose: ..."></textarea>
+        <label class="field-label" style="margin-top:.8rem">สื่อชิ้นที่ 2: (ชื่อ/URL/ลิงก์)</label>
+        <input type="text" class="work-input" id="ws2_3" placeholder="ชื่อโพสต์ หรือ URL...">
+        <label class="field-label">ผลการประเมิน CRAAP Test ของสื่อชิ้นที่ 2</label>
+        <textarea class="work-textarea" style="min-height:70px" id="ws2_4" placeholder="Currency: ... / Relevance: ... / Authority: ... / Accuracy: ... / Purpose: ..."></textarea>
+        <label class="field-label" style="margin-top:.8rem">สรุป: สิ่งที่นักเรียนเรียนรู้จากการทำใบงานนี้</label>
+        <textarea class="work-textarea" style="min-height:60px" id="ws2_5" placeholder="เขียนสะท้อนคิด..."></textarea>
+        <button class="submit-btn" id="worksheetBtn2" onclick="submitWorksheet2()"><i class="fas fa-paper-plane"></i> ส่งใบงาน</button>
+        <div class="result-box" id="worksheetResult2"></div>
+      </div>
+      <div id="worksheetPendingBox2" style="display:none;margin-top:1rem;background:#fffbeb;border:1px solid #fcd34d;border-radius:12px;padding:1.25rem">
+        <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem">
+          <i class="fas fa-clock" style="color:#d97706;font-size:1.3rem"></i>
+          <p style="font-weight:700;color:#92400e;margin:0">ส่งใบงานแล้ว — รอครูตรวจ</p>
+        </div>
+        <button id="editWorksheetBtn2" style="background:#fff;border:1px solid #fcd34d;color:#b45309;padding:.4rem .9rem;border-radius:8px;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer"><i class="fas fa-pen"></i> แก้ไขคำตอบ</button>
+      </div>
+      <div id="worksheetGradedBox2" style="display:none;margin-top:1rem;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:1.25rem;text-align:center">
+        <i class="fas fa-circle-check" style="color:#16a34a;font-size:2rem;margin-bottom:.4rem;display:block"></i>
+        <p style="font-weight:700;color:#166534;margin:0 0 .25rem">ครูตรวจแล้ว!</p>
+        <p id="worksheetGradedScore2" style="font-size:.9rem;color:#166534;margin:0"></p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /utab-exercises -->
+
+<!-- ===== TAB: แบบทดสอบ ===== -->
+<div id="utab-test" class="unit-tab-content">
+
+  <!-- Locked state -->
+  <div id="testLockedBox" style="display:none" class="test-locked-box">
+    <i class="fas fa-lock"></i>
+    <h3 style="color:#475569;margin-bottom:.5rem">แบบทดสอบยังไม่เปิด</h3>
+    <p style="font-size:.9rem">รอครูเปิดแบบทดสอบบทที่ 2</p>
+  </div>
+
+  <!-- Graded state -->
+  <div id="testGradedBox" style="display:none;text-align:center;padding:3rem 1.5rem">
+    <i class="fas fa-circle-check" style="color:#16a34a;font-size:3rem;display:block;margin-bottom:1rem"></i>
+    <h3 style="color:#166534;margin-bottom:.5rem">ทำแบบทดสอบแล้ว!</h3>
+    <p id="testGradedScore" style="font-size:1.1rem;color:#166534;font-weight:700;margin:0"></p>
+  </div>
+
+  <!-- Start state -->
+  <div id="testStartBox" class="test-start-box">
+    <i class="fas fa-file-alt" style="font-size:3rem;color:#7c3aed;display:block;margin-bottom:1rem"></i>
+    <h2 style="color:#1e293b;margin-bottom:.5rem">แบบทดสอบบทที่ 2</h2>
+    <p style="color:#64748b;margin-bottom:.5rem">การวิเคราะห์และประเมินสื่อ</p>
+    <div style="display:inline-flex;gap:1.5rem;margin:1rem 0;flex-wrap:wrap;justify-content:center">
+      <div style="text-align:center"><span style="font-size:1.5rem;font-weight:700;color:#7c3aed">10</span><br><span style="font-size:.8rem;color:#64748b">ข้อ</span></div>
+      <div style="text-align:center"><span style="font-size:1.5rem;font-weight:700;color:#7c3aed">20</span><br><span style="font-size:.8rem;color:#64748b">นาที</span></div>
+      <div style="text-align:center"><span style="font-size:1.5rem;font-weight:700;color:#7c3aed">10</span><br><span style="font-size:.8rem;color:#64748b">คะแนน</span></div>
+    </div>
+    <p style="font-size:.85rem;color:#dc2626;margin-bottom:1.5rem"><i class="fas fa-exclamation-triangle"></i> เมื่อเริ่มแล้วจะนับเวลาถอยหลัง ทำได้เพียงครั้งเดียว</p>
+    <button onclick="startTest()" style="background:linear-gradient(135deg,#7c3aed,#4c1d95);color:white;border:none;border-radius:12px;padding:.9rem 2.5rem;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer"><i class="fas fa-play"></i> เริ่มทำแบบทดสอบ</button>
+  </div>
+
+  <!-- Test area -->
+  <div id="testArea" style="display:none">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:.5rem">
+      <div id="testTimerDisplay" class="test-timer">20:00</div>
+      <div class="test-progress" id="testProgressText">ข้อ 0/10</div>
+    </div>
+    <div id="testQuestionsContainer"></div>
+    <button class="test-submit-btn" onclick="submitTest()"><i class="fas fa-paper-plane"></i> ส่งแบบทดสอบ</button>
+  </div>
+
+  <!-- Test result -->
+  <div id="testResultBox" class="test-result-box">
+    <i class="fas fa-trophy" style="font-size:3rem;color:#7c3aed;display:block;margin-bottom:1rem"></i>
+    <h3 id="testResultTitle" style="color:#1e293b;margin-bottom:.5rem"></h3>
+    <p id="testResultScore" style="font-size:1.5rem;font-weight:700;color:#7c3aed;margin:.5rem 0"></p>
+    <p id="testResultDetail" style="font-size:.9rem;color:#64748b;margin:0"></p>
+  </div>
+
+</div><!-- /utab-test -->
+
+<!-- ===== TAB: คะแนนของฉัน ===== -->
+<div id="utab-scores" class="unit-tab-content">
+  <div class="student-score-header" id="scoreStudentHeader"><i class="fas fa-spinner fa-spin"></i> กำลังโหลดข้อมูล...</div>
+  <div id="scoreSummary" class="score-summary-chips" style="display:none"></div>
+  <div class="score-table-wrapper">
+    <table class="score-table">
+      <thead><tr><th>#</th><th>หัวข้อ/งาน</th><th>คะแนน</th><th>ประเภท</th><th>หมายเหตุ</th><th>วันที่</th></tr></thead>
+      <tbody id="scoreTableBody"><tr><td colspan="6" style="text-align:center;padding:2rem;color:#64748b"><i class="fas fa-spinner fa-spin"></i> กำลังโหลด...</td></tr></tbody>
+    </table>
+  </div>
+  <div style="text-align:center;margin-top:1rem">
+    <button onclick="initStudentScoreTab('media-m1')" class="btn btn-outline"><i class="fas fa-rotate-right"></i> โหลดใหม่</button>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <p>&copy; 2569 <strong>ครูศิริศักดิ์ ปิลอง</strong> &mdash; รายวิชารู้เท่าทันสื่อ ม.1</p>
+</footer>
+
+<script src="js/auth.js"></script>
+<script>requireAuth('1');</script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/app.js"></script>
+<script>
+/* ── Tab switching ── */
+document.querySelectorAll('.unit-tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = btn.dataset.utab;
+    document.querySelectorAll('.unit-tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.unit-tab-content').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    const pane = document.getElementById(target);
+    if (pane) pane.classList.add('active');
+    if (target === 'utab-scores') initStudentScoreTab('media-m1');
+  });
+});
+if (location.hash === '#exercises') document.querySelector('[data-utab="utab-exercises"]')?.click();
+if (location.hash === '#test') document.querySelector('[data-utab="utab-test"]')?.click();
+
+/* ── Section accordion ── */
+function toggleSection(header) {
+  header.classList.toggle('open');
+  const body = header.nextElementSibling;
+  if (body) body.classList.toggle('open');
+}
+
+function getStudent() {
+  return typeof getCurrentStudent === 'function' ? getCurrentStudent() : null;
+}
+
+/* ── Exercise lock state ── */
+let _exerciseLocked = false;
+let _testLocked = false;
+
+async function loadUnitSettings() {
+  const settings = await getSubjectSettings('media-m1');
+  _exerciseLocked = settings.unit2_exercise === false;
+  _testLocked = settings.unit2_test === false;
+
+  const lockBanner = document.getElementById('exerciseLockBanner');
+  if (_exerciseLocked) {
+    if (lockBanner) lockBanner.style.display = 'block';
+    ['matchBtn2','mcqBtn2','tfBtn2','analysisBtn2','worksheetBtn2'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) { el.disabled = true; el.title = 'ครูยังไม่เปิดรับงาน'; }
+    });
+    ['badge_w1','badge_w2','badge_w3','badge_w4','badge_w5'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) { el.className = 'work-status-badge locked'; el.innerHTML = '<i class="fas fa-lock"></i> ปิดรับงาน'; }
+    });
+  }
+}
+
+/* ── Work 1: Match ── */
+const MATCH2_ANS = { m2_1: 'B', m2_2: 'A', m2_3: 'C', m2_4: 'D' };
+
+async function submitMatch2() {
+  if (_exerciseLocked) { showToast('แบบฝึกหัดยังไม่เปิด', 'warning'); return; }
+  const s = getStudent();
+  if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน', 'warning'); return; }
+
+  const answers = {};
+  Object.keys(MATCH2_ANS).forEach(k => { answers[k] = document.getElementById(k).value; });
+  if (Object.values(answers).some(v => !v)) { showToast('กรุณาเลือกคำตอบให้ครบทุกข้อ', 'warning'); return; }
+
+  let correct = 0;
+  Object.keys(MATCH2_ANS).forEach(k => { if (answers[k] === MATCH2_ANS[k]) correct++; });
+  const score = correct, max = 4;
+
+  const resultBox = document.getElementById('matchResult2');
+  resultBox.className = 'result-box show ' + (score >= 3 ? 'pass' : 'fail');
+  resultBox.innerHTML = `ได้ ${score}/${max} คะแนน (ถูก ${correct} ข้อ จาก 4 ข้อ)`;
+
+  const res = await saveScore('media-m1',
+    { studentId: s.id, name: s.name, room: s.class },
+    { title: 'แบบฝึกหัดที่ 1 บทที่ 2: จับคู่สัญญาณเตือน', score, maxScore: max, type: 'exercise', note: '' }
+  );
+  if (res.ok) showToast('บันทึกคะแนนสำเร็จ', 'success');
+}
+
+/* ── Work 2: MCQ ── */
+const MCQ2_ANS = { q2_1: 'B', q2_2: 'C', q2_3: 'C', q2_4: 'B' };
+
+async function submitMCQ2() {
+  if (_exerciseLocked) { showToast('แบบฝึกหัดยังไม่เปิด', 'warning'); return; }
+  const s = getStudent();
+  if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน', 'warning'); return; }
+
+  const allAnswered = Object.keys(MCQ2_ANS).every(q => document.querySelector(`input[name="${q}"]:checked`));
+  if (!allAnswered) { showToast('กรุณาตอบให้ครบทุกข้อ', 'warning'); return; }
+
+  let correct = 0;
+  Object.keys(MCQ2_ANS).forEach(q => {
+    const chosen = document.querySelector(`input[name="${q}"]:checked`);
+    document.querySelectorAll(`input[name="${q}"]`).forEach(opt => {
+      const label = opt.closest('.mcq-option');
+      label.classList.remove('correct-ans', 'wrong-ans');
+      if (opt.value === MCQ2_ANS[q]) label.classList.add('correct-ans');
+      else if (chosen && opt === chosen && opt.value !== MCQ2_ANS[q]) label.classList.add('wrong-ans');
+    });
+    if (chosen && chosen.value === MCQ2_ANS[q]) correct++;
+  });
+
+  const score = correct, max = 4;
+  const resultBox = document.getElementById('mcqResult2');
+  resultBox.className = 'result-box show ' + (score >= 3 ? 'pass' : 'fail');
+  resultBox.innerHTML = `ได้ ${score}/${max} คะแนน (ถูก ${correct} ข้อ)`;
+
+  const res = await saveScore('media-m1',
+    { studentId: s.id, name: s.name, room: s.class },
+    { title: 'แบบฝึกหัดที่ 2 บทที่ 2: ปรนัย SIFT', score, maxScore: max, type: 'quiz', note: '' }
+  );
+  if (res.ok) showToast('บันทึกคะแนนสำเร็จ', 'success');
+}
+
+/* ── Work 3: T/F ── */
+const TF2_ANS = { tf2_1: 'F', tf2_2: 'T', tf2_3: 'T' };
+
+async function submitTF2() {
+  if (_exerciseLocked) { showToast('แบบฝึกหัดยังไม่เปิด', 'warning'); return; }
+  const s = getStudent();
+  if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน', 'warning'); return; }
+
+  const allAnswered = Object.keys(TF2_ANS).every(q => document.querySelector(`input[name="${q}"]:checked`));
+  if (!allAnswered) { showToast('กรุณาตอบให้ครบทุกข้อ', 'warning'); return; }
+
+  let correct = 0;
+  Object.keys(TF2_ANS).forEach(q => {
+    const chosen = document.querySelector(`input[name="${q}"]:checked`);
+    document.querySelectorAll(`input[name="${q}"]`).forEach(opt => {
+      const label = opt.closest('.mcq-option');
+      label.classList.remove('correct-ans', 'wrong-ans');
+      if (opt.value === TF2_ANS[q]) label.classList.add('correct-ans');
+      else if (chosen && opt === chosen && opt.value !== TF2_ANS[q]) label.classList.add('wrong-ans');
+    });
+    if (chosen && chosen.value === TF2_ANS[q]) correct++;
+  });
+
+  const score = correct, max = 3;
+  const resultBox = document.getElementById('tfResult2');
+  resultBox.className = 'result-box show ' + (score >= 2 ? 'pass' : 'fail');
+  resultBox.innerHTML = `ได้ ${score}/${max} คะแนน (ถูก ${correct} ข้อ)`;
+
+  const res = await saveScore('media-m1',
+    { studentId: s.id, name: s.name, room: s.class },
+    { title: 'แบบฝึกหัดที่ 3 บทที่ 2: ถูก/ผิด', score, maxScore: max, type: 'quiz', note: '' }
+  );
+  if (res.ok) showToast('บันทึกคะแนนสำเร็จ', 'success');
+}
+
+/* ── Work 4: Analysis ── */
+function _loadAnalysisState2() {
+  setupWorkCard({
+    subjectId: 'media-m1',
+    title: 'แบบฝึกหัดที่ 4 บทที่ 2: วิเคราะห์โฆษณาอาหารเสริม',
+    formEl: document.getElementById('analysisFormArea2'),
+    pendingBoxEl: document.getElementById('analysisPendingBox2'),
+    gradedBoxEl: document.getElementById('analysisGradedBox2'),
+    editBtnEl: document.getElementById('editAnalysisBtn2'),
+    onGraded: sub => {
+      document.getElementById('analysisGradedScore2').textContent = 'คะแนน: ' + sub.score + '/' + sub.maxScore;
+    }
+  });
+}
+
+async function submitAnalysis2() {
+  if (_exerciseLocked) { showToast('แบบฝึกหัดยังไม่เปิด', 'warning'); return; }
+  const s = getStudent();
+  if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน', 'warning'); return; }
+
+  const a1 = document.getElementById('an2_1').value.trim();
+  const a2 = document.getElementById('an2_2').value.trim();
+  const a3 = document.getElementById('an2_3').value.trim();
+  if (!a1 || !a2 || !a3) { showToast('กรุณาตอบให้ครบทั้ง 3 ข้อ', 'warning'); return; }
+
+  const btn = document.getElementById('analysisBtn2');
+  btn.disabled = true; btn.textContent = 'กำลังส่ง...';
+
+  const note = `1)${a1.slice(0,80)} | 2)${a2.slice(0,60)} | 3)${a3.slice(0,60)}`;
+  const formEl = document.getElementById('analysisFormArea2');
+  const editId = formEl.dataset.editScoreId;
+  const res = editId
+    ? await editPendingNote('media-m1', s.id, editId, note)
+    : await saveScore('media-m1',
+        { studentId: s.id, name: s.name, room: s.class },
+        { title: 'แบบฝึกหัดที่ 4 บทที่ 2: วิเคราะห์โฆษณาอาหารเสริม', score: 0, maxScore: 5, type: 'exercise', status: 'pending', note }
+      );
+
+  btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> ส่งงานวิเคราะห์';
+  if (res.ok) { delete formEl.dataset.editScoreId; showToast('ส่งงานสำเร็จ รอครูตรวจ', 'success'); _loadAnalysisState2(); }
+  else showToast('เกิดข้อผิดพลาด: ' + res.error, 'error');
+}
+
+/* ── Work 5: Worksheet ── */
+function _loadWorksheetState2() {
+  setupWorkCard({
+    subjectId: 'media-m1',
+    title: 'แบบฝึกหัดที่ 5 บทที่ 2: ล่าสัญญาณเตือนในสื่อ',
+    formEl: document.getElementById('worksheetFormArea2'),
+    pendingBoxEl: document.getElementById('worksheetPendingBox2'),
+    gradedBoxEl: document.getElementById('worksheetGradedBox2'),
+    editBtnEl: document.getElementById('editWorksheetBtn2'),
+    onGraded: sub => {
+      document.getElementById('worksheetGradedScore2').textContent = 'คะแนน: ' + sub.score + '/' + sub.maxScore;
+    }
+  });
+}
+
+async function submitWorksheet2() {
+  if (_exerciseLocked) { showToast('แบบฝึกหัดยังไม่เปิด', 'warning'); return; }
+  const s = getStudent();
+  if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน', 'warning'); return; }
+
+  const ws1 = document.getElementById('ws2_1').value.trim();
+  const ws2 = document.getElementById('ws2_2').value.trim();
+  const ws3 = document.getElementById('ws2_3').value.trim();
+  const ws4 = document.getElementById('ws2_4').value.trim();
+  const ws5 = document.getElementById('ws2_5').value.trim();
+  if (!ws1 || !ws2 || !ws3 || !ws4 || !ws5) { showToast('กรุณากรอกข้อมูลให้ครบ', 'warning'); return; }
+
+  const btn = document.getElementById('worksheetBtn2');
+  btn.disabled = true; btn.textContent = 'กำลังส่ง...';
+
+  const note = `สื่อ1:${ws1.slice(0,40)} | สื่อ2:${ws3.slice(0,40)} | สรุป:${ws5.slice(0,60)}`;
+  const formEl = document.getElementById('worksheetFormArea2');
+  const editId = formEl.dataset.editScoreId;
+  const res = editId
+    ? await editPendingNote('media-m1', s.id, editId, note)
+    : await saveScore('media-m1',
+        { studentId: s.id, name: s.name, room: s.class },
+        { title: 'แบบฝึกหัดที่ 5 บทที่ 2: ล่าสัญญาณเตือนในสื่อ', score: 0, maxScore: 4, type: 'exercise', status: 'pending', note }
+      );
+
+  btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> ส่งใบงาน';
+  if (res.ok) { delete formEl.dataset.editScoreId; showToast('ส่งใบงานสำเร็จ รอครูตรวจ', 'success'); _loadWorksheetState2(); }
+  else showToast('เกิดข้อผิดพลาด: ' + res.error, 'error');
+}
+
+/* ── Test ── */
+const TEST2_QUESTIONS = [
+  { q: '1. ขั้นแรกของ SIFT คือ "Stop" เพราะเหตุใด?', opts: ['เพื่อรอให้คนอื่นตรวจสอบก่อน', 'อารมณ์แรงทำให้ตัดสินใจผิดพลาดง่ายขึ้น', 'เพราะข้อมูลทุกชิ้นเป็นเท็จ', 'เพราะต้องรออนุมัติจากครู'], ans: 'B' },
+  { q: '2. "C" ใน CRAAP Test หมายถึงอะไร?', opts: ['Correct (ถูกต้อง)', 'Clear (ชัดเจน)', 'Currency (ความทันสมัย)', 'Credible (น่าเชื่อถือ)'], ans: 'C' },
+  { q: '3. ถ้าต้องการตรวจสอบว่าภาพถ่ายถูกใช้ผิดบริบทหรือไม่ ควรใช้เครื่องมือใด?', opts: ['ค้น hashtag บน Twitter', 'Google Images Reverse Search', 'ถามเพื่อนในกลุ่มไลน์', 'ดูจำนวนยอด like'], ans: 'B' },
+  { q: '4. URL แบบใดน่าสงสัยว่าอาจเป็นเว็บปลอม?', opts: ['bbc.com', 'moph.go.th', 'bbc.com.news.info', 'reuters.com'], ans: 'C' },
+  { q: '5. "ธงแดง" (Red Flag) ในการวิเคราะห์สื่อหมายความว่าอย่างไร?', opts: ['สื่อที่ใช้สีแดง', 'สัญญาณเตือนที่บ่งชี้ว่าสื่ออาจไม่น่าเชื่อถือ', 'การห้ามแชร์เนื้อหา', 'ข่าวเกี่ยวกับการเมือง'], ans: 'B' },
+  { q: '6. ข้อใดคือตัวอย่างของ "P — Purpose" ใน CRAAP Test?', opts: ['ตรวจว่าเว็บใช้ภาษาถูกต้อง', 'ตรวจว่าเนื้อหาสร้างขึ้นเพื่อขายสินค้าหรือให้ข้อมูล', 'ตรวจว่าผู้เขียนเป็นผู้เชี่ยวชาญ', 'ตรวจวันที่เผยแพร่'], ans: 'C' },
+  { q: '7. คำถามข้อที่ 4 ใน "5 คำถามวิเคราะห์สื่อ" คือ?', opts: ['ใครเขียนสื่อนี้?', 'ข้อมูลนี้ถูกต้องไหม?', 'เนื้อหาสนุกไหม?', 'ใช้เทคนิคอะไรดึงดูดความสนใจ?'], ans: 'D' },
+  { q: '8. ถ้ารู้สึกโกรธหรือกลัวมากเมื่อดูสื่อชิ้นหนึ่ง ควรทำอย่างไร?', opts: ['แชร์ทันทีเพราะข้อมูลสำคัญ', 'ลบทิ้งทันที', 'หยุดและตรวจสอบด้วย SIFT ก่อน', 'โทรแจ้งตำรวจ'], ans: 'C' },
+  { q: '9. เว็บไซต์ที่มีโดเมน ".go.th" หมายความว่าอะไร?', opts: ['เว็บที่ดีที่สุดในไทย', 'เว็บขายสินค้าออนไลน์', 'เว็บที่ไม่ต้องตรวจสอบ', 'เว็บของหน่วยงานรัฐบาลไทย'], ans: 'D' },
+  { q: '10. "T — Trace" ใน SIFT หมายถึงอะไร?', opts: ['ติดตามผู้ติดตามบนโซเชียล', 'ย้อนรอยข้ออ้างกลับไปสู่แหล่งต้นทาง', 'บันทึกหน้าจอ', 'แปลภาษาเนื้อหา'], ans: 'B' }
+];
+
+let _testTimer = null;
+let _testTimeLeft = 20 * 60;
+let _testSubmitted = false;
+
+function startTest() {
+  if (_testLocked) { showToast('แบบทดสอบยังไม่เปิด', 'warning'); return; }
+  const s = getStudent();
+  if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน', 'warning'); return; }
+
+  document.getElementById('testStartBox').style.display = 'none';
+  document.getElementById('testArea').style.display = 'block';
+
+  // Render questions
+  const container = document.getElementById('testQuestionsContainer');
+  container.innerHTML = TEST2_QUESTIONS.map((q, i) => `
+    <div class="work-card" style="margin-bottom:1rem">
+      <div class="work-body">
+        <div class="mcq-item">
+          <div class="mcq-q">${q.q}</div>
+          <div class="mcq-options">
+            ${q.opts.map((opt, j) => {
+              const val = ['A','B','C','D'][j];
+              return `<label class="mcq-option"><input type="radio" name="test2_q${i+1}" value="${val}"> ${opt}</label>`;
+            }).join('')}
+          </div>
+        </div>
+      </div>
+    </div>`).join('');
+
+  // Start timer
+  _testTimeLeft = 20 * 60;
+  _testTimer = setInterval(() => {
+    _testTimeLeft--;
+    const m = Math.floor(_testTimeLeft / 60).toString().padStart(2, '0');
+    const sec = (_testTimeLeft % 60).toString().padStart(2, '0');
+    const display = document.getElementById('testTimerDisplay');
+    if (display) {
+      display.textContent = m + ':' + sec;
+      if (_testTimeLeft <= 60) display.classList.add('warning');
+    }
+    const answered = TEST2_QUESTIONS.filter((_, i) => document.querySelector(`input[name="test2_q${i+1}"]:checked`)).length;
+    const prog = document.getElementById('testProgressText');
+    if (prog) prog.textContent = `ข้อ ${answered}/${TEST2_QUESTIONS.length}`;
+    if (_testTimeLeft <= 0) { clearInterval(_testTimer); submitTest(true); }
+  }, 1000);
+}
+
+async function submitTest(auto = false) {
+  if (_testSubmitted) return;
+  _testSubmitted = true;
+  clearInterval(_testTimer);
+
+  const s = getStudent();
+  if (!s) return;
+
+  let correct = 0;
+  TEST2_QUESTIONS.forEach((q, i) => {
+    const chosen = document.querySelector(`input[name="test2_q${i+1}"]:checked`);
+    if (chosen && chosen.value === q.ans) correct++;
+  });
+
+  const score = correct, max = 10;
+  document.getElementById('testArea').style.display = 'none';
+  const resBox = document.getElementById('testResultBox');
+  resBox.classList.add('show');
+  document.getElementById('testResultTitle').textContent = auto ? 'หมดเวลา — บันทึกคะแนนอัตโนมัติ' : 'ส่งแบบทดสอบสำเร็จ!';
+  document.getElementById('testResultScore').textContent = `${score}/${max} คะแนน`;
+  document.getElementById('testResultDetail').textContent = `ถูก ${correct} ข้อ จาก 10 ข้อ`;
+
+  await saveScore('media-m1',
+    { studentId: s.id, name: s.name, room: s.class },
+    { title: 'แบบทดสอบบทที่ 2: การวิเคราะห์และประเมินสื่อ', score, maxScore: max, type: 'exam', status: 'graded', note: '' }
+  );
+  showToast(`ได้ ${score}/${max} คะแนน`, score >= 7 ? 'success' : 'info');
+}
+
+/* ── Check test done state ── */
+async function checkTestDone() {
+  const s = getStudent();
+  if (!s || !firebaseReady) return;
+  const res = await getSubmissionByTitle('media-m1', s.id, 'แบบทดสอบบทที่ 2: การวิเคราะห์และประเมินสื่อ');
+  if (res.ok && res.data && res.data.status === 'graded') {
+    document.getElementById('testStartBox').style.display = 'none';
+    document.getElementById('testGradedBox').style.display = 'block';
+    document.getElementById('testGradedScore').textContent = `คะแนน: ${res.data.score}/${res.data.maxScore}`;
+  }
+}
+
+/* ── Init ── */
+document.addEventListener('DOMContentLoaded', async () => {
+  await loadUnitSettings();
+  _loadAnalysisState2();
+  _loadWorksheetState2();
+  if (_testLocked) {
+    document.getElementById('testLockedBox').style.display = 'block';
+    document.getElementById('testStartBox').style.display = 'none';
+  } else {
+    await checkTestDone();
+  }
+});
+</script>
+</body>
+</html>

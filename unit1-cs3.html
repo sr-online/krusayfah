@@ -745,14 +745,35 @@
         <div id="submitSitesMsg" style="margin-top:.6rem;font-size:.85rem;display:none"></div>
       </div>
 
-      <!-- แสดงเมื่อส่งสำเร็จ -->
-      <div id="activityDoneBox" style="display:none;margin-top:1.25rem;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:1.5rem;text-align:center">
+      <!-- รอตรวจ -->
+      <div id="activityPendingBox" style="display:none;margin-top:1.25rem;background:#fffbeb;border:1px solid #fcd34d;border-radius:12px;padding:1.5rem">
+        <div style="display:flex;align-items:flex-start;gap:.75rem;margin-bottom:.75rem">
+          <i class="fas fa-clock" style="color:#d97706;font-size:1.5rem;margin-top:.1rem"></i>
+          <div>
+            <p style="font-weight:700;color:#92400e;margin:0">ส่งงานแล้ว — รอครูตรวจ</p>
+            <p id="pendingSitesUrl" style="font-size:.85rem;color:#b45309;margin:.25rem 0 0;word-break:break-all">
+              <i class="fas fa-link"></i> <span></span>
+            </p>
+          </div>
+        </div>
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+          <a id="pendingSitesLink" href="#" target="_blank"
+            style="display:inline-flex;align-items:center;gap:.4rem;background:#fff;border:1px solid #fcd34d;color:#b45309;padding:.45rem 1rem;border-radius:8px;font-size:.88rem;font-weight:600;text-decoration:none">
+            <i class="fas fa-external-link-alt"></i> เปิดเว็บไซต์
+          </a>
+          <button id="editSitesBtn"
+            style="background:#fff;border:1px solid #fcd34d;color:#b45309;padding:.45rem 1rem;border-radius:8px;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer">
+            <i class="fas fa-pen"></i> แก้ไขลิงก์
+          </button>
+        </div>
+      </div>
+
+      <!-- ตรวจแล้ว -->
+      <div id="activityGradedBox" style="display:none;margin-top:1.25rem;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:1.5rem;text-align:center">
         <i class="fas fa-circle-check" style="color:#16a34a;font-size:2.5rem;margin-bottom:.6rem;display:block"></i>
-        <p style="font-weight:700;color:#166534;font-size:1.05rem;margin:0 0 .3rem">ส่งงานสำเร็จแล้ว!</p>
-        <p id="submittedUrlText" style="font-size:.85rem;color:#166534;margin:0 0 .75rem">
-          <i class="fas fa-link"></i> <span></span>
-        </p>
-        <a id="submittedLink" href="#" target="_blank"
+        <p style="font-weight:700;color:#166534;font-size:1.05rem;margin:0 0 .3rem">ครูตรวจแล้ว!</p>
+        <p id="gradedSitesScore" style="font-size:.9rem;color:#166534;margin:0 0 .75rem"></p>
+        <a id="gradedSitesLink" href="#" target="_blank"
           style="display:inline-block;background:#1e40af;color:#fff;padding:.5rem 1.25rem;border-radius:8px;font-size:.88rem;font-weight:600;text-decoration:none">
           <i class="fas fa-external-link-alt"></i> เปิดเว็บไซต์ของฉัน
         </a>
@@ -849,6 +870,28 @@
   if (ham) ham.addEventListener('click', () => mob.classList.toggle('open'));
 
   /* ===== ACTIVITY: Google Sites ===== */
+  function _loadSitesState() {
+    setupWorkCard({
+      subjectId:    'cs3-m6',
+      title:        'กิจกรรมที่ 1: Google Sites',
+      formEl:       document.getElementById('activitySubmitForm'),
+      pendingBoxEl: document.getElementById('activityPendingBox'),
+      gradedBoxEl:  document.getElementById('activityGradedBox'),
+      editBtnEl:    document.getElementById('editSitesBtn'),
+      noteInputEl:  document.getElementById('googleSitesUrl'),
+      onPending: sub => {
+        const u = sub.note || '';
+        document.getElementById('pendingSitesUrl').querySelector('span').textContent = u;
+        document.getElementById('pendingSitesLink').href = u || '#';
+      },
+      onGraded: sub => {
+        const u = sub.note || '';
+        document.getElementById('gradedSitesScore').textContent = 'คะแนน: ' + sub.score + '/' + sub.maxScore;
+        document.getElementById('gradedSitesLink').href = u || '#';
+      }
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     const s = getCurrentStudent();
     if (s) {
@@ -857,13 +900,15 @@
         s.name + '&nbsp;&nbsp;|&nbsp;&nbsp;' + s.class +
         '&nbsp;&nbsp;เลขที่ ' + s.no + '&nbsp;&nbsp;(รหัส ' + s.id + ')';
     }
+    _loadSitesState();
   });
 
   async function submitGoogleSites() {
-    const s   = getCurrentStudent();
-    const url = document.getElementById('googleSitesUrl').value.trim();
-    const btn = document.getElementById('submitSitesBtn');
-    const msg = document.getElementById('submitSitesMsg');
+    const s      = getCurrentStudent();
+    const url    = document.getElementById('googleSitesUrl').value.trim();
+    const btn    = document.getElementById('submitSitesBtn');
+    const msg    = document.getElementById('submitSitesMsg');
+    const formEl = document.getElementById('activitySubmitForm');
 
     msg.style.display = 'none';
 
@@ -889,19 +934,21 @@
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังส่ง...';
 
-    const result = await saveScore('cs3-m6',
-      { name: s.name, studentId: s.id, room: s.class },
-      { title: 'กิจกรรมที่ 1: Google Sites', score: 0, maxScore: 10, type: 'project', status: 'pending', note: url }
-    );
+    const editId = formEl.dataset.editScoreId;
+    const result = editId
+      ? await editPendingNote('cs3-m6', s.id, editId, url)
+      : await saveScore('cs3-m6',
+          { name: s.name, studentId: s.id, room: s.class },
+          { title: 'กิจกรรมที่ 1: Google Sites', score: 0, maxScore: 10, type: 'project', status: 'pending', note: url }
+        );
 
     btn.disabled = false;
     btn.innerHTML = '<i class="fas fa-paper-plane"></i> ส่งงาน';
 
     if (result.ok) {
-      document.getElementById('activitySubmitForm').style.display = 'none';
-      document.getElementById('submittedUrlText').querySelector('span').textContent = url;
-      document.getElementById('submittedLink').href = url;
-      document.getElementById('activityDoneBox').style.display = 'block';
+      document.getElementById('googleSitesUrl').value = '';
+      delete formEl.dataset.editScoreId;
+      _loadSitesState();
     } else {
       msg.style.color = '#dc2626';
       msg.textContent = '❌ เกิดข้อผิดพลาด: ' + result.error;

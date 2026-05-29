@@ -483,6 +483,11 @@
 <!-- ===== TAB: แบบฝึกหัด ===== -->
 <div id="utab-exercises" class="unit-tab-content">
 
+  <div id="exerciseLockBanner1" style="display:none;background:#fef3c7;border:1px solid #fcd34d;border-radius:12px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;align-items:center;gap:.75rem">
+    <i class="fas fa-lock" style="color:#d97706;font-size:1.4rem"></i>
+    <p style="font-weight:700;color:#92400e;margin:0">ครูปิดการส่งแบบฝึกหัดชั่วคราว กรุณารอการเปิดจากครู</p>
+  </div>
+
   <!-- Work Card 1: จับคู่ (Auto-graded) -->
   <div class="work-card" id="wcard1">
     <div class="work-card-header">
@@ -492,7 +497,7 @@
         <div class="work-badges">
           <span class="work-score-badge"><i class="fas fa-star"></i> 5 คะแนน</span>
           <span class="work-type-badge"><i class="fas fa-puzzle-piece"></i> จับคู่</span>
-          <span class="work-status-badge open"><i class="fas fa-circle-check"></i> เปิดรับงาน</span>
+          <span class="work-status-badge open" id="badge1_w1"><i class="fas fa-circle-check"></i> เปิดรับงาน</span>
         </div>
       </div>
     </div>
@@ -555,7 +560,7 @@
           </select>
         </div>
       </div>
-      <button class="submit-btn" onclick="submitMatch()">
+      <button class="submit-btn" id="matchBtn1" onclick="submitMatch()">
         <i class="fas fa-check-circle"></i> ตรวจคำตอบและส่งคะแนน
       </button>
       <div class="result-box" id="matchResult"></div>
@@ -571,7 +576,7 @@
         <div class="work-badges">
           <span class="work-score-badge"><i class="fas fa-star"></i> 3 คะแนน</span>
           <span class="work-type-badge"><i class="fas fa-list-check"></i> ปรนัย</span>
-          <span class="work-status-badge open"><i class="fas fa-circle-check"></i> เปิดรับงาน</span>
+          <span class="work-status-badge open" id="badge1_w2"><i class="fas fa-circle-check"></i> เปิดรับงาน</span>
         </div>
       </div>
     </div>
@@ -603,7 +608,7 @@
           <label class="mcq-option"><input type="radio" name="q3" value="D"> TrueID News</label>
         </div>
       </div>
-      <button class="submit-btn" onclick="submitMCQ()">
+      <button class="submit-btn" id="mcqBtn1" onclick="submitMCQ()">
         <i class="fas fa-check-circle"></i> ตรวจคำตอบและส่งคะแนน
       </button>
       <div class="result-box" id="mcqResult"></div>
@@ -619,7 +624,7 @@
         <div class="work-badges">
           <span class="work-score-badge"><i class="fas fa-star"></i> 10 คะแนน</span>
           <span class="work-type-badge"><i class="fas fa-pen-to-square"></i> เขียนวิเคราะห์</span>
-          <span class="work-status-badge open"><i class="fas fa-circle-check"></i> เปิดรับงาน</span>
+          <span class="work-status-badge open" id="badge1_w3"><i class="fas fa-circle-check"></i> เปิดรับงาน</span>
         </div>
       </div>
     </div>
@@ -627,16 +632,33 @@
       <div class="info-box" style="margin-bottom:1rem">
         <p><strong>สถานการณ์:</strong> นักเรียนเห็นโพสต์บน TikTok ที่อ้างว่า "ฝุ่น PM2.5 ในเชียงรายวันนี้อันตรายถึงชีวิต ค่า AQI เกิน 500!" โพสต์มียอดแชร์กว่า 200,000 ครั้งในช่วงเวลา 2 ชั่วโมง แต่ไม่มีการระบุแหล่งที่มาของข้อมูล</p>
       </div>
-      <label class="field-label">1. นักเรียนจะตรวจสอบข้อมูลนี้อย่างไร? (อธิบายอย่างน้อย 2 วิธี)</label>
-      <textarea class="work-textarea" id="analysis1" placeholder="พิมพ์คำตอบของนักเรียน..."></textarea>
-      <label class="field-label" style="margin-top:.8rem">2. ข้อมูลนี้มีสัญญาณอะไรที่บ่งบอกว่าอาจไม่น่าเชื่อถือ?</label>
-      <textarea class="work-textarea" id="analysis2" placeholder="พิมพ์คำตอบของนักเรียน..."></textarea>
-      <label class="field-label" style="margin-top:.8rem">3. ถ้าคุณแชร์ข้อมูลนี้ต่อไปโดยไม่ตรวจสอบ จะเกิดผลเสียอะไรบ้าง?</label>
-      <textarea class="work-textarea" id="analysis3" placeholder="พิมพ์คำตอบของนักเรียน..."></textarea>
-      <button class="submit-btn" onclick="submitAnalysis()" id="analysisBtn">
-        <i class="fas fa-paper-plane"></i> ส่งงานวิเคราะห์
-      </button>
-      <div class="result-box" id="analysisResult"></div>
+      <div id="analysisFormArea">
+        <label class="field-label">1. นักเรียนจะตรวจสอบข้อมูลนี้อย่างไร? (อธิบายอย่างน้อย 2 วิธี)</label>
+        <textarea class="work-textarea" id="analysis1" placeholder="พิมพ์คำตอบของนักเรียน..."></textarea>
+        <label class="field-label" style="margin-top:.8rem">2. ข้อมูลนี้มีสัญญาณอะไรที่บ่งบอกว่าอาจไม่น่าเชื่อถือ?</label>
+        <textarea class="work-textarea" id="analysis2" placeholder="พิมพ์คำตอบของนักเรียน..."></textarea>
+        <label class="field-label" style="margin-top:.8rem">3. ถ้าคุณแชร์ข้อมูลนี้ต่อไปโดยไม่ตรวจสอบ จะเกิดผลเสียอะไรบ้าง?</label>
+        <textarea class="work-textarea" id="analysis3" placeholder="พิมพ์คำตอบของนักเรียน..."></textarea>
+        <button class="submit-btn" onclick="submitAnalysis()" id="analysisBtn">
+          <i class="fas fa-paper-plane"></i> ส่งงานวิเคราะห์
+        </button>
+        <div class="result-box" id="analysisResult"></div>
+      </div>
+      <div id="analysisPendingBox" style="display:none;margin-top:1rem;background:#fffbeb;border:1px solid #fcd34d;border-radius:12px;padding:1.25rem">
+        <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem">
+          <i class="fas fa-clock" style="color:#d97706;font-size:1.3rem"></i>
+          <p style="font-weight:700;color:#92400e;margin:0">ส่งงานแล้ว — รอครูตรวจ</p>
+        </div>
+        <button id="editAnalysisBtn"
+          style="background:#fff;border:1px solid #fcd34d;color:#b45309;padding:.4rem .9rem;border-radius:8px;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer">
+          <i class="fas fa-pen"></i> แก้ไขคำตอบ
+        </button>
+      </div>
+      <div id="analysisGradedBox" style="display:none;margin-top:1rem;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:1.25rem;text-align:center">
+        <i class="fas fa-circle-check" style="color:#16a34a;font-size:2rem;margin-bottom:.4rem;display:block"></i>
+        <p style="font-weight:700;color:#166534;margin:0 0 .25rem">ครูตรวจแล้ว!</p>
+        <p id="analysisGradedScore" style="font-size:.9rem;color:#166534;margin:0"></p>
+      </div>
     </div>
   </div>
 
@@ -649,24 +671,41 @@
         <div class="work-badges">
           <span class="work-score-badge"><i class="fas fa-star"></i> 5 คะแนน</span>
           <span class="work-type-badge"><i class="fas fa-clipboard"></i> ใบงาน</span>
-          <span class="work-status-badge open"><i class="fas fa-circle-check"></i> เปิดรับงาน</span>
+          <span class="work-status-badge open" id="badge1_w4"><i class="fas fa-circle-check"></i> เปิดรับงาน</span>
         </div>
       </div>
     </div>
     <div class="work-body">
       <p style="font-size:.88rem;color:#475569;margin-bottom:1rem">สำรวจพฤติกรรมการใช้สื่อของตนเองและสะท้อนคิด</p>
-      <label class="field-label">1. สื่อดิจิทัล 3 อันดับที่นักเรียนใช้มากที่สุดในแต่ละวัน</label>
-      <input type="text" class="work-input" id="ws1" placeholder="เช่น TikTok, YouTube, LINE">
-      <label class="field-label">2. นักเรียนใช้สื่อดิจิทัลประมาณกี่ชั่วโมงต่อวัน? และส่วนมากทำอะไร?</label>
-      <textarea class="work-textarea" style="min-height:70px" id="ws2" placeholder="เช่น ประมาณ 4 ชั่วโมง ส่วนมากดู TikTok และฟังเพลงบน YouTube..."></textarea>
-      <label class="field-label" style="margin-top:.8rem">3. สื่อที่ใช้อยู่นั้นจัดอยู่ในประเภทใด? (จากที่เรียนในบทที่ 1)</label>
-      <textarea class="work-textarea" style="min-height:70px" id="ws3" placeholder="ระบุประเภทและเหตุผล..."></textarea>
-      <label class="field-label" style="margin-top:.8rem">4. มีสื่อใดที่นักเรียนคิดว่าตนเองใช้มากเกินไปหรือไม่? อยากปรับอย่างไร?</label>
-      <textarea class="work-textarea" style="min-height:70px" id="ws4" placeholder="สะท้อนคิดอย่างตรงไปตรงมา..."></textarea>
-      <button class="submit-btn" onclick="submitWorksheet()" id="worksheetBtn">
-        <i class="fas fa-paper-plane"></i> ส่งใบงาน
-      </button>
-      <div class="result-box" id="worksheetResult"></div>
+      <div id="worksheetFormArea">
+        <label class="field-label">1. สื่อดิจิทัล 3 อันดับที่นักเรียนใช้มากที่สุดในแต่ละวัน</label>
+        <input type="text" class="work-input" id="ws1" placeholder="เช่น TikTok, YouTube, LINE">
+        <label class="field-label">2. นักเรียนใช้สื่อดิจิทัลประมาณกี่ชั่วโมงต่อวัน? และส่วนมากทำอะไร?</label>
+        <textarea class="work-textarea" style="min-height:70px" id="ws2" placeholder="เช่น ประมาณ 4 ชั่วโมง ส่วนมากดู TikTok และฟังเพลงบน YouTube..."></textarea>
+        <label class="field-label" style="margin-top:.8rem">3. สื่อที่ใช้อยู่นั้นจัดอยู่ในประเภทใด? (จากที่เรียนในบทที่ 1)</label>
+        <textarea class="work-textarea" style="min-height:70px" id="ws3" placeholder="ระบุประเภทและเหตุผล..."></textarea>
+        <label class="field-label" style="margin-top:.8rem">4. มีสื่อใดที่นักเรียนคิดว่าตนเองใช้มากเกินไปหรือไม่? อยากปรับอย่างไร?</label>
+        <textarea class="work-textarea" style="min-height:70px" id="ws4" placeholder="สะท้อนคิดอย่างตรงไปตรงมา..."></textarea>
+        <button class="submit-btn" onclick="submitWorksheet()" id="worksheetBtn">
+          <i class="fas fa-paper-plane"></i> ส่งใบงาน
+        </button>
+        <div class="result-box" id="worksheetResult"></div>
+      </div>
+      <div id="worksheetPendingBox" style="display:none;margin-top:1rem;background:#fffbeb;border:1px solid #fcd34d;border-radius:12px;padding:1.25rem">
+        <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem">
+          <i class="fas fa-clock" style="color:#d97706;font-size:1.3rem"></i>
+          <p style="font-weight:700;color:#92400e;margin:0">ส่งใบงานแล้ว — รอครูตรวจ</p>
+        </div>
+        <button id="editWorksheetBtn"
+          style="background:#fff;border:1px solid #fcd34d;color:#b45309;padding:.4rem .9rem;border-radius:8px;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer">
+          <i class="fas fa-pen"></i> แก้ไขคำตอบ
+        </button>
+      </div>
+      <div id="worksheetGradedBox" style="display:none;margin-top:1rem;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:1.25rem;text-align:center">
+        <i class="fas fa-circle-check" style="color:#16a34a;font-size:2rem;margin-bottom:.4rem;display:block"></i>
+        <p style="font-weight:700;color:#166534;margin:0 0 .25rem">ครูตรวจแล้ว!</p>
+        <p id="worksheetGradedScore" style="font-size:.9rem;color:#166534;margin:0"></p>
+      </div>
     </div>
   </div>
 
@@ -740,10 +779,38 @@ function getStudent() {
   return typeof getCurrentStudent === 'function' ? getCurrentStudent() : null;
 }
 
+/* ── Settings lock ── */
+let _exLocked1 = false;
+
+async function loadUnitSettings1() {
+  if (typeof getSubjectSettings !== 'function') return;
+  const settings = await getSubjectSettings('media-m1');
+  _exLocked1 = settings.unit1_exercise === false;
+  const banner = document.getElementById('exerciseLockBanner1');
+  if (banner) banner.style.display = _exLocked1 ? 'flex' : 'none';
+  const badgeIds = ['badge1_w1', 'badge1_w2', 'badge1_w3', 'badge1_w4'];
+  badgeIds.forEach(id => {
+    const b = document.getElementById(id);
+    if (!b) return;
+    if (_exLocked1) {
+      b.className = 'work-status-badge coming';
+      b.innerHTML = '<i class="fas fa-lock"></i> ปิดรับงาน';
+    } else {
+      b.className = 'work-status-badge open';
+      b.innerHTML = '<i class="fas fa-circle-check"></i> เปิดรับงาน';
+    }
+  });
+  ['matchBtn1', 'mcqBtn1', 'analysisBtn', 'worksheetBtn'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.disabled = _exLocked1;
+  });
+}
+
 /* ── Work 1: Match ── */
 const MATCH_ANSWERS = { m1: 'TikTok', m2: 'Blogspot', m3: 'TrueID News', m4: 'YouTube', m5: 'เกม Kahoot' };
 
 async function submitMatch() {
+  if (_exLocked1) { showToast('ครูปิดการส่งแบบฝึกหัดชั่วคราว', 'warning'); return; }
   const s = getStudent();
   if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน', 'warning'); return; }
 
@@ -776,6 +843,7 @@ async function submitMatch() {
 const MCQ_ANSWERS = { q1: 'C', q2: 'B', q3: 'C' };
 
 async function submitMCQ() {
+  if (_exLocked1) { showToast('ครูปิดการส่งแบบฝึกหัดชั่วคราว', 'warning'); return; }
   const s = getStudent();
   if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน', 'warning'); return; }
 
@@ -813,7 +881,22 @@ async function submitMCQ() {
 }
 
 /* ── Work 3: Analysis ── */
+function _loadAnalysisState() {
+  setupWorkCard({
+    subjectId:    'media-m1',
+    title:        'แบบฝึกหัดที่ 3: วิเคราะห์สถานการณ์ PM2.5',
+    formEl:       document.getElementById('analysisFormArea'),
+    pendingBoxEl: document.getElementById('analysisPendingBox'),
+    gradedBoxEl:  document.getElementById('analysisGradedBox'),
+    editBtnEl:    document.getElementById('editAnalysisBtn'),
+    onGraded: sub => {
+      document.getElementById('analysisGradedScore').textContent = 'คะแนน: ' + sub.score + '/' + sub.maxScore;
+    }
+  });
+}
+
 async function submitAnalysis() {
+  if (_exLocked1) { showToast('ครูปิดการส่งแบบฝึกหัดชั่วคราว', 'warning'); return; }
   const s = getStudent();
   if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน', 'warning'); return; }
 
@@ -825,27 +908,46 @@ async function submitAnalysis() {
   const btn = document.getElementById('analysisBtn');
   btn.disabled = true; btn.textContent = 'กำลังส่ง...';
 
-  const note = `1)${a1.slice(0,80)} | 2)${a2.slice(0,60)} | 3)${a3.slice(0,60)}`;
-  const res = await saveScore('media-m1',
-    { studentId: s.id, name: s.name, room: s.class },
-    { title: 'แบบฝึกหัดที่ 3: วิเคราะห์สถานการณ์ PM2.5', score: 0, maxScore: 10, type: 'exercise', status: 'pending', note }
-  );
+  const note   = `1)${a1.slice(0,80)} | 2)${a2.slice(0,60)} | 3)${a3.slice(0,60)}`;
+  const formEl = document.getElementById('analysisFormArea');
+  const editId = formEl.dataset.editScoreId;
+  const res = editId
+    ? await editPendingNote('media-m1', s.id, editId, note)
+    : await saveScore('media-m1',
+        { studentId: s.id, name: s.name, room: s.class },
+        { title: 'แบบฝึกหัดที่ 3: วิเคราะห์สถานการณ์ PM2.5', score: 0, maxScore: 10, type: 'exercise', status: 'pending', note }
+      );
 
   btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> ส่งงานวิเคราะห์';
 
-  const resultBox = document.getElementById('analysisResult');
   if (res.ok) {
-    resultBox.className = 'result-box show sent';
-    resultBox.innerHTML = '<i class="fas fa-check-circle"></i> ส่งงานสำเร็จแล้ว! ครูจะตรวจและให้คะแนน (0–10) ภายหลัง';
+    delete formEl.dataset.editScoreId;
     showToast('ส่งงานสำเร็จ', 'success');
+    _loadAnalysisState();
   } else {
+    const resultBox = document.getElementById('analysisResult');
     resultBox.className = 'result-box show fail';
     resultBox.innerHTML = 'เกิดข้อผิดพลาด: ' + res.error;
   }
 }
 
 /* ── Work 4: Worksheet ── */
+function _loadWorksheetState() {
+  setupWorkCard({
+    subjectId:    'media-m1',
+    title:        'แบบฝึกหัดที่ 4: ใบงาน ฉันกับสื่อที่ใช้ประจำ',
+    formEl:       document.getElementById('worksheetFormArea'),
+    pendingBoxEl: document.getElementById('worksheetPendingBox'),
+    gradedBoxEl:  document.getElementById('worksheetGradedBox'),
+    editBtnEl:    document.getElementById('editWorksheetBtn'),
+    onGraded: sub => {
+      document.getElementById('worksheetGradedScore').textContent = 'คะแนน: ' + sub.score + '/' + sub.maxScore;
+    }
+  });
+}
+
 async function submitWorksheet() {
+  if (_exLocked1) { showToast('ครูปิดการส่งแบบฝึกหัดชั่วคราว', 'warning'); return; }
   const s = getStudent();
   if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน', 'warning'); return; }
 
@@ -858,31 +960,37 @@ async function submitWorksheet() {
   const btn = document.getElementById('worksheetBtn');
   btn.disabled = true; btn.textContent = 'กำลังส่ง...';
 
-  const note = `สื่อที่ใช้:${w1.slice(0,50)} | ชม/วัน:${w2.slice(0,40)}`;
-  const res = await saveScore('media-m1',
-    { studentId: s.id, name: s.name, room: s.class },
-    { title: 'แบบฝึกหัดที่ 4: ใบงาน ฉันกับสื่อที่ใช้ประจำ', score: 0, maxScore: 5, type: 'exercise', status: 'pending', note }
-  );
+  const note   = `สื่อที่ใช้:${w1.slice(0,50)} | ชม/วัน:${w2.slice(0,40)}`;
+  const formEl = document.getElementById('worksheetFormArea');
+  const editId = formEl.dataset.editScoreId;
+  const res = editId
+    ? await editPendingNote('media-m1', s.id, editId, note)
+    : await saveScore('media-m1',
+        { studentId: s.id, name: s.name, room: s.class },
+        { title: 'แบบฝึกหัดที่ 4: ใบงาน ฉันกับสื่อที่ใช้ประจำ', score: 0, maxScore: 5, type: 'exercise', status: 'pending', note }
+      );
 
   btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> ส่งใบงาน';
 
-  const resultBox = document.getElementById('worksheetResult');
   if (res.ok) {
-    resultBox.className = 'result-box show sent';
-    resultBox.innerHTML = '<i class="fas fa-check-circle"></i> ส่งใบงานสำเร็จแล้ว! ครูจะตรวจและให้คะแนน (0–5) ภายหลัง';
+    delete formEl.dataset.editScoreId;
     showToast('ส่งใบงานสำเร็จ', 'success');
+    _loadWorksheetState();
   } else {
+    const resultBox = document.getElementById('worksheetResult');
     resultBox.className = 'result-box show fail';
     resultBox.innerHTML = 'เกิดข้อผิดพลาด: ' + res.error;
   }
 }
 
 /* ── Auto-load score tab when switching to it ── */
-document.addEventListener('DOMContentLoaded', () => {
-  // Load score tab data on first visit if directly linked
+document.addEventListener('DOMContentLoaded', async () => {
   if (location.hash === '#scores') {
     document.querySelector('[data-utab="utab-scores"]')?.click();
   }
+  await loadUnitSettings1();
+  _loadAnalysisState();
+  _loadWorksheetState();
 });
 </script>
 </body>

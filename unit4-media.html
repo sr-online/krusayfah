@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>บทที่ 4: ข่าวปลอมและการตรวจสอบข้อเท็จจริง | รู้เท่าทันสื่อ ม.1</title>
+  <script>(function(){try{var s=JSON.parse(localStorage.getItem('srr_student_2569'));if(!s||!s.grade||!s.name)window.location.replace('login.html');}catch(e){window.location.replace('login.html');}})();</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    :root { --unit-accent: #7c3aed; --unit-accent-dark: #4c1d95; }
+    .unit-hero { background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%); color: white; padding: 2.5rem 0 0; }
+    .unit-hero-content { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+    .unit-hero h1 { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 700; margin: .5rem 0 .4rem; }
+    .unit-hero p { opacity: .85; font-size: .95rem; margin-bottom: 1.5rem; }
+    .unit-breadcrumb { opacity: .8; font-size: .82rem; margin-bottom: .5rem; }
+    .unit-breadcrumb a { color: rgba(255,255,255,.85); text-decoration: none; }
+    .unit-tabs { display: flex; gap: .5rem; padding-top: .5rem; flex-wrap: wrap; }
+    .unit-tab-btn { background: rgba(255,255,255,.15); color: white; border: none; border-radius: 8px 8px 0 0; padding: .6rem 1.2rem; font-family: inherit; font-size: .9rem; cursor: pointer; display: flex; align-items: center; gap: .4rem; transition: background .2s; }
+    .unit-tab-btn.active { background: white; color: #7c3aed; font-weight: 700; }
+    .unit-tab-btn:hover:not(.active) { background: rgba(255,255,255,.25); }
+    .unit-tab-content { display: none; max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; }
+    .unit-tab-content.active { display: block; }
+    .section-card { background: white; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,.07); margin-bottom: 1.5rem; overflow: hidden; border: 1px solid #e2e8f0; }
+    .section-card-header { display: flex; align-items: center; gap: 1rem; padding: 1.1rem 1.4rem; background: #f8fafc; border-bottom: 1px solid #e2e8f0; cursor: pointer; user-select: none; }
+    .section-card-header:hover { background: #f1f5f9; }
+    .section-num { min-width: 38px; height: 38px; background: linear-gradient(135deg, #7c3aed, #4c1d95); color: white; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: 700; flex-shrink: 0; }
+    .section-card-header h3 { flex: 1; font-size: 1rem; font-weight: 700; color: #1e293b; margin: 0; }
+    .section-toggle { color: #94a3b8; transition: transform .25s; font-size: .85rem; }
+    .section-card-header.open .section-toggle { transform: rotate(180deg); }
+    .section-body { display: none; padding: 1.4rem; }
+    .section-body.open { display: block; }
+    .info-box { background: #f5f3ff; border-left: 4px solid #7c3aed; border-radius: 0 8px 8px 0; padding: 1rem 1.2rem; margin-bottom: 1rem; }
+    .info-box p { margin: 0; color: #1e293b; line-height: 1.75; font-size: .95rem; }
+    .def-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: .8rem; margin-top: .8rem; }
+    .def-chip { background: white; border: 1px solid #ddd6fe; border-radius: 10px; padding: .8rem 1rem; text-align: center; }
+    .def-chip .def-icon { font-size: 1.5rem; }
+    .def-chip .def-label { font-size: .82rem; font-weight: 600; color: #5b21b6; margin-top: .3rem; }
+    .def-chip .def-desc { font-size: .78rem; color: #64748b; margin-top: .15rem; }
+    .type-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+    .type-table th { background: #7c3aed; color: white; padding: .6rem .9rem; text-align: left; }
+    .type-table td { padding: .55rem .9rem; border-bottom: 1px solid #f1f5f9; }
+    .type-table tr:nth-child(even) td { background: #faf5ff; }
+    .timeline { display: flex; flex-direction: column; gap: .8rem; margin-top: .6rem; }
+    .tl-item { display: flex; gap: .9rem; align-items: flex-start; }
+    .tl-dot { min-width: 32px; height: 32px; background: #7c3aed; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-size: .72rem; font-weight: 700; flex-shrink: 0; margin-top: .1rem; }
+    .tl-content h4 { margin: 0 0 .15rem; font-size: .9rem; color: #1e293b; }
+    .tl-content p { margin: 0; font-size: .82rem; color: #64748b; line-height: 1.5; }
+    .example-box { background: #faf5ff; border: 1px solid #ddd6fe; border-radius: 10px; padding: 1rem 1.2rem; margin: .8rem 0; }
+    .example-box .ex-label { font-size: .75rem; font-weight: 700; color: #7c3aed; text-transform: uppercase; letter-spacing: .05em; margin-bottom: .35rem; }
+    .example-box p { margin: 0; font-size: .88rem; color: #1e293b; line-height: 1.6; }
+    .fact-check-steps { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: .8rem; margin-top: .8rem; }
+    .fcs-card { border: 1px solid #ddd6fe; border-radius: 12px; padding: 1rem; background: white; }
+    .fcs-card .fcs-num { font-size: 1.8rem; font-weight: 900; color: #7c3aed; opacity: .25; line-height: 1; }
+    .fcs-card h4 { font-size: .88rem; font-weight: 700; color: #5b21b6; margin: .2rem 0; }
+    .fcs-card p { font-size: .8rem; color: #64748b; margin: 0; }
+    .work-card { background: white; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,.07); margin-bottom: 1.5rem; overflow: hidden; border: 1px solid #e2e8f0; }
+    .work-card-header { display: flex; align-items: flex-start; gap: 1rem; padding: 1.25rem; border-bottom: 1px solid #e2e8f0; background: #f8fafc; }
+    .work-num { min-width: 42px; height: 42px; background: linear-gradient(135deg, #7c3aed, #4c1d95); color: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 700; flex-shrink: 0; }
+    .work-title { flex: 1; min-width: 0; }
+    .work-title h3 { font-size: 1rem; font-weight: 700; color: #1e293b; margin: 0 0 .35rem; }
+    .work-badges { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .work-score-badge { background: #dbeafe; color: #1e40af; padding: .2rem .75rem; border-radius: 999px; font-size: .78rem; font-weight: 700; }
+    .work-type-badge { background: #ede9fe; color: #6d28d9; padding: .2rem .75rem; border-radius: 999px; font-size: .78rem; font-weight: 700; }
+    .work-status-badge { padding: .2rem .75rem; border-radius: 999px; font-size: .78rem; font-weight: 700; }
+    .work-status-badge.open { background: #d1fae5; color: #065f46; }
+    .work-status-badge.locked { background: #fee2e2; color: #991b1b; }
+    .work-body { padding: 1.4rem; }
+    .match-grid { display: grid; gap: .8rem; margin: 1rem 0; }
+    .match-row { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
+    .match-label { flex: 1; min-width: 160px; font-size: .9rem; color: #1e293b; font-weight: 500; }
+    .match-label .match-num { display: inline-block; width: 22px; height: 22px; background: #7c3aed; color: white; border-radius: 50%; font-size: .72rem; font-weight: 700; text-align: center; line-height: 22px; margin-right: .5rem; }
+    .match-select { flex: 1; min-width: 160px; padding: .5rem .8rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: .88rem; color: #1e293b; background: white; }
+    .mcq-item { margin-bottom: 1.2rem; }
+    .mcq-q { font-size: .92rem; font-weight: 600; color: #1e293b; margin-bottom: .6rem; }
+    .mcq-options { display: flex; flex-direction: column; gap: .4rem; }
+    .mcq-option { display: flex; align-items: center; gap: .7rem; padding: .55rem .9rem; border: 1.5px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all .15s; font-size: .88rem; }
+    .mcq-option:hover { border-color: #7c3aed; background: #f5f3ff; }
+    .mcq-option input { accent-color: #7c3aed; width: 16px; height: 16px; flex-shrink: 0; }
+    .mcq-option.correct-ans { border-color: #059669; background: #d1fae5; }
+    .mcq-option.wrong-ans { border-color: #dc2626; background: #fee2e2; }
+    .work-textarea { width: 100%; box-sizing: border-box; padding: .75rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 10px; font-family: inherit; font-size: .88rem; resize: vertical; min-height: 90px; color: #1e293b; }
+    .work-textarea:focus { outline: none; border-color: #7c3aed; box-shadow: 0 0 0 3px rgba(124,58,237,.15); }
+    .work-input { width: 100%; box-sizing: border-box; padding: .6rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: .88rem; margin-bottom: .6rem; }
+    .field-label { font-size: .85rem; font-weight: 600; color: #475569; margin-bottom: .35rem; display: block; }
+    .submit-btn { display: inline-flex; align-items: center; gap: .5rem; background: linear-gradient(135deg, #7c3aed, #6d28d9); color: white; border: none; border-radius: 10px; padding: .7rem 1.6rem; font-family: inherit; font-size: .92rem; font-weight: 700; cursor: pointer; margin-top: 1rem; }
+    .submit-btn:disabled { opacity: .55; cursor: not-allowed; }
+    .result-box { margin-top: 1rem; padding: 1rem 1.2rem; border-radius: 10px; font-weight: 600; display: none; }
+    .result-box.show { display: block; }
+    .result-box.pass { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+    .result-box.fail { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+    .test-locked-box { text-align: center; padding: 3rem 1.5rem; color: #94a3b8; }
+    .test-locked-box i { font-size: 3rem; color: #cbd5e1; display: block; margin-bottom: 1rem; }
+    .test-timer { font-size: 2rem; font-weight: 700; color: #7c3aed; font-variant-numeric: tabular-nums; margin: 1rem 0; }
+    .test-timer.warning { color: #dc2626; animation: blink .8s step-start infinite; }
+    @keyframes blink { 50% { opacity: .4; } }
+    @media (max-width: 600px) { .def-grid, .fact-check-steps { grid-template-columns: 1fr 1fr; } .match-row { flex-direction: column; align-items: stretch; } }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-icon"><i class="fas fa-chalkboard-user"></i></div>
+      <span>ครูศิริศักดิ์ ปิลอง</span>
+    </a>
+    <ul class="navbar-menu">
+      <li><a href="home.html"><i class="fas fa-house"></i> หน้าหลัก</a></li>
+      <li><a href="subject-media.html" class="active"><i class="fas fa-tv"></i> รู้เท่าทันสื่อ ม.1</a></li>
+      <li><a href="subject-programming.html"><i class="fas fa-code"></i> โปรแกรมเบื้องต้น ม.2</a></li>
+      <li><a href="subject-cs3.html"><i class="fas fa-microchip"></i> วิทยาการคำนวณ 3 ม.6</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger"><i class="fas fa-bars"></i></button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="home.html"><i class="fas fa-house"></i> หน้าหลักนักเรียน</a>
+    <a href="subject-media.html"><i class="fas fa-tv"></i> รู้เท่าทันสื่อ ม.1</a>
+  </div>
+</nav>
+
+<div class="unit-hero">
+  <div class="unit-hero-content">
+    <p class="unit-breadcrumb">
+      <a href="index.html">หน้าหลัก</a>
+      <i class="fas fa-chevron-right" style="font-size:.7rem;margin:0 .4rem"></i>
+      <a href="subject-media.html">รู้เท่าทันสื่อ ม.1</a>
+      <i class="fas fa-chevron-right" style="font-size:.7rem;margin:0 .4rem"></i>
+      บทที่ 4
+    </p>
+    <h1>📰 บทที่ 4 : ข่าวปลอมและการตรวจสอบข้อเท็จจริง</h1>
+    <p>ประเภทของข่าวปลอม กระบวนการแพร่กระจาย วิธีตรวจสอบข้อเท็จจริง และเครื่องมือ Fact-check</p>
+    <div class="unit-tabs">
+      <button class="unit-tab-btn active" data-utab="utab-lesson"><i class="fas fa-book-open"></i> เนื้อหาบทเรียน</button>
+      <button class="unit-tab-btn" data-utab="utab-exercises"><i class="fas fa-pencil-alt"></i> แบบฝึกหัด</button>
+      <button class="unit-tab-btn" data-utab="utab-test"><i class="fas fa-file-alt"></i> แบบทดสอบ</button>
+      <button class="unit-tab-btn" data-utab="utab-scores"><i class="fas fa-chart-bar"></i> คะแนนของฉัน</button>
+    </div>
+  </div>
+</div>
+
+<!-- TAB: เนื้อหาบทเรียน -->
+<div id="utab-lesson" class="unit-tab-content active">
+
+  <div class="section-card">
+    <div class="section-card-header open" onclick="toggleSection(this)">
+      <div class="section-num">1</div>
+      <h3>ข่าวปลอมคืออะไร? แยกแยะประเภท</h3>
+      <i class="fas fa-chevron-down section-toggle"></i>
+    </div>
+    <div class="section-body open">
+      <div class="info-box">
+        <p><strong>ข่าวปลอม (Fake News / Misinformation / Disinformation)</strong> คือข้อมูลที่ไม่ถูกต้อง ไม่ว่าจะเกิดจากความไม่รู้ ความผิดพลาด หรือเจตนาร้าย</p>
+      </div>
+      <table class="type-table">
+        <thead><tr><th>ประเภท</th><th>คำอธิบาย</th><th>ตัวอย่าง</th><th>เจตนา</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Misinformation</strong></td><td>ข้อมูลผิดพลาด ไม่ตั้งใจ</td><td>แชร์สูตรยาผิด ๆ โดยหวังดี</td><td>ไม่มี</td></tr>
+          <tr><td><strong>Disinformation</strong></td><td>ข้อมูลเท็จที่สร้างขึ้นโดยตั้งใจ</td><td>ข่าวปั้นแต่งเพื่อโจมตีคู่แข่ง</td><td>มี (ร้าย)</td></tr>
+          <tr><td><strong>Malinformation</strong></td><td>ข้อมูลจริง แต่ใช้เพื่อทำร้าย</td><td>เปิดเผยที่อยู่บ้านคนเพื่อให้ถูกคุกคาม</td><td>มี (ร้าย)</td></tr>
+          <tr><td><strong>Satire</strong></td><td>เนื้อหาล้อเลียน ตั้งใจไม่จริง</td><td>เว็บข่าวล้อเลียน Onion</td><td>บันเทิง</td></tr>
+          <tr><td><strong>Clickbait</strong></td><td>หัวข้อเกินจริง เนื้อหาไม่ตรงกัน</td><td>"คุณจะไม่เชื่อว่า..." แต่ข้อมูลธรรมดา</td><td>รายได้</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-header open" onclick="toggleSection(this)">
+      <div class="section-num">2</div>
+      <h3>ทำไมข่าวปลอมจึงแพร่กระจายได้เร็ว?</h3>
+      <i class="fas fa-chevron-down section-toggle"></i>
+    </div>
+    <div class="section-body open">
+      <div class="info-box">
+        <p>งานวิจัยจาก MIT (2018) พบว่า ข่าวปลอมแพร่กระจายเร็วกว่าข่าวจริง <strong>6 เท่า</strong> บนโซเชียลมีเดีย เพราะเหตุใด?</p>
+      </div>
+      <div class="def-grid">
+        <div class="def-chip">
+          <div class="def-icon">😱</div>
+          <div class="def-label">กระตุ้นอารมณ์</div>
+          <div class="def-desc">ข่าวที่ทำให้โกรธหรือกลัวถูกแชร์มากกว่า</div>
+        </div>
+        <div class="def-chip">
+          <div class="def-icon">🆕</div>
+          <div class="def-label">ความแปลกใหม่</div>
+          <div class="def-desc">สิ่งที่น่าตกใจดึงดูดความสนใจมากกว่าข่าวธรรมดา</div>
+        </div>
+        <div class="def-chip">
+          <div class="def-icon">⚡</div>
+          <div class="def-label">ความรวดเร็ว</div>
+          <div class="def-desc">แชร์ก่อนคิด คิดหลังแชร์ มักเกิดขึ้น</div>
+        </div>
+        <div class="def-chip">
+          <div class="def-icon">🤝</div>
+          <div class="def-label">ความไว้ใจคนรู้จัก</div>
+          <div class="def-desc">ถ้าเพื่อนแชร์มา เราเชื่อมากขึ้น</div>
+        </div>
+      </div>
+      <div class="example-box" style="margin-top:1rem">
+        <div class="ex-label">กรณีศึกษา: ข่าวปลอมในไทย</div>
+        <p>ปี 2563: ข่าวว่า "โรงพยาบาลเต็มหมด ผู้ป่วยโควิดนอนตายกลางถนน" ถูกแชร์ในกลุ่มไลน์ทั่วประเทศ ทำให้คนแห่ซื้อยาและอาหาร แต่ความจริงคือภาพดังกล่าวเป็นภาพจากต่างประเทศที่เกิดขึ้นหลายปีก่อน</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-header open" onclick="toggleSection(this)">
+      <div class="section-num">3</div>
+      <h3>กระบวนการตรวจสอบข้อเท็จจริง (Fact-Checking)</h3>
+      <i class="fas fa-chevron-down section-toggle"></i>
+    </div>
+    <div class="section-body open">
+      <div class="fact-check-steps">
+        <div class="fcs-card">
+          <div class="fcs-num">01</div>
+          <h4>หยุด — อย่าแชร์ทันที</h4>
+          <p>ให้เวลาตัวเองหายใจก่อน อย่าให้อารมณ์นำ</p>
+        </div>
+        <div class="fcs-card">
+          <div class="fcs-num">02</div>
+          <h4>อ่านทั้งหมด ไม่ใช่แค่หัวข้อ</h4>
+          <p>หัวข้อกับเนื้อหามักไม่ตรงกันในข่าวปลอม</p>
+        </div>
+        <div class="fcs-card">
+          <div class="fcs-num">03</div>
+          <h4>ตรวจสอบแหล่งที่มา</h4>
+          <p>เว็บนี้คือใคร? เคยเผยแพร่ข่าวปลอมมาก่อนไหม?</p>
+        </div>
+        <div class="fcs-card">
+          <div class="fcs-num">04</div>
+          <h4>ค้นหาแหล่งอื่น</h4>
+          <p>ค้น Google ดูว่ามีสื่อน่าเชื่อถืออื่นรายงานเรื่องนี้ไหม?</p>
+        </div>
+        <div class="fcs-card">
+          <div class="fcs-num">05</div>
+          <h4>ตรวจสอบวันที่</h4>
+          <p>ข่าวเก่าถูกนำมาแชร์ใหม่ราวกับเพิ่งเกิด?</p>
+        </div>
+        <div class="fcs-card">
+          <div class="fcs-num">06</div>
+          <h4>ตรวจสอบภาพ</h4>
+          <p>ค้น Google Images / TinEye ว่าภาพถูกใช้ผิดบริบทไหม?</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-header open" onclick="toggleSection(this)">
+      <div class="section-num">4</div>
+      <h3>เครื่องมือ Fact-Check ที่ใช้ได้จริง</h3>
+      <i class="fas fa-chevron-down section-toggle"></i>
+    </div>
+    <div class="section-body open">
+      <table class="type-table">
+        <thead><tr><th>เครื่องมือ</th><th>ใช้ทำอะไร</th><th>วิธีใช้</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Google Images</strong></td><td>ตรวจสอบภาพย้อนกลับ</td><td>คลิกขวาที่รูป → "ค้นหารูปภาพ" หรืออัปโหลดใน images.google.com</td></tr>
+          <tr><td><strong>AFP Fact Check Thailand</strong></td><td>ตรวจสอบข่าวปลอมในไทย</td><td>ค้นหาคีย์เวิร์ดที่ factcheck.afp.com</td></tr>
+          <tr><td><strong>Cofact (โคแฟค)</strong></td><td>ฐานข้อมูลข่าวปลอมไทย</td><td>ค้นหาข้อความที่น่าสงสัยที่ cofact.org</td></tr>
+          <tr><td><strong>Google Fact Check Tools</strong></td><td>ค้นหาการตรวจสอบข่าว</td><td>toolbox.google.com/factcheck/explorer</td></tr>
+          <tr><td><strong>TinEye</strong></td><td>ค้นหาที่มาของรูปภาพ</td><td>อัปโหลดรูปที่ tineye.com</td></tr>
+          <tr><td><strong>InVID / WeVerify</strong></td><td>ตรวจสอบวิดีโอ</td><td>Plugin สำหรับ Chrome</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-header open" onclick="toggleSection(this)">
+      <div class="section-num">5</div>
+      <h3>ผลกระทบของข่าวปลอมและความรับผิดชอบของผู้รับสื่อ</h3>
+      <i class="fas fa-chevron-down section-toggle"></i>
+    </div>
+    <div class="section-body open">
+      <div class="info-box">
+        <p>ข่าวปลอมไม่ใช่แค่เรื่องเล็กน้อย — มีผลกระทบทั้งต่อบุคคล สังคม และระบบสาธารณสุข</p>
+      </div>
+      <div class="def-grid">
+        <div class="def-chip">
+          <div class="def-icon">🏥</div>
+          <div class="def-label">สุขภาพ</div>
+          <div class="def-desc">ข่าวปลอมทางการแพทย์ทำให้คนรักษาตัวผิดวิธี</div>
+        </div>
+        <div class="def-chip">
+          <div class="def-icon">🗳️</div>
+          <div class="def-label">การเมือง</div>
+          <div class="def-desc">ข้อมูลบิดเบือนสร้างความแตกแยกในสังคม</div>
+        </div>
+        <div class="def-chip">
+          <div class="def-icon">💰</div>
+          <div class="def-label">เศรษฐกิจ</div>
+          <div class="def-desc">ข่าวปลอมเรื่องสินค้าทำให้ธุรกิจเสียหาย</div>
+        </div>
+        <div class="def-chip">
+          <div class="def-icon">🧍</div>
+          <div class="def-label">บุคคล</div>
+          <div class="def-desc">ข่าวปลอมเกี่ยวกับบุคคลทำลายชื่อเสียง</div>
+        </div>
+      </div>
+      <p style="font-size:.9rem;color:#475569;margin:1rem 0 .5rem;font-weight:600">ความรับผิดชอบของเรา:</p>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot"><i class="fas fa-check" style="font-size:.6rem"></i></div>
+          <div class="tl-content"><h4>ตรวจสอบก่อนแชร์ทุกครั้ง</h4><p>แม้เพื่อนแชร์มา หรือเนื้อหาดูน่าเชื่อถือ</p></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"><i class="fas fa-check" style="font-size:.6rem"></i></div>
+          <div class="tl-content"><h4>แจ้งเตือนเมื่อพบข่าวปลอม</h4><p>บอกคนที่แชร์มาอย่างสุภาพ หรือรายงานต่อแพลตฟอร์ม</p></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"><i class="fas fa-check" style="font-size:.6rem"></i></div>
+          <div class="tl-content"><h4>ไม่แก้ข่าวปลอมด้วยข่าวปลอม</h4><p>ใช้แหล่งข้อมูลที่เชื่อถือได้ในการแก้ไขความเข้าใจผิด</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /utab-lesson -->
+
+<!-- TAB: แบบฝึกหัด -->
+<div id="utab-exercises" class="unit-tab-content">
+
+  <div id="exerciseLockBanner4" style="display:none;background:#fee2e2;border:1px solid #fca5a5;border-radius:10px;padding:1rem 1.2rem;margin-bottom:1.5rem">
+    <p style="margin:0;color:#991b1b;font-weight:600"><i class="fas fa-lock"></i> แบบฝึกหัดบทที่ 4 ยังไม่เปิดรับงาน</p>
+  </div>
+
+  <!-- Work 1: Match (4pt) -->
+  <div class="work-card">
+    <div class="work-card-header">
+      <div class="work-num">1</div>
+      <div class="work-title">
+        <h3>จับคู่: ประเภทข่าวปลอมกับตัวอย่าง</h3>
+        <div class="work-badges">
+          <span class="work-score-badge"><i class="fas fa-star"></i> 4 คะแนน</span>
+          <span class="work-type-badge"><i class="fas fa-puzzle-piece"></i> จับคู่</span>
+          <span id="badge4_w1" class="work-status-badge open"><i class="fas fa-circle-check"></i> เปิดรับงาน</span>
+        </div>
+      </div>
+    </div>
+    <div class="work-body">
+      <p style="font-size:.88rem;color:#475569;margin-bottom:1rem">จับคู่ประเภทข้อมูลเท็จกับคำอธิบาย</p>
+      <div class="match-grid">
+        <div class="match-row">
+          <div class="match-label"><span class="match-num">1</span>Disinformation</div>
+          <select class="match-select" id="m4_1">
+            <option value="">-- เลือก --</option>
+            <option value="A">ข้อมูลผิดพลาดโดยไม่ตั้งใจ</option>
+            <option value="B">เนื้อหาล้อเลียน ไม่ได้ตั้งใจให้เชื่อจริง</option>
+            <option value="C">ข้อมูลเท็จที่สร้างขึ้นเพื่อหลอกลวงโดยเจตนา</option>
+            <option value="D">ข้อมูลจริงที่ใช้เพื่อทำร้ายบุคคล</option>
+          </select>
+        </div>
+        <div class="match-row">
+          <div class="match-label"><span class="match-num">2</span>Misinformation</div>
+          <select class="match-select" id="m4_2">
+            <option value="">-- เลือก --</option>
+            <option value="A">ข้อมูลผิดพลาดโดยไม่ตั้งใจ</option>
+            <option value="B">เนื้อหาล้อเลียน ไม่ได้ตั้งใจให้เชื่อจริง</option>
+            <option value="C">ข้อมูลเท็จที่สร้างขึ้นเพื่อหลอกลวงโดยเจตนา</option>
+            <option value="D">ข้อมูลจริงที่ใช้เพื่อทำร้ายบุคคล</option>
+          </select>
+        </div>
+        <div class="match-row">
+          <div class="match-label"><span class="match-num">3</span>Satire</div>
+          <select class="match-select" id="m4_3">
+            <option value="">-- เลือก --</option>
+            <option value="A">ข้อมูลผิดพลาดโดยไม่ตั้งใจ</option>
+            <option value="B">เนื้อหาล้อเลียน ไม่ได้ตั้งใจให้เชื่อจริง</option>
+            <option value="C">ข้อมูลเท็จที่สร้างขึ้นเพื่อหลอกลวงโดยเจตนา</option>
+            <option value="D">ข้อมูลจริงที่ใช้เพื่อทำร้ายบุคคล</option>
+          </select>
+        </div>
+        <div class="match-row">
+          <div class="match-label"><span class="match-num">4</span>Malinformation</div>
+          <select class="match-select" id="m4_4">
+            <option value="">-- เลือก --</option>
+            <option value="A">ข้อมูลผิดพลาดโดยไม่ตั้งใจ</option>
+            <option value="B">เนื้อหาล้อเลียน ไม่ได้ตั้งใจให้เชื่อจริง</option>
+            <option value="C">ข้อมูลเท็จที่สร้างขึ้นเพื่อหลอกลวงโดยเจตนา</option>
+            <option value="D">ข้อมูลจริงที่ใช้เพื่อทำร้ายบุคคล</option>
+          </select>
+        </div>
+      </div>
+      <button class="submit-btn" id="matchBtn4" onclick="submitMatch4()"><i class="fas fa-check-circle"></i> ตรวจคำตอบและส่งคะแนน</button>
+      <div class="result-box" id="matchResult4"></div>
+    </div>
+  </div>
+
+  <!-- Work 2: MCQ (4pt) -->
+  <div class="work-card">
+    <div class="work-card-header">
+      <div class="work-num">2</div>
+      <div class="work-title">
+        <h3>ปรนัย: Fact-Check และข่าวปลอม</h3>
+        <div class="work-badges">
+          <span class="work-score-badge"><i class="fas fa-star"></i> 4 คะแนน</span>
+          <span class="work-type-badge"><i class="fas fa-list-check"></i> ปรนัย</span>
+          <span id="badge4_w2" class="work-status-badge open"><i class="fas fa-circle-check"></i> เปิดรับงาน</span>
+        </div>
+      </div>
+    </div>
+    <div class="work-body">
+      <div class="mcq-item">
+        <div class="mcq-q">1. งานวิจัยจาก MIT พบว่าข่าวปลอมแพร่กระจายเร็วกว่าข่าวจริงกี่เท่า?</div>
+        <div class="mcq-options">
+          <label class="mcq-option"><input type="radio" name="q4_1" value="A"> 2 เท่า</label>
+          <label class="mcq-option"><input type="radio" name="q4_1" value="B"> 6 เท่า</label>
+          <label class="mcq-option"><input type="radio" name="q4_1" value="C"> 10 เท่า</label>
+          <label class="mcq-option"><input type="radio" name="q4_1" value="D"> 20 เท่า</label>
+        </div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q">2. เครื่องมือใดใช้ตรวจสอบว่าภาพนั้นถูกนำมาใช้ผิดบริบทหรือไม่?</div>
+        <div class="mcq-options">
+          <label class="mcq-option"><input type="radio" name="q4_2" value="A"> Microsoft Word</label>
+          <label class="mcq-option"><input type="radio" name="q4_2" value="B"> Google Translate</label>
+          <label class="mcq-option"><input type="radio" name="q4_2" value="C"> Google Images Reverse Search</label>
+          <label class="mcq-option"><input type="radio" name="q4_2" value="D"> YouTube Studio</label>
+        </div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q">3. "Cofact" คืออะไร?</div>
+        <div class="mcq-options">
+          <label class="mcq-option"><input type="radio" name="q4_3" value="A"> แอปถ่ายรูปภาพ</label>
+          <label class="mcq-option"><input type="radio" name="q4_3" value="B"> เกมออนไลน์</label>
+          <label class="mcq-option"><input type="radio" name="q4_3" value="C"> ฐานข้อมูลตรวจสอบข่าวปลอมในไทย</label>
+          <label class="mcq-option"><input type="radio" name="q4_3" value="D"> บริษัทโทรคมนาคม</label>
+        </div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q">4. ขั้นตอนแรกของกระบวนการ Fact-Check คือ?</div>
+        <div class="mcq-options">
+          <label class="mcq-option"><input type="radio" name="q4_4" value="A"> แชร์ก่อนให้คนอื่นได้รู้</label>
+          <label class="mcq-option"><input type="radio" name="q4_4" value="B"> ตรวจสอบภาพ</label>
+          <label class="mcq-option"><input type="radio" name="q4_4" value="C"> หยุด — อย่าแชร์ทันที</label>
+          <label class="mcq-option"><input type="radio" name="q4_4" value="D"> ดูยอดแชร์</label>
+        </div>
+      </div>
+      <button class="submit-btn" id="mcqBtn4" onclick="submitMCQ4()"><i class="fas fa-check-circle"></i> ตรวจคำตอบและส่งคะแนน</button>
+      <div class="result-box" id="mcqResult4"></div>
+    </div>
+  </div>
+
+  <!-- Work 3: T/F (3pt) -->
+  <div class="work-card">
+    <div class="work-card-header">
+      <div class="work-num">3</div>
+      <div class="work-title">
+        <h3>ถูก/ผิด: ข้อเท็จจริงเกี่ยวกับข่าวปลอม</h3>
+        <div class="work-badges">
+          <span class="work-score-badge"><i class="fas fa-star"></i> 3 คะแนน</span>
+          <span class="work-type-badge"><i class="fas fa-toggle-on"></i> ถูก/ผิด</span>
+          <span id="badge4_w3" class="work-status-badge open"><i class="fas fa-circle-check"></i> เปิดรับงาน</span>
+        </div>
+      </div>
+    </div>
+    <div class="work-body">
+      <div class="mcq-item">
+        <div class="mcq-q">1. ถ้าเพื่อนที่เชื่อถือได้แชร์ข่าวมา ก็ไม่ต้องตรวจสอบอีกแล้ว</div>
+        <div class="mcq-options">
+          <label class="mcq-option"><input type="radio" name="tf4_1" value="T"> ถูก</label>
+          <label class="mcq-option"><input type="radio" name="tf4_1" value="F"> ผิด</label>
+        </div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q">2. เว็บ "Satire" (เนื้อหาล้อเลียน) ถือว่าเป็นข่าวปลอมที่มีเจตนาร้ายเสมอ</div>
+        <div class="mcq-options">
+          <label class="mcq-option"><input type="radio" name="tf4_2" value="T"> ถูก</label>
+          <label class="mcq-option"><input type="radio" name="tf4_2" value="F"> ผิด</label>
+        </div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q">3. ข่าวปลอมอาจส่งผลกระทบต่อสุขภาพ เศรษฐกิจ และการเมืองได้จริง</div>
+        <div class="mcq-options">
+          <label class="mcq-option"><input type="radio" name="tf4_3" value="T"> ถูก</label>
+          <label class="mcq-option"><input type="radio" name="tf4_3" value="F"> ผิด</label>
+        </div>
+      </div>
+      <button class="submit-btn" id="tfBtn4" onclick="submitTF4()"><i class="fas fa-check-circle"></i> ตรวจคำตอบและส่งคะแนน</button>
+      <div class="result-box" id="tfResult4"></div>
+    </div>
+  </div>
+
+  <!-- Work 4: Analysis (5pt) -->
+  <div class="work-card">
+    <div class="work-card-header">
+      <div class="work-num">4</div>
+      <div class="work-title">
+        <h3>Fact-Check: ข่าวที่น่าสงสัย</h3>
+        <div class="work-badges">
+          <span class="work-score-badge"><i class="fas fa-star"></i> 5 คะแนน</span>
+          <span class="work-type-badge"><i class="fas fa-pen-to-square"></i> ตรวจสอบข้อเท็จจริง</span>
+          <span id="badge4_w4" class="work-status-badge open"><i class="fas fa-circle-check"></i> เปิดรับงาน</span>
+        </div>
+      </div>
+    </div>
+    <div class="work-body">
+      <div class="info-box" style="margin-bottom:1rem">
+        <p><strong>สถานการณ์:</strong> มีข้อความในกลุ่มไลน์อ้างว่า "กินกล้วยหอมวันละ 2 ลูก รักษามะเร็งตับได้ นักวิจัยญี่ปุ่นพิสูจน์แล้ว 100%" ข้อความนี้มียอดส่งต่อในกลุ่มผู้ปกครองนักเรียนทั่วประเทศ</p>
+      </div>
+      <div id="analysisFormArea4">
+        <label class="field-label">1. ใช้กระบวนการ Fact-Check ตรวจสอบข้อมูลนี้ทีละขั้น</label>
+        <textarea class="work-textarea" id="an4_1" placeholder="ขั้นที่ 1: หยุด... ขั้นที่ 2: อ่านทั้งหมด... ขั้นที่ 3: ตรวจแหล่งที่มา... ขั้นที่ 4: ค้นหาแหล่งอื่น..."></textarea>
+        <label class="field-label" style="margin-top:.8rem">2. จัดประเภทข้อมูลนี้: เป็น Misinformation, Disinformation หรืออะไร? เพราะอะไร?</label>
+        <textarea class="work-textarea" id="an4_2" placeholder="ระบุประเภทพร้อมเหตุผล..."></textarea>
+        <label class="field-label" style="margin-top:.8rem">3. ถ้านักเรียนอยู่ในกลุ่มไลน์นั้น นักเรียนจะทำอะไร?</label>
+        <textarea class="work-textarea" id="an4_3" placeholder="วิธีรับมือและตอบสนองต่อข่าวปลอม..."></textarea>
+        <button class="submit-btn" id="analysisBtn4" onclick="submitAnalysis4()"><i class="fas fa-paper-plane"></i> ส่งงาน</button>
+        <div class="result-box" id="analysisResult4"></div>
+      </div>
+      <div id="analysisPendingBox4" style="display:none;margin-top:1rem;background:#fffbeb;border:1px solid #fcd34d;border-radius:12px;padding:1.25rem">
+        <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem">
+          <i class="fas fa-clock" style="color:#d97706;font-size:1.3rem"></i>
+          <p style="font-weight:700;color:#92400e;margin:0">ส่งงานแล้ว — รอครูตรวจ</p>
+        </div>
+        <button id="editAnalysisBtn4" style="background:#fff;border:1px solid #fcd34d;color:#b45309;padding:.4rem .9rem;border-radius:8px;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer"><i class="fas fa-pen"></i> แก้ไขคำตอบ</button>
+      </div>
+      <div id="analysisGradedBox4" style="display:none;margin-top:1rem;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:1.25rem;text-align:center">
+        <i class="fas fa-circle-check" style="color:#16a34a;font-size:2rem;margin-bottom:.4rem;display:block"></i>
+        <p style="font-weight:700;color:#166534;margin:0 0 .25rem">ครูตรวจแล้ว!</p>
+        <p id="analysisGradedScore4" style="font-size:.9rem;color:#166534;margin:0"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Work 5: Worksheet (4pt) -->
+  <div class="work-card">
+    <div class="work-card-header">
+      <div class="work-num">5</div>
+      <div class="work-title">
+        <h3>ใบงาน: ล่าข่าวปลอมรอบตัว</h3>
+        <div class="work-badges">
+          <span class="work-score-badge"><i class="fas fa-star"></i> 4 คะแนน</span>
+          <span class="work-type-badge"><i class="fas fa-clipboard"></i> ใบงาน</span>
+          <span id="badge4_w5" class="work-status-badge open"><i class="fas fa-circle-check"></i> เปิดรับงาน</span>
+        </div>
+      </div>
+    </div>
+    <div class="work-body">
+      <p style="font-size:.88rem;color:#475569;margin-bottom:1rem">ค้นหาข่าวปลอม 1 ชิ้นที่คุณเคยเห็นหรือค้นใน cofact.org แล้วทำ Fact-Check</p>
+      <div id="worksheetFormArea4">
+        <label class="field-label">1. ข่าวปลอมที่พบ (อธิบายเนื้อหาหรือวาง URL)</label>
+        <textarea class="work-textarea" style="min-height:60px" id="ws4_1" placeholder="อธิบายข่าวปลอมที่พบ..."></textarea>
+        <label class="field-label">2. ข้อมูลที่ถูกต้อง (พบจากแหล่งใด?)</label>
+        <textarea class="work-textarea" style="min-height:60px" id="ws4_2" placeholder="ข้อเท็จจริง พร้อมระบุแหล่งที่มา..."></textarea>
+        <label class="field-label" style="margin-top:.8rem">3. เครื่องมือที่ใช้ในการตรวจสอบ</label>
+        <input type="text" class="work-input" id="ws4_3" placeholder="เช่น Cofact, AFP Fact Check, Google Images...">
+        <label class="field-label">4. สิ่งที่เรียนรู้จากการทำ Fact-Check ครั้งนี้</label>
+        <textarea class="work-textarea" style="min-height:60px" id="ws4_4" placeholder="สะท้อนคิด..."></textarea>
+        <button class="submit-btn" id="worksheetBtn4" onclick="submitWorksheet4()"><i class="fas fa-paper-plane"></i> ส่งใบงาน</button>
+        <div class="result-box" id="worksheetResult4"></div>
+      </div>
+      <div id="worksheetPendingBox4" style="display:none;margin-top:1rem;background:#fffbeb;border:1px solid #fcd34d;border-radius:12px;padding:1.25rem">
+        <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem">
+          <i class="fas fa-clock" style="color:#d97706;font-size:1.3rem"></i>
+          <p style="font-weight:700;color:#92400e;margin:0">ส่งใบงานแล้ว — รอครูตรวจ</p>
+        </div>
+        <button id="editWorksheetBtn4" style="background:#fff;border:1px solid #fcd34d;color:#b45309;padding:.4rem .9rem;border-radius:8px;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer"><i class="fas fa-pen"></i> แก้ไขคำตอบ</button>
+      </div>
+      <div id="worksheetGradedBox4" style="display:none;margin-top:1rem;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:1.25rem;text-align:center">
+        <i class="fas fa-circle-check" style="color:#16a34a;font-size:2rem;margin-bottom:.4rem;display:block"></i>
+        <p style="font-weight:700;color:#166534;margin:0 0 .25rem">ครูตรวจแล้ว!</p>
+        <p id="worksheetGradedScore4" style="font-size:.9rem;color:#166534;margin:0"></p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /utab-exercises -->
+
+<!-- TAB: แบบทดสอบ -->
+<div id="utab-test" class="unit-tab-content">
+  <div id="testLockedBox4" style="display:none" class="test-locked-box"><i class="fas fa-lock"></i><h3 style="color:#475569;margin-bottom:.5rem">แบบทดสอบยังไม่เปิด</h3><p>รอครูเปิดแบบทดสอบบทที่ 4</p></div>
+  <div id="testGradedBox4" style="display:none;text-align:center;padding:3rem 1.5rem">
+    <i class="fas fa-circle-check" style="color:#16a34a;font-size:3rem;display:block;margin-bottom:1rem"></i>
+    <h3 style="color:#166534;margin-bottom:.5rem">ทำแบบทดสอบแล้ว!</h3>
+    <p id="testGradedScore4" style="font-size:1.1rem;color:#166534;font-weight:700;margin:0"></p>
+  </div>
+  <div id="testStartBox4" style="text-align:center;padding:2rem">
+    <i class="fas fa-file-alt" style="font-size:3rem;color:#7c3aed;display:block;margin-bottom:1rem"></i>
+    <h2 style="color:#1e293b;margin-bottom:.5rem">แบบทดสอบบทที่ 4</h2>
+    <p style="color:#64748b;margin-bottom:.5rem">ข่าวปลอมและการตรวจสอบข้อเท็จจริง</p>
+    <div style="display:inline-flex;gap:1.5rem;margin:1rem 0;flex-wrap:wrap;justify-content:center">
+      <div style="text-align:center"><span style="font-size:1.5rem;font-weight:700;color:#7c3aed">10</span><br><span style="font-size:.8rem;color:#64748b">ข้อ</span></div>
+      <div style="text-align:center"><span style="font-size:1.5rem;font-weight:700;color:#7c3aed">20</span><br><span style="font-size:.8rem;color:#64748b">นาที</span></div>
+      <div style="text-align:center"><span style="font-size:1.5rem;font-weight:700;color:#7c3aed">10</span><br><span style="font-size:.8rem;color:#64748b">คะแนน</span></div>
+    </div>
+    <p style="font-size:.85rem;color:#dc2626;margin-bottom:1.5rem"><i class="fas fa-exclamation-triangle"></i> เมื่อเริ่มแล้วจะนับเวลาถอยหลัง ทำได้เพียงครั้งเดียว</p>
+    <button onclick="startTest4()" style="background:linear-gradient(135deg,#7c3aed,#4c1d95);color:white;border:none;border-radius:12px;padding:.9rem 2.5rem;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer"><i class="fas fa-play"></i> เริ่มทำแบบทดสอบ</button>
+  </div>
+  <div id="testArea4" style="display:none">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:.5rem">
+      <div id="testTimerDisplay4" class="test-timer">20:00</div>
+      <div id="testProgressText4" style="font-size:.85rem;color:#64748b">ข้อ 0/10</div>
+    </div>
+    <div id="testQuestionsContainer4"></div>
+    <button style="background:linear-gradient(135deg,#7c3aed,#4c1d95);color:white;border:none;border-radius:10px;padding:.8rem 2rem;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:1.5rem" onclick="submitTest4()"><i class="fas fa-paper-plane"></i> ส่งแบบทดสอบ</button>
+  </div>
+  <div id="testResultBox4" style="background:#f5f3ff;border:2px solid #7c3aed;border-radius:14px;padding:2rem;text-align:center;margin-top:1.5rem;display:none">
+    <i class="fas fa-trophy" style="font-size:3rem;color:#7c3aed;display:block;margin-bottom:1rem"></i>
+    <h3 id="testResultTitle4" style="color:#1e293b;margin-bottom:.5rem"></h3>
+    <p id="testResultScore4" style="font-size:1.5rem;font-weight:700;color:#7c3aed;margin:.5rem 0"></p>
+    <p id="testResultDetail4" style="font-size:.9rem;color:#64748b;margin:0"></p>
+  </div>
+</div>
+
+<!-- TAB: คะแนน -->
+<div id="utab-scores" class="unit-tab-content">
+  <div class="student-score-header" id="scoreStudentHeader"><i class="fas fa-spinner fa-spin"></i> กำลังโหลด...</div>
+  <div id="scoreSummary" class="score-summary-chips" style="display:none"></div>
+  <div class="score-table-wrapper">
+    <table class="score-table">
+      <thead><tr><th>#</th><th>หัวข้อ/งาน</th><th>คะแนน</th><th>ประเภท</th><th>หมายเหตุ</th><th>วันที่</th></tr></thead>
+      <tbody id="scoreTableBody"><tr><td colspan="6" style="text-align:center;padding:2rem;color:#64748b"><i class="fas fa-spinner fa-spin"></i> กำลังโหลด...</td></tr></tbody>
+    </table>
+  </div>
+  <div style="text-align:center;margin-top:1rem">
+    <button onclick="initStudentScoreTab('media-m1')" class="btn btn-outline"><i class="fas fa-rotate-right"></i> โหลดใหม่</button>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2569 <strong>ครูศิริศักดิ์ ปิลอง</strong> &mdash; รายวิชารู้เท่าทันสื่อ ม.1</p>
+</footer>
+
+<script src="js/auth.js"></script>
+<script>requireAuth('1');</script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/app.js"></script>
+<script>
+document.querySelectorAll('.unit-tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = btn.dataset.utab;
+    document.querySelectorAll('.unit-tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.unit-tab-content').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    const pane = document.getElementById(target); if (pane) pane.classList.add('active');
+    if (target === 'utab-scores') initStudentScoreTab('media-m1');
+  });
+});
+if (location.hash === '#exercises') document.querySelector('[data-utab="utab-exercises"]')?.click();
+if (location.hash === '#test') document.querySelector('[data-utab="utab-test"]')?.click();
+
+function toggleSection(header) { header.classList.toggle('open'); const b = header.nextElementSibling; if (b) b.classList.toggle('open'); }
+function getStudent() { return typeof getCurrentStudent === 'function' ? getCurrentStudent() : null; }
+
+let _exLocked4 = false, _testLocked4 = false;
+async function loadUnitSettings4() {
+  const s = await getSubjectSettings('media-m1');
+  _exLocked4 = s.unit4_exercise === false; _testLocked4 = s.unit4_test === false;
+  if (_exLocked4) {
+    document.getElementById('exerciseLockBanner4').style.display = 'block';
+    ['matchBtn4','mcqBtn4','tfBtn4','analysisBtn4','worksheetBtn4'].forEach(id => { const el = document.getElementById(id); if (el) el.disabled = true; });
+    ['badge4_w1','badge4_w2','badge4_w3','badge4_w4','badge4_w5'].forEach(id => { const el = document.getElementById(id); if (el) { el.className = 'work-status-badge locked'; el.innerHTML = '<i class="fas fa-lock"></i> ปิดรับงาน'; }});
+  }
+}
+
+const MATCH4_ANS = { m4_1: 'C', m4_2: 'A', m4_3: 'B', m4_4: 'D' };
+async function submitMatch4() {
+  if (_exLocked4) { showToast('แบบฝึกหัดยังไม่เปิด','warning'); return; }
+  const s = getStudent(); if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน','warning'); return; }
+  const ans = {}; Object.keys(MATCH4_ANS).forEach(k => { ans[k] = document.getElementById(k).value; });
+  if (Object.values(ans).some(v => !v)) { showToast('กรุณาเลือกคำตอบให้ครบ','warning'); return; }
+  let correct = 0; Object.keys(MATCH4_ANS).forEach(k => { if (ans[k] === MATCH4_ANS[k]) correct++; });
+  const score = correct, max = 4;
+  const rb = document.getElementById('matchResult4'); rb.className = 'result-box show '+(score>=3?'pass':'fail'); rb.innerHTML = `ได้ ${score}/${max} คะแนน`;
+  const res = await saveScore('media-m1',{studentId:s.id,name:s.name,room:s.class},{title:'แบบฝึกหัดที่ 1 บทที่ 4: จับคู่ประเภทข่าวปลอม',score,maxScore:max,type:'exercise',note:''});
+  if (res.ok) showToast('บันทึกคะแนนสำเร็จ','success');
+}
+
+const MCQ4_ANS = { q4_1: 'B', q4_2: 'C', q4_3: 'C', q4_4: 'C' };
+async function submitMCQ4() {
+  if (_exLocked4) { showToast('แบบฝึกหัดยังไม่เปิด','warning'); return; }
+  const s = getStudent(); if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน','warning'); return; }
+  if (!Object.keys(MCQ4_ANS).every(q => document.querySelector(`input[name="${q}"]:checked`))) { showToast('กรุณาตอบให้ครบ','warning'); return; }
+  let correct = 0;
+  Object.keys(MCQ4_ANS).forEach(q => {
+    const chosen = document.querySelector(`input[name="${q}"]:checked`);
+    document.querySelectorAll(`input[name="${q}"]`).forEach(opt => { const l = opt.closest('.mcq-option'); l.classList.remove('correct-ans','wrong-ans'); if (opt.value===MCQ4_ANS[q]) l.classList.add('correct-ans'); else if (chosen&&opt===chosen&&opt.value!==MCQ4_ANS[q]) l.classList.add('wrong-ans'); });
+    if (chosen&&chosen.value===MCQ4_ANS[q]) correct++;
+  });
+  const score = correct, max = 4;
+  const rb = document.getElementById('mcqResult4'); rb.className = 'result-box show '+(score>=3?'pass':'fail'); rb.innerHTML = `ได้ ${score}/${max} คะแนน`;
+  await saveScore('media-m1',{studentId:s.id,name:s.name,room:s.class},{title:'แบบฝึกหัดที่ 2 บทที่ 4: ปรนัย Fact-Check',score,maxScore:max,type:'quiz',note:''});
+  showToast('บันทึกคะแนนสำเร็จ','success');
+}
+
+const TF4_ANS = { tf4_1: 'F', tf4_2: 'F', tf4_3: 'T' };
+async function submitTF4() {
+  if (_exLocked4) { showToast('แบบฝึกหัดยังไม่เปิด','warning'); return; }
+  const s = getStudent(); if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน','warning'); return; }
+  if (!Object.keys(TF4_ANS).every(q => document.querySelector(`input[name="${q}"]:checked`))) { showToast('กรุณาตอบให้ครบ','warning'); return; }
+  let correct = 0;
+  Object.keys(TF4_ANS).forEach(q => {
+    const chosen = document.querySelector(`input[name="${q}"]:checked`);
+    document.querySelectorAll(`input[name="${q}"]`).forEach(opt => { const l = opt.closest('.mcq-option'); l.classList.remove('correct-ans','wrong-ans'); if (opt.value===TF4_ANS[q]) l.classList.add('correct-ans'); else if (chosen&&opt===chosen&&opt.value!==TF4_ANS[q]) l.classList.add('wrong-ans'); });
+    if (chosen&&chosen.value===TF4_ANS[q]) correct++;
+  });
+  const score = correct, max = 3;
+  const rb = document.getElementById('tfResult4'); rb.className = 'result-box show '+(score>=2?'pass':'fail'); rb.innerHTML = `ได้ ${score}/${max} คะแนน`;
+  await saveScore('media-m1',{studentId:s.id,name:s.name,room:s.class},{title:'แบบฝึกหัดที่ 3 บทที่ 4: ถูก/ผิดข่าวปลอม',score,maxScore:max,type:'quiz',note:''});
+  showToast('บันทึกคะแนนสำเร็จ','success');
+}
+
+function _loadAnalysisState4() {
+  setupWorkCard({subjectId:'media-m1',title:'แบบฝึกหัดที่ 4 บทที่ 4: Fact-Check กล้วยหอมรักษามะเร็ง',
+    formEl:document.getElementById('analysisFormArea4'),pendingBoxEl:document.getElementById('analysisPendingBox4'),
+    gradedBoxEl:document.getElementById('analysisGradedBox4'),editBtnEl:document.getElementById('editAnalysisBtn4'),
+    onGraded:sub=>{ document.getElementById('analysisGradedScore4').textContent='คะแนน: '+sub.score+'/'+sub.maxScore; }
+  });
+}
+async function submitAnalysis4() {
+  if (_exLocked4) { showToast('แบบฝึกหัดยังไม่เปิด','warning'); return; }
+  const s = getStudent(); if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน','warning'); return; }
+  const a1=document.getElementById('an4_1').value.trim(),a2=document.getElementById('an4_2').value.trim(),a3=document.getElementById('an4_3').value.trim();
+  if (!a1||!a2||!a3) { showToast('กรุณาตอบให้ครบทั้ง 3 ข้อ','warning'); return; }
+  const btn=document.getElementById('analysisBtn4'); btn.disabled=true; btn.textContent='กำลังส่ง...';
+  const note=`1)${a1.slice(0,80)} | 2)${a2.slice(0,60)} | 3)${a3.slice(0,60)}`;
+  const formEl=document.getElementById('analysisFormArea4'); const editId=formEl.dataset.editScoreId;
+  const res=editId?await editPendingNote('media-m1',s.id,editId,note)
+    :await saveScore('media-m1',{studentId:s.id,name:s.name,room:s.class},{title:'แบบฝึกหัดที่ 4 บทที่ 4: Fact-Check กล้วยหอมรักษามะเร็ง',score:0,maxScore:5,type:'exercise',status:'pending',note});
+  btn.disabled=false; btn.innerHTML='<i class="fas fa-paper-plane"></i> ส่งงาน';
+  if (res.ok) { delete formEl.dataset.editScoreId; showToast('ส่งงานสำเร็จ รอครูตรวจ','success'); _loadAnalysisState4(); }
+  else showToast('เกิดข้อผิดพลาด: '+res.error,'error');
+}
+
+function _loadWorksheetState4() {
+  setupWorkCard({subjectId:'media-m1',title:'แบบฝึกหัดที่ 5 บทที่ 4: ล่าข่าวปลอมรอบตัว',
+    formEl:document.getElementById('worksheetFormArea4'),pendingBoxEl:document.getElementById('worksheetPendingBox4'),
+    gradedBoxEl:document.getElementById('worksheetGradedBox4'),editBtnEl:document.getElementById('editWorksheetBtn4'),
+    onGraded:sub=>{ document.getElementById('worksheetGradedScore4').textContent='คะแนน: '+sub.score+'/'+sub.maxScore; }
+  });
+}
+async function submitWorksheet4() {
+  if (_exLocked4) { showToast('แบบฝึกหัดยังไม่เปิด','warning'); return; }
+  const s = getStudent(); if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน','warning'); return; }
+  const w1=document.getElementById('ws4_1').value.trim(),w2=document.getElementById('ws4_2').value.trim(),w3=document.getElementById('ws4_3').value.trim(),w4=document.getElementById('ws4_4').value.trim();
+  if (!w1||!w2||!w3||!w4) { showToast('กรุณากรอกข้อมูลให้ครบ','warning'); return; }
+  const btn=document.getElementById('worksheetBtn4'); btn.disabled=true; btn.textContent='กำลังส่ง...';
+  const note=`ข่าว:${w1.slice(0,50)} | ข้อเท็จจริง:${w2.slice(0,50)} | เครื่องมือ:${w3}`;
+  const formEl=document.getElementById('worksheetFormArea4'); const editId=formEl.dataset.editScoreId;
+  const res=editId?await editPendingNote('media-m1',s.id,editId,note)
+    :await saveScore('media-m1',{studentId:s.id,name:s.name,room:s.class},{title:'แบบฝึกหัดที่ 5 บทที่ 4: ล่าข่าวปลอมรอบตัว',score:0,maxScore:4,type:'exercise',status:'pending',note});
+  btn.disabled=false; btn.innerHTML='<i class="fas fa-paper-plane"></i> ส่งใบงาน';
+  if (res.ok) { delete formEl.dataset.editScoreId; showToast('ส่งสำเร็จ รอครูตรวจ','success'); _loadWorksheetState4(); }
+  else showToast('เกิดข้อผิดพลาด: '+res.error,'error');
+}
+
+/* ── Test ── */
+const TEST4_QUESTIONS = [
+  { q: '1. ข้อใดคือความหมายของ "Disinformation"?', opts: ['ข้อมูลผิดพลาดโดยไม่ตั้งใจ', 'ข้อมูลเท็จที่สร้างขึ้นโดยตั้งใจเพื่อหลอกลวง', 'เนื้อหาล้อเลียน', 'ข้อมูลจริงแต่ใช้ทำร้ายคน'], ans: 'B' },
+  { q: '2. ข่าวปลอมแพร่กระจายเร็วเพราะสาเหตุหลักใด?', opts: ['ข่าวปลอมมักสั้นกว่าข่าวจริง', 'ข่าวปลอมกระตุ้นอารมณ์และน่าสนใจกว่า', 'แพลตฟอร์มโปรโมตข่าวปลอม', 'คนอ่านข่าวจริงน้อยลง'], ans: 'B' },
+  { q: '3. เว็บ Cofact ใช้ทำอะไร?', opts: ['ถ่ายภาพ', 'แปลภาษา', 'ตรวจสอบข่าวปลอมในไทย', 'ค้นหารูปภาพย้อนกลับ'], ans: 'C' },
+  { q: '4. ถ้าสงสัยว่าภาพในข่าวถูกนำออกจากบริบท ควรใช้เครื่องมือใด?', opts: ['Microsoft Word', 'Google Maps', 'Google Images Reverse Search', 'Instagram'], ans: 'C' },
+  { q: '5. ขั้นตอนแรกของกระบวนการ Fact-Check คือ?', opts: ['ตรวจสอบภาพ', 'ค้นหาแหล่งอื่น', 'หยุด — อย่าแชร์ทันที', 'โทรถามผู้เชี่ยวชาญ'], ans: 'C' },
+  { q: '6. ข้อใดคือตัวอย่างของ "Misinformation"?', opts: ['สร้างข่าวปลอมเพื่อทำลายคู่แข่ง', 'แชร์ข้อมูลที่ผิดพลาดโดยไม่รู้', 'เผยแพร่ที่อยู่บ้านคนเพื่อให้ถูกคุกคาม', 'เขียนบทความล้อเลียนการเมือง'], ans: 'B' },
+  { q: '7. งานวิจัย MIT (2018) พบว่าข่าวปลอมแพร่เร็วกว่าข่าวจริงกี่เท่า?', opts: ['2 เท่า', '4 เท่า', '6 เท่า', '10 เท่า'], ans: 'C' },
+  { q: '8. AFP Fact Check ใช้ทำอะไร?', opts: ['แปลภาษาอังกฤษ', 'ตรวจสอบข่าวปลอม', 'ค้นหารูปภาพ', 'แก้ไขเอกสาร'], ans: 'B' },
+  { q: '9. ข้อใดคือความรับผิดชอบของผู้รับสื่อในการรับมือข่าวปลอม?', opts: ['แชร์เร็วที่สุดเพื่อให้คนอื่นรู้', 'เชื่อทุกข่าวที่คนรู้จักแชร์', 'ตรวจสอบก่อนแชร์และแจ้งเตือนเมื่อพบข่าวปลอม', 'หลีกเลี่ยงการอ่านข่าวทั้งหมด'], ans: 'C' },
+  { q: '10. "Clickbait" หมายถึงอะไร?', opts: ['โฆษณาป๊อปอัป', 'หัวข้อเกินจริงที่ออกแบบมาเพื่อให้คลิก', 'ไวรัสในคอมพิวเตอร์', 'การแฮ็กบัญชี'], ans: 'B' }
+];
+
+let _testTimer4=null, _testTimeLeft4=20*60, _testSubmitted4=false;
+function startTest4() {
+  if (_testLocked4) { showToast('แบบทดสอบยังไม่เปิด','warning'); return; }
+  const s=getStudent(); if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน','warning'); return; }
+  document.getElementById('testStartBox4').style.display='none'; document.getElementById('testArea4').style.display='block';
+  const container=document.getElementById('testQuestionsContainer4');
+  container.innerHTML=TEST4_QUESTIONS.map((q,i)=>`<div class="work-card" style="margin-bottom:1rem"><div class="work-body"><div class="mcq-item"><div class="mcq-q">${q.q}</div><div class="mcq-options">${q.opts.map((opt,j)=>`<label class="mcq-option"><input type="radio" name="test4_q${i+1}" value="${['A','B','C','D'][j]}"> ${opt}</label>`).join('')}</div></div></div></div>`).join('');
+  _testTimeLeft4=20*60;
+  _testTimer4=setInterval(()=>{
+    _testTimeLeft4--;
+    const m=Math.floor(_testTimeLeft4/60).toString().padStart(2,'0'),sec=(_testTimeLeft4%60).toString().padStart(2,'0');
+    const d=document.getElementById('testTimerDisplay4'); if(d){d.textContent=m+':'+sec; if(_testTimeLeft4<=60)d.classList.add('warning');}
+    const answered=TEST4_QUESTIONS.filter((_,i)=>document.querySelector(`input[name="test4_q${i+1}"]:checked`)).length;
+    const p=document.getElementById('testProgressText4'); if(p)p.textContent=`ข้อ ${answered}/10`;
+    if(_testTimeLeft4<=0){clearInterval(_testTimer4);submitTest4(true);}
+  },1000);
+}
+async function submitTest4(auto=false) {
+  if(_testSubmitted4)return; _testSubmitted4=true; clearInterval(_testTimer4);
+  const s=getStudent(); if(!s)return;
+  let correct=0; TEST4_QUESTIONS.forEach((q,i)=>{const c=document.querySelector(`input[name="test4_q${i+1}"]:checked`); if(c&&c.value===q.ans)correct++;});
+  const score=correct,max=10;
+  document.getElementById('testArea4').style.display='none';
+  const rb=document.getElementById('testResultBox4'); rb.style.display='block';
+  document.getElementById('testResultTitle4').textContent=auto?'หมดเวลา — บันทึกคะแนนอัตโนมัติ':'ส่งแบบทดสอบสำเร็จ!';
+  document.getElementById('testResultScore4').textContent=`${score}/${max} คะแนน`;
+  document.getElementById('testResultDetail4').textContent=`ถูก ${correct} ข้อ จาก 10 ข้อ`;
+  await saveScore('media-m1',{studentId:s.id,name:s.name,room:s.class},{title:'แบบทดสอบบทที่ 4: ข่าวปลอมและการตรวจสอบข้อเท็จจริง',score,maxScore:max,type:'exam',status:'graded',note:''});
+  showToast(`ได้ ${score}/${max} คะแนน`,score>=7?'success':'info');
+}
+async function checkTestDone4() {
+  const s=getStudent(); if(!s||!firebaseReady)return;
+  const res=await getSubmissionByTitle('media-m1',s.id,'แบบทดสอบบทที่ 4: ข่าวปลอมและการตรวจสอบข้อเท็จจริง');
+  if(res.ok&&res.data&&res.data.status==='graded'){document.getElementById('testStartBox4').style.display='none';document.getElementById('testGradedBox4').style.display='block';document.getElementById('testGradedScore4').textContent=`คะแนน: ${res.data.score}/${res.data.maxScore}`;}
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  await loadUnitSettings4();
+  _loadAnalysisState4();
+  _loadWorksheetState4();
+  if (_testLocked4) { document.getElementById('testLockedBox4').style.display='block'; document.getElementById('testStartBox4').style.display='none'; }
+  else { await checkTestDone4(); }
+});
+</script>
+</body>
+</html>

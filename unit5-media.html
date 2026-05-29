@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>บทที่ 5: จริยธรรมและความรับผิดชอบในการใช้สื่อ | รู้เท่าทันสื่อ ม.1</title>
+  <script>(function(){try{var s=JSON.parse(localStorage.getItem('srr_student_2569'));if(!s||!s.grade||!s.name)window.location.replace('login.html');}catch(e){window.location.replace('login.html');}})();</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    :root { --unit-accent: #7c3aed; --unit-accent-dark: #4c1d95; }
+    .unit-hero { background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%); color: white; padding: 2.5rem 0 0; }
+    .unit-hero-content { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+    .unit-hero h1 { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 700; margin: .5rem 0 .4rem; }
+    .unit-hero p { opacity: .85; font-size: .95rem; margin-bottom: 1.5rem; }
+    .unit-breadcrumb { opacity: .8; font-size: .82rem; margin-bottom: .5rem; }
+    .unit-breadcrumb a { color: rgba(255,255,255,.85); text-decoration: none; }
+    .unit-tabs { display: flex; gap: .5rem; padding-top: .5rem; flex-wrap: wrap; }
+    .unit-tab-btn { background: rgba(255,255,255,.15); color: white; border: none; border-radius: 8px 8px 0 0; padding: .6rem 1.2rem; font-family: inherit; font-size: .9rem; cursor: pointer; display: flex; align-items: center; gap: .4rem; transition: background .2s; }
+    .unit-tab-btn.active { background: white; color: #7c3aed; font-weight: 700; }
+    .unit-tab-btn:hover:not(.active) { background: rgba(255,255,255,.25); }
+    .unit-tab-content { display: none; max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; }
+    .unit-tab-content.active { display: block; }
+    .section-card { background: white; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,.07); margin-bottom: 1.5rem; overflow: hidden; border: 1px solid #e2e8f0; }
+    .section-card-header { display: flex; align-items: center; gap: 1rem; padding: 1.1rem 1.4rem; background: #f8fafc; border-bottom: 1px solid #e2e8f0; cursor: pointer; user-select: none; }
+    .section-card-header:hover { background: #f1f5f9; }
+    .section-num { min-width: 38px; height: 38px; background: linear-gradient(135deg, #7c3aed, #4c1d95); color: white; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: 700; flex-shrink: 0; }
+    .section-card-header h3 { flex: 1; font-size: 1rem; font-weight: 700; color: #1e293b; margin: 0; }
+    .section-toggle { color: #94a3b8; transition: transform .25s; font-size: .85rem; }
+    .section-card-header.open .section-toggle { transform: rotate(180deg); }
+    .section-body { display: none; padding: 1.4rem; }
+    .section-body.open { display: block; }
+    .info-box { background: #f5f3ff; border-left: 4px solid #7c3aed; border-radius: 0 8px 8px 0; padding: 1rem 1.2rem; margin-bottom: 1rem; }
+    .info-box p { margin: 0; color: #1e293b; line-height: 1.75; font-size: .95rem; }
+    .def-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: .8rem; margin-top: .8rem; }
+    .def-chip { background: white; border: 1px solid #ddd6fe; border-radius: 10px; padding: .8rem 1rem; text-align: center; }
+    .def-chip .def-icon { font-size: 1.5rem; }
+    .def-chip .def-label { font-size: .82rem; font-weight: 600; color: #5b21b6; margin-top: .3rem; }
+    .def-chip .def-desc { font-size: .78rem; color: #64748b; margin-top: .15rem; }
+    .type-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+    .type-table th { background: #7c3aed; color: white; padding: .6rem .9rem; text-align: left; }
+    .type-table td { padding: .55rem .9rem; border-bottom: 1px solid #f1f5f9; }
+    .type-table tr:nth-child(even) td { background: #faf5ff; }
+    .timeline { display: flex; flex-direction: column; gap: .8rem; margin-top: .6rem; }
+    .tl-item { display: flex; gap: .9rem; align-items: flex-start; }
+    .tl-dot { min-width: 32px; height: 32px; background: #7c3aed; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-size: .72rem; font-weight: 700; flex-shrink: 0; margin-top: .1rem; }
+    .tl-content h4 { margin: 0 0 .15rem; font-size: .9rem; color: #1e293b; }
+    .tl-content p { margin: 0; font-size: .82rem; color: #64748b; line-height: 1.5; }
+    .example-box { background: #faf5ff; border: 1px solid #ddd6fe; border-radius: 10px; padding: 1rem 1.2rem; margin: .8rem 0; }
+    .example-box .ex-label { font-size: .75rem; font-weight: 700; color: #7c3aed; text-transform: uppercase; letter-spacing: .05em; margin-bottom: .35rem; }
+    .example-box p { margin: 0; font-size: .88rem; color: #1e293b; line-height: 1.6; }
+    .think-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: .8rem; margin-top: .8rem; }
+    .think-card { border-radius: 12px; padding: 1rem; text-align: center; }
+    .think-card .think-letter { font-size: 2rem; font-weight: 900; line-height: 1; }
+    .think-card h4 { font-size: .85rem; font-weight: 700; margin: .3rem 0 .15rem; }
+    .think-card p { font-size: .78rem; margin: 0; opacity: .85; }
+    .work-card { background: white; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,.07); margin-bottom: 1.5rem; overflow: hidden; border: 1px solid #e2e8f0; }
+    .work-card-header { display: flex; align-items: flex-start; gap: 1rem; padding: 1.25rem; border-bottom: 1px solid #e2e8f0; background: #f8fafc; }
+    .work-num { min-width: 42px; height: 42px; background: linear-gradient(135deg, #7c3aed, #4c1d95); color: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 700; flex-shrink: 0; }
+    .work-title { flex: 1; min-width: 0; }
+    .work-title h3 { font-size: 1rem; font-weight: 700; color: #1e293b; margin: 0 0 .35rem; }
+    .work-badges { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .work-score-badge { background: #dbeafe; color: #1e40af; padding: .2rem .75rem; border-radius: 999px; font-size: .78rem; font-weight: 700; }
+    .work-type-badge { background: #ede9fe; color: #6d28d9; padding: .2rem .75rem; border-radius: 999px; font-size: .78rem; font-weight: 700; }
+    .work-status-badge { padding: .2rem .75rem; border-radius: 999px; font-size: .78rem; font-weight: 700; }
+    .work-status-badge.open { background: #d1fae5; color: #065f46; }
+    .work-status-badge.locked { background: #fee2e2; color: #991b1b; }
+    .work-body { padding: 1.4rem; }
+    .match-grid { display: grid; gap: .8rem; margin: 1rem 0; }
+    .match-row { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
+    .match-label { flex: 1; min-width: 160px; font-size: .9rem; color: #1e293b; font-weight: 500; }
+    .match-label .match-num { display: inline-block; width: 22px; height: 22px; background: #7c3aed; color: white; border-radius: 50%; font-size: .72rem; font-weight: 700; text-align: center; line-height: 22px; margin-right: .5rem; }
+    .match-select { flex: 1; min-width: 160px; padding: .5rem .8rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: .88rem; color: #1e293b; background: white; }
+    .mcq-item { margin-bottom: 1.2rem; }
+    .mcq-q { font-size: .92rem; font-weight: 600; color: #1e293b; margin-bottom: .6rem; }
+    .mcq-options { display: flex; flex-direction: column; gap: .4rem; }
+    .mcq-option { display: flex; align-items: center; gap: .7rem; padding: .55rem .9rem; border: 1.5px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all .15s; font-size: .88rem; }
+    .mcq-option:hover { border-color: #7c3aed; background: #f5f3ff; }
+    .mcq-option input { accent-color: #7c3aed; width: 16px; height: 16px; flex-shrink: 0; }
+    .mcq-option.correct-ans { border-color: #059669; background: #d1fae5; }
+    .mcq-option.wrong-ans { border-color: #dc2626; background: #fee2e2; }
+    .work-textarea { width: 100%; box-sizing: border-box; padding: .75rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 10px; font-family: inherit; font-size: .88rem; resize: vertical; min-height: 90px; color: #1e293b; }
+    .work-textarea:focus { outline: none; border-color: #7c3aed; box-shadow: 0 0 0 3px rgba(124,58,237,.15); }
+    .work-input { width: 100%; box-sizing: border-box; padding: .6rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-family: inherit; font-size: .88rem; margin-bottom: .6rem; }
+    .field-label { font-size: .85rem; font-weight: 600; color: #475569; margin-bottom: .35rem; display: block; }
+    .submit-btn { display: inline-flex; align-items: center; gap: .5rem; background: linear-gradient(135deg, #7c3aed, #6d28d9); color: white; border: none; border-radius: 10px; padding: .7rem 1.6rem; font-family: inherit; font-size: .92rem; font-weight: 700; cursor: pointer; margin-top: 1rem; }
+    .submit-btn:disabled { opacity: .55; cursor: not-allowed; }
+    .result-box { margin-top: 1rem; padding: 1rem 1.2rem; border-radius: 10px; font-weight: 600; display: none; }
+    .result-box.show { display: block; }
+    .result-box.pass { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+    .result-box.fail { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+    .test-locked-box { text-align: center; padding: 3rem 1.5rem; color: #94a3b8; }
+    .test-locked-box i { font-size: 3rem; color: #cbd5e1; display: block; margin-bottom: 1rem; }
+    .test-timer { font-size: 2rem; font-weight: 700; color: #7c3aed; font-variant-numeric: tabular-nums; margin: 1rem 0; }
+    .test-timer.warning { color: #dc2626; animation: blink .8s step-start infinite; }
+    @keyframes blink { 50% { opacity: .4; } }
+    @media (max-width: 600px) { .def-grid, .think-grid { grid-template-columns: 1fr 1fr; } .match-row { flex-direction: column; align-items: stretch; } }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-icon"><i class="fas fa-chalkboard-user"></i></div>
+      <span>ครูศิริศักดิ์ ปิลอง</span>
+    </a>
+    <ul class="navbar-menu">
+      <li><a href="home.html"><i class="fas fa-house"></i> หน้าหลัก</a></li>
+      <li><a href="subject-media.html" class="active"><i class="fas fa-tv"></i> รู้เท่าทันสื่อ ม.1</a></li>
+      <li><a href="subject-programming.html"><i class="fas fa-code"></i> โปรแกรมเบื้องต้น ม.2</a></li>
+      <li><a href="subject-cs3.html"><i class="fas fa-microchip"></i> วิทยาการคำนวณ 3 ม.6</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger"><i class="fas fa-bars"></i></button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="home.html"><i class="fas fa-house"></i> หน้าหลักนักเรียน</a>
+    <a href="subject-media.html"><i class="fas fa-tv"></i> รู้เท่าทันสื่อ ม.1</a>
+  </div>
+</nav>
+
+<div class="unit-hero">
+  <div class="unit-hero-content">
+    <p class="unit-breadcrumb">
+      <a href="index.html">หน้าหลัก</a>
+      <i class="fas fa-chevron-right" style="font-size:.7rem;margin:0 .4rem"></i>
+      <a href="subject-media.html">รู้เท่าทันสื่อ ม.1</a>
+      <i class="fas fa-chevron-right" style="font-size:.7rem;margin:0 .4rem"></i>
+      บทที่ 5
+    </p>
+    <h1>⚖️ บทที่ 5 : จริยธรรมและความรับผิดชอบในการใช้สื่อ</h1>
+    <p>จริยธรรมดิจิทัล ลิขสิทธิ์ ความเป็นส่วนตัว Cyberbullying และการเป็นพลเมืองดิจิทัลที่ดี</p>
+    <div class="unit-tabs">
+      <button class="unit-tab-btn active" data-utab="utab-lesson"><i class="fas fa-book-open"></i> เนื้อหาบทเรียน</button>
+      <button class="unit-tab-btn" data-utab="utab-exercises"><i class="fas fa-pencil-alt"></i> แบบฝึกหัด</button>
+      <button class="unit-tab-btn" data-utab="utab-test"><i class="fas fa-file-alt"></i> แบบทดสอบ</button>
+      <button class="unit-tab-btn" data-utab="utab-scores"><i class="fas fa-chart-bar"></i> คะแนนของฉัน</button>
+    </div>
+  </div>
+</div>
+
+<!-- TAB: เนื้อหาบทเรียน -->
+<div id="utab-lesson" class="unit-tab-content active">
+
+  <div class="section-card">
+    <div class="section-card-header open" onclick="toggleSection(this)">
+      <div class="section-num">1</div>
+      <h3>จริยธรรมสื่อดิจิทัลคืออะไร?</h3>
+      <i class="fas fa-chevron-down section-toggle"></i>
+    </div>
+    <div class="section-body open">
+      <div class="info-box">
+        <p><strong>จริยธรรมสื่อดิจิทัล (Digital Media Ethics)</strong> คือหลักการและความรับผิดชอบที่ควรปฏิบัติเมื่อใช้สื่อดิจิทัล เพื่อไม่ให้ละเมิดสิทธิผู้อื่น และร่วมสร้างสังคมออนไลน์ที่ดี</p>
+      </div>
+      <div class="def-grid">
+        <div class="def-chip">
+          <div class="def-icon">🤝</div>
+          <div class="def-label">ความซื่อสัตย์</div>
+          <div class="def-desc">ไม่บิดเบือนข้อมูล ไม่สร้างตัวตนปลอม</div>
+        </div>
+        <div class="def-chip">
+          <div class="def-icon">🛡️</div>
+          <div class="def-label">ความรับผิดชอบ</div>
+          <div class="def-desc">รับผิดชอบต่อสิ่งที่โพสต์และแชร์</div>
+        </div>
+        <div class="def-chip">
+          <div class="def-icon">🫶</div>
+          <div class="def-label">การเคารพสิทธิ์</div>
+          <div class="def-desc">เคารพความเป็นส่วนตัวและลิขสิทธิ์</div>
+        </div>
+        <div class="def-chip">
+          <div class="def-icon">⚖️</div>
+          <div class="def-label">ความยุติธรรม</div>
+          <div class="def-desc">ไม่เลือกปฏิบัติหรือกีดกันผู้อื่น</div>
+        </div>
+      </div>
+      <div class="example-box" style="margin-top:1rem">
+        <div class="ex-label">ตัวอย่างในชีวิตประจำวัน</div>
+        <p>เพื่อนถ่ายรูปคุณตอนกำลังกิน แล้วโพสต์ลง TikTok โดยไม่ขออนุญาต — แม้รูปจะดูสนุก แต่นี่คือการละเมิดสิทธิความเป็นส่วนตัว การขออนุญาตก่อนคือการแสดงจริยธรรมดิจิทัล</p>
+      </div>
+      <p style="font-size:.9rem;color:#475569;margin:1rem 0 .5rem;font-weight:600">9 องค์ประกอบของพลเมืองดิจิทัล (Mike Ribble):</p>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-dot">1</div><div class="tl-content"><h4>Digital Access</h4><p>สิทธิ์การเข้าถึงเทคโนโลยีอย่างเท่าเทียม</p></div></div>
+        <div class="tl-item"><div class="tl-dot">2</div><div class="tl-content"><h4>Digital Commerce</h4><p>การซื้อขายออนไลน์อย่างปลอดภัย</p></div></div>
+        <div class="tl-item"><div class="tl-dot">3</div><div class="tl-content"><h4>Digital Communication</h4><p>การสื่อสารดิจิทัลที่มีมารยาท</p></div></div>
+        <div class="tl-item"><div class="tl-dot">4</div><div class="tl-content"><h4>Digital Literacy</h4><p>ทักษะการใช้เทคโนโลยีอย่างมีประสิทธิภาพ</p></div></div>
+        <div class="tl-item"><div class="tl-dot">5</div><div class="tl-content"><h4>Digital Etiquette</h4><p>มารยาทในโลกดิจิทัล</p></div></div>
+        <div class="tl-item"><div class="tl-dot">6</div><div class="tl-content"><h4>Digital Law</h4><p>กฎหมายและระเบียบดิจิทัล</p></div></div>
+        <div class="tl-item"><div class="tl-dot">7</div><div class="tl-content"><h4>Digital Rights & Responsibilities</h4><p>สิทธิ์และหน้าที่ดิจิทัล</p></div></div>
+        <div class="tl-item"><div class="tl-dot">8</div><div class="tl-content"><h4>Digital Health & Wellness</h4><p>สุขภาพจากการใช้เทคโนโลยี</p></div></div>
+        <div class="tl-item"><div class="tl-dot">9</div><div class="tl-content"><h4>Digital Security</h4><p>ความปลอดภัยในโลกดิจิทัล</p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-header open" onclick="toggleSection(this)">
+      <div class="section-num">2</div>
+      <h3>ลิขสิทธิ์และทรัพย์สินทางปัญญา</h3>
+      <i class="fas fa-chevron-down section-toggle"></i>
+    </div>
+    <div class="section-body open">
+      <div class="info-box">
+        <p><strong>ลิขสิทธิ์ (Copyright)</strong> คือสิทธิ์ที่ผู้สร้างผลงานมีโดยอัตโนมัติในการควบคุม ทำซ้ำ และเผยแพร่ผลงานนั้น ไม่ว่าจะเป็นเพลง รูปภาพ วิดีโอ หรือบทความ</p>
+      </div>
+      <table class="type-table">
+        <thead><tr><th>ประเภทสิทธิ์</th><th>ความหมาย</th><th>ใช้ได้ไหม?</th></tr></thead>
+        <tbody>
+          <tr><td><strong>All Rights Reserved</strong></td><td>สงวนลิขสิทธิ์ทั้งหมด</td><td>ต้องขออนุญาตก่อน</td></tr>
+          <tr><td><strong>Creative Commons (CC)</strong></td><td>ผู้สร้างกำหนดเงื่อนไขการใช้งาน</td><td>ตามเงื่อนไขที่ระบุ</td></tr>
+          <tr><td><strong>Public Domain</strong></td><td>หมดอายุลิขสิทธิ์แล้ว หรืออุทิศให้สาธารณะ</td><td>ใช้ได้เสรี</td></tr>
+          <tr><td><strong>Fair Use</strong></td><td>การใช้งานที่ได้รับอนุญาตในขอบเขตจำกัด</td><td>เพื่อการศึกษา วิจารณ์ ข่าว ล้อเลียน</td></tr>
+        </tbody>
+      </table>
+      <div class="example-box" style="margin-top:1rem">
+        <div class="ex-label">สถานการณ์จริง</div>
+        <p><strong>ดาวน์โหลดเพลงจาก YouTube โดยไม่จ่ายเงิน</strong> — ผิดกฎหมายลิขสิทธิ์ ถึงแม้ไม่มีใครจับได้ในทันที แต่ก็เป็นการขโมยรายได้จากศิลปิน ทางที่ถูกต้องคือใช้บริการที่ถูกลิขสิทธิ์ เช่น Spotify, YouTube Music, Apple Music</p>
+      </div>
+      <p style="font-size:.88rem;color:#475569;margin-top:1rem">Creative Commons มีหลายแบบ เช่น <strong>CC BY</strong> (ต้องระบุแหล่งที่มา), <strong>CC BY-NC</strong> (ใช้ได้ไม่เพื่อการค้า), <strong>CC BY-SA</strong> (ต้องแชร์ในเงื่อนไขเดิม) — ต้องอ่านเงื่อนไขก่อนใช้งานเสมอ</p>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-header open" onclick="toggleSection(this)">
+      <div class="section-num">3</div>
+      <h3>ความเป็นส่วนตัวในโลกออนไลน์ และ PDPA</h3>
+      <i class="fas fa-chevron-down section-toggle"></i>
+    </div>
+    <div class="section-body open">
+      <div class="info-box">
+        <p><strong>ข้อมูลส่วนบุคคล</strong> คือข้อมูลที่สามารถระบุตัวตนได้ เช่น ชื่อ นามสกุล เบอร์โทรศัพท์ ที่อยู่ รูปถ่าย เลขบัตรประชาชน หรือแม้แต่ IP Address</p>
+      </div>
+      <div class="def-grid">
+        <div class="def-chip">
+          <div class="def-icon">👤</div>
+          <div class="def-label">ชื่อ-นามสกุล</div>
+          <div class="def-desc">อย่าระบุชื่อจริงในพื้นที่สาธารณะ</div>
+        </div>
+        <div class="def-chip">
+          <div class="def-icon">📍</div>
+          <div class="def-label">ที่อยู่/ตำแหน่ง</div>
+          <div class="def-desc">อย่าเปิด Location โดยไม่จำเป็น</div>
+        </div>
+        <div class="def-chip">
+          <div class="def-icon">📸</div>
+          <div class="def-label">รูปถ่าย</div>
+          <div class="def-desc">ขออนุญาตก่อนโพสต์รูปคนอื่น</div>
+        </div>
+        <div class="def-chip">
+          <div class="def-icon">🔑</div>
+          <div class="def-label">รหัสผ่าน</div>
+          <div class="def-desc">อย่าใช้ซ้ำและอย่าบอกใคร</div>
+        </div>
+      </div>
+      <p style="font-size:.9rem;color:#1e293b;margin:1.2rem 0 .5rem;font-weight:700">พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล (PDPA) พ.ศ. 2562</p>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot"><i class="fas fa-shield-halved" style="font-size:.55rem"></i></div>
+          <div class="tl-content"><h4>สิทธิ์ของเจ้าของข้อมูล</h4><p>มีสิทธิ์รับรู้ เข้าถึง แก้ไข ลบ และปฏิเสธการนำข้อมูลไปใช้</p></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"><i class="fas fa-building" style="font-size:.55rem"></i></div>
+          <div class="tl-content"><h4>หน้าที่ขององค์กร</h4><p>ต้องขอความยินยอมก่อนเก็บข้อมูล และเก็บเท่าที่จำเป็น</p></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"><i class="fas fa-gavel" style="font-size:.55rem"></i></div>
+          <div class="tl-content"><h4>โทษ</h4><p>ปรับสูงสุด 5 ล้านบาท และจำคุกไม่เกิน 1 ปี หากละเมิด</p></div>
+        </div>
+      </div>
+      <div class="example-box" style="margin-top:1rem">
+        <div class="ex-label">Digital Footprint — รอยเท้าดิจิทัล</div>
+        <p>ทุกครั้งที่ใช้อินเทอร์เน็ต เราทิ้งร่องรอยไว้ เช่น ประวัติการค้นหา โพสต์โซเชียล ความคิดเห็น รูปภาพ — ข้อมูลเหล่านี้อยู่บนอินเทอร์เน็ตตลอดไปและอาจส่งผลต่ออนาคต เช่น การสมัครงานหรือเข้ามหาวิทยาลัย</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-header open" onclick="toggleSection(this)">
+      <div class="section-num">4</div>
+      <h3>การกลั่นแกล้งทางออนไลน์ (Cyberbullying)</h3>
+      <i class="fas fa-chevron-down section-toggle"></i>
+    </div>
+    <div class="section-body open">
+      <div class="info-box">
+        <p><strong>Cyberbullying</strong> คือการใช้เทคโนโลยีดิจิทัลเป็นเครื่องมือในการรังแก คุกคาม ทำให้อับอาย หรือทำร้ายผู้อื่นซ้ำๆ</p>
+      </div>
+      <table class="type-table">
+        <thead><tr><th>ประเภท</th><th>ตัวอย่าง</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Harassment</strong> — คุกคามซ้ำๆ</td><td>ส่งข้อความด่าทอหรือข่มขู่ซ้ำๆ ในกลุ่มไลน์</td></tr>
+          <tr><td><strong>Cyberstalking</strong> — สะกดรอย</td><td>ติดตามทุก Story ทุกโพสต์ และ Comment เชิงคุกคาม</td></tr>
+          <tr><td><strong>Doxxing</strong> — เปิดเผยข้อมูลส่วนตัว</td><td>โพสต์ที่อยู่บ้าน เบอร์โทร หรือรูปส่วนตัวของผู้อื่น</td></tr>
+          <tr><td><strong>Exclusion</strong> — กีดกัน</td><td>ไม่เพิ่มเข้ากลุ่มออนไลน์ หรือ Kick ออกจากกลุ่ม</td></tr>
+          <tr><td><strong>Impersonation</strong> — แอบอ้าง</td><td>สร้างบัญชีปลอมในชื่อผู้อื่นเพื่อทำให้เสียหาย</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:.9rem;font-weight:700;color:#1e293b;margin:1.2rem 0 .5rem">วิธีรับมือเมื่อถูก Cyberbullying:</p>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-dot">1</div><div class="tl-content"><h4>📸 บันทึกหลักฐาน (Screenshot)</h4><p>เก็บทุกข้อความ รูปภาพ หรือหลักฐานก่อนที่จะถูกลบ</p></div></div>
+        <div class="tl-item"><div class="tl-dot">2</div><div class="tl-content"><h4>🚫 บล็อคและหยุดการสื่อสาร</h4><p>อย่าตอบโต้กลับ เพราะจะยิ่งทำให้แย่ลง</p></div></div>
+        <div class="tl-item"><div class="tl-dot">3</div><div class="tl-content"><h4>🚨 รายงานต่อแพลตฟอร์ม</h4><p>ใช้ฟีเจอร์ Report บน Facebook, TikTok, Instagram, LINE</p></div></div>
+        <div class="tl-item"><div class="tl-dot">4</div><div class="tl-content"><h4>🧑‍🏫 บอกผู้ใหญ่ที่ไว้วางใจ</h4><p>ครู ผู้ปกครอง หรือแจ้งตำรวจหากรุนแรง (โทร 191 หรือ 1300)</p></div></div>
+      </div>
+      <div class="example-box" style="margin-top:1rem">
+        <div class="ex-label">กฎหมายที่เกี่ยวข้อง</div>
+        <p>พระราชบัญญัติว่าด้วยการกระทำความผิดเกี่ยวกับคอมพิวเตอร์ พ.ศ. 2560 มาตรา 14-16 ครอบคลุมการนำเข้าข้อมูลเท็จ การละเมิดความเป็นส่วนตัว และการตัดต่อรูปภาพ โทษจำคุกตั้งแต่ 3 เดือน ถึง 5 ปี</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-header open" onclick="toggleSection(this)">
+      <div class="section-num">5</div>
+      <h3>การเป็นพลเมืองดิจิทัลที่ดี: หลัก THINK</h3>
+      <i class="fas fa-chevron-down section-toggle"></i>
+    </div>
+    <div class="section-body open">
+      <div class="info-box">
+        <p>ก่อนโพสต์หรือแชร์ทุกครั้ง ให้ถามตัวเองด้วยหลัก <strong>THINK</strong> — เป็นเครื่องมือง่ายๆ ที่ช่วยให้เราเป็นพลเมืองดิจิทัลที่ดี</p>
+      </div>
+      <div class="think-grid">
+        <div class="think-card" style="background:#fef9c3;color:#713f12">
+          <div class="think-letter">T</div>
+          <h4>True</h4>
+          <p>ข้อมูลนี้เป็นความจริงหรือเปล่า?</p>
+        </div>
+        <div class="think-card" style="background:#dcfce7;color:#14532d">
+          <div class="think-letter">H</div>
+          <h4>Helpful</h4>
+          <p>มีประโยชน์ต่อผู้อ่านไหม?</p>
+        </div>
+        <div class="think-card" style="background:#dbeafe;color:#1e3a8a">
+          <div class="think-letter">I</div>
+          <h4>Inspiring</h4>
+          <p>สร้างแรงบันดาลใจหรือเสริมพลังไหม?</p>
+        </div>
+        <div class="think-card" style="background:#fce7f3;color:#831843">
+          <div class="think-letter">N</div>
+          <h4>Necessary</h4>
+          <p>จำเป็นต้องแชร์จริงๆ ไหม?</p>
+        </div>
+        <div class="think-card" style="background:#ede9fe;color:#4c1d95">
+          <div class="think-letter">K</div>
+          <h4>Kind</h4>
+          <p>เป็นมิตรและไม่ทำให้ใครเสียใจไหม?</p>
+        </div>
+      </div>
+      <p style="font-size:.9rem;font-weight:700;color:#1e293b;margin:1.5rem 0 .5rem">แนวปฏิบัติพลเมืองดิจิทัลที่ดี:</p>
+      <div class="def-grid">
+        <div class="def-chip">
+          <div class="def-icon">🔐</div>
+          <div class="def-label">ปกป้องบัญชี</div>
+          <div class="def-desc">ใช้รหัสผ่านแข็งแกร่ง เปิด 2FA</div>
+        </div>
+        <div class="def-chip">
+          <div class="def-icon">📵</div>
+          <div class="def-label">Digital Wellness</div>
+          <div class="def-desc">กำหนดเวลาใช้หน้าจอ พักสายตา</div>
+        </div>
+        <div class="def-chip">
+          <div class="def-icon">🌐</div>
+          <div class="def-label">เคารพความต่าง</div>
+          <div class="def-desc">ออนไลน์มีคนหลากวัฒนธรรม</div>
+        </div>
+        <div class="def-chip">
+          <div class="def-icon">♻️</div>
+          <div class="def-label">แก้ไขความผิดพลาด</div>
+          <div class="def-desc">ถ้าโพสต์ผิด กล้าขอโทษและแก้ไข</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /utab-lesson -->
+
+<!-- TAB: แบบฝึกหัด -->
+<div id="utab-exercises" class="unit-tab-content">
+
+  <div id="exerciseLockBanner5" style="display:none;background:#fee2e2;border:1px solid #fca5a5;border-radius:10px;padding:1rem 1.2rem;margin-bottom:1.5rem">
+    <p style="margin:0;color:#991b1b;font-weight:600"><i class="fas fa-lock"></i> แบบฝึกหัดบทที่ 5 ยังไม่เปิดรับงาน</p>
+  </div>
+
+  <!-- Work 1: Match (4pt) -->
+  <div class="work-card">
+    <div class="work-card-header">
+      <div class="work-num">1</div>
+      <div class="work-title">
+        <h3>จับคู่: คำศัพท์จริยธรรมดิจิทัล</h3>
+        <div class="work-badges">
+          <span class="work-score-badge"><i class="fas fa-star"></i> 4 คะแนน</span>
+          <span class="work-type-badge"><i class="fas fa-puzzle-piece"></i> จับคู่</span>
+          <span id="badge5_w1" class="work-status-badge open"><i class="fas fa-circle-check"></i> เปิดรับงาน</span>
+        </div>
+      </div>
+    </div>
+    <div class="work-body">
+      <p style="font-size:.88rem;color:#475569;margin-bottom:1rem">จับคู่คำศัพท์ด้านซ้ายกับความหมายด้านขวา</p>
+      <div class="match-grid">
+        <div class="match-row">
+          <div class="match-label"><span class="match-num">1</span>Copyright (ลิขสิทธิ์)</div>
+          <select class="match-select" id="m5_1">
+            <option value="">-- เลือก --</option>
+            <option value="A">ร่องรอยข้อมูลที่เราทิ้งไว้ในโลกออนไลน์</option>
+            <option value="B">การกลั่นแกล้งรังแกผ่านช่องทางดิจิทัล</option>
+            <option value="C">สิทธิ์ที่ผู้สร้างงานมีในการควบคุมผลงาน</option>
+            <option value="D">กฎหมายคุ้มครองข้อมูลส่วนบุคคลของไทย</option>
+          </select>
+        </div>
+        <div class="match-row">
+          <div class="match-label"><span class="match-num">2</span>Digital Footprint</div>
+          <select class="match-select" id="m5_2">
+            <option value="">-- เลือก --</option>
+            <option value="A">ร่องรอยข้อมูลที่เราทิ้งไว้ในโลกออนไลน์</option>
+            <option value="B">การกลั่นแกล้งรังแกผ่านช่องทางดิจิทัล</option>
+            <option value="C">สิทธิ์ที่ผู้สร้างงานมีในการควบคุมผลงาน</option>
+            <option value="D">กฎหมายคุ้มครองข้อมูลส่วนบุคคลของไทย</option>
+          </select>
+        </div>
+        <div class="match-row">
+          <div class="match-label"><span class="match-num">3</span>Cyberbullying</div>
+          <select class="match-select" id="m5_3">
+            <option value="">-- เลือก --</option>
+            <option value="A">ร่องรอยข้อมูลที่เราทิ้งไว้ในโลกออนไลน์</option>
+            <option value="B">การกลั่นแกล้งรังแกผ่านช่องทางดิจิทัล</option>
+            <option value="C">สิทธิ์ที่ผู้สร้างงานมีในการควบคุมผลงาน</option>
+            <option value="D">กฎหมายคุ้มครองข้อมูลส่วนบุคคลของไทย</option>
+          </select>
+        </div>
+        <div class="match-row">
+          <div class="match-label"><span class="match-num">4</span>PDPA</div>
+          <select class="match-select" id="m5_4">
+            <option value="">-- เลือก --</option>
+            <option value="A">ร่องรอยข้อมูลที่เราทิ้งไว้ในโลกออนไลน์</option>
+            <option value="B">การกลั่นแกล้งรังแกผ่านช่องทางดิจิทัล</option>
+            <option value="C">สิทธิ์ที่ผู้สร้างงานมีในการควบคุมผลงาน</option>
+            <option value="D">กฎหมายคุ้มครองข้อมูลส่วนบุคคลของไทย</option>
+          </select>
+        </div>
+      </div>
+      <button class="submit-btn" id="matchBtn5" onclick="submitMatch5()"><i class="fas fa-check-circle"></i> ตรวจคำตอบและส่งคะแนน</button>
+      <div class="result-box" id="matchResult5"></div>
+    </div>
+  </div>
+
+  <!-- Work 2: MCQ (4pt) -->
+  <div class="work-card">
+    <div class="work-card-header">
+      <div class="work-num">2</div>
+      <div class="work-title">
+        <h3>ปรนัย: จริยธรรมดิจิทัล</h3>
+        <div class="work-badges">
+          <span class="work-score-badge"><i class="fas fa-star"></i> 4 คะแนน</span>
+          <span class="work-type-badge"><i class="fas fa-list-check"></i> ปรนัย</span>
+          <span id="badge5_w2" class="work-status-badge open"><i class="fas fa-circle-check"></i> เปิดรับงาน</span>
+        </div>
+      </div>
+    </div>
+    <div class="work-body">
+      <div class="mcq-item">
+        <div class="mcq-q">1. ตัว T ในหลัก THINK ย่อมาจากอะไร?</div>
+        <div class="mcq-options">
+          <label class="mcq-option"><input type="radio" name="q5_1" value="A"> Trendy (ทันสมัย)</label>
+          <label class="mcq-option"><input type="radio" name="q5_1" value="B"> Transparent (โปร่งใส)</label>
+          <label class="mcq-option"><input type="radio" name="q5_1" value="C"> True (เป็นความจริง)</label>
+          <label class="mcq-option"><input type="radio" name="q5_1" value="D"> Tested (ผ่านการทดสอบ)</label>
+        </div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q">2. Creative Commons (CC) คืออะไร?</div>
+        <div class="mcq-options">
+          <label class="mcq-option"><input type="radio" name="q5_2" value="A"> ซอฟต์แวร์ตัดต่อวิดีโอ</label>
+          <label class="mcq-option"><input type="radio" name="q5_2" value="B"> ระบบที่ผู้สร้างงานกำหนดเงื่อนไขการอนุญาตให้ใช้งาน</label>
+          <label class="mcq-option"><input type="radio" name="q5_2" value="C"> เว็บไซต์แชร์ไฟล์</label>
+          <label class="mcq-option"><input type="radio" name="q5_2" value="D"> แอปพลิเคชันโซเชียลมีเดีย</label>
+        </div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q">3. ข้อใดเป็นวิธีรับมือ Cyberbullying ที่ถูกต้องที่สุด?</div>
+        <div class="mcq-options">
+          <label class="mcq-option"><input type="radio" name="q5_3" value="A"> ตอบโต้กลับทันทีเพื่อปกป้องตัวเอง</label>
+          <label class="mcq-option"><input type="radio" name="q5_3" value="B"> ลบบัญชีโซเชียลมีเดียทั้งหมด</label>
+          <label class="mcq-option"><input type="radio" name="q5_3" value="C"> บันทึกหลักฐาน บล็อค รายงาน และบอกผู้ใหญ่ที่ไว้ใจได้</label>
+          <label class="mcq-option"><input type="radio" name="q5_3" value="D"> เพิกเฉยและหวังว่ามันจะหยุดเอง</label>
+        </div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q">4. Digital Footprint คืออะไร?</div>
+        <div class="mcq-options">
+          <label class="mcq-option"><input type="radio" name="q5_4" value="A"> รองเท้าดิจิทัลที่ขายออนไลน์</label>
+          <label class="mcq-option"><input type="radio" name="q5_4" value="B"> ร่องรอยข้อมูลทั้งหมดที่เราทิ้งไว้เมื่อใช้อินเทอร์เน็ต</label>
+          <label class="mcq-option"><input type="radio" name="q5_4" value="C"> รหัสผ่านที่ปลอดภัย</label>
+          <label class="mcq-option"><input type="radio" name="q5_4" value="D"> แอปติดตามการออกกำลังกาย</label>
+        </div>
+      </div>
+      <button class="submit-btn" id="mcqBtn5" onclick="submitMCQ5()"><i class="fas fa-check-circle"></i> ตรวจคำตอบและส่งคะแนน</button>
+      <div class="result-box" id="mcqResult5"></div>
+    </div>
+  </div>
+
+  <!-- Work 3: T/F (3pt) -->
+  <div class="work-card">
+    <div class="work-card-header">
+      <div class="work-num">3</div>
+      <div class="work-title">
+        <h3>ถูก/ผิด: สิทธิ์และจริยธรรมดิจิทัล</h3>
+        <div class="work-badges">
+          <span class="work-score-badge"><i class="fas fa-star"></i> 3 คะแนน</span>
+          <span class="work-type-badge"><i class="fas fa-toggle-on"></i> ถูก/ผิด</span>
+          <span id="badge5_w3" class="work-status-badge open"><i class="fas fa-circle-check"></i> เปิดรับงาน</span>
+        </div>
+      </div>
+    </div>
+    <div class="work-body">
+      <div class="mcq-item">
+        <div class="mcq-q">1. เนื้อหาทุกอย่างในอินเทอร์เน็ตสามารถนำมาใช้ได้ฟรีโดยไม่ผิดกฎหมาย</div>
+        <div class="mcq-options">
+          <label class="mcq-option"><input type="radio" name="tf5_1" value="T"> ถูก</label>
+          <label class="mcq-option"><input type="radio" name="tf5_1" value="F"> ผิด</label>
+        </div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q">2. PDPA คือกฎหมายที่คุ้มครองข้อมูลส่วนบุคคลของประชาชนไทย</div>
+        <div class="mcq-options">
+          <label class="mcq-option"><input type="radio" name="tf5_2" value="T"> ถูก</label>
+          <label class="mcq-option"><input type="radio" name="tf5_2" value="F"> ผิด</label>
+        </div>
+      </div>
+      <div class="mcq-item">
+        <div class="mcq-q">3. การโพสต์รูปถ่ายผู้อื่นโดยไม่ได้รับอนุญาตอาจถือเป็นการละเมิดสิทธิส่วนบุคคล</div>
+        <div class="mcq-options">
+          <label class="mcq-option"><input type="radio" name="tf5_3" value="T"> ถูก</label>
+          <label class="mcq-option"><input type="radio" name="tf5_3" value="F"> ผิด</label>
+        </div>
+      </div>
+      <button class="submit-btn" id="tfBtn5" onclick="submitTF5()"><i class="fas fa-check-circle"></i> ตรวจคำตอบและส่งคะแนน</button>
+      <div class="result-box" id="tfResult5"></div>
+    </div>
+  </div>
+
+  <!-- Work 4: Analysis (5pt) -->
+  <div class="work-card">
+    <div class="work-card-header">
+      <div class="work-num">4</div>
+      <div class="work-title">
+        <h3>วิเคราะห์กรณีศึกษา: Cyberbullying ในห้องเรียน</h3>
+        <div class="work-badges">
+          <span class="work-score-badge"><i class="fas fa-star"></i> 5 คะแนน</span>
+          <span class="work-type-badge"><i class="fas fa-pen-to-square"></i> วิเคราะห์</span>
+          <span id="badge5_w4" class="work-status-badge open"><i class="fas fa-circle-check"></i> เปิดรับงาน</span>
+        </div>
+      </div>
+    </div>
+    <div class="work-body">
+      <div class="info-box" style="margin-bottom:1rem">
+        <p><strong>สถานการณ์:</strong> นักเรียนคนหนึ่งแอบถ่ายรูปเพื่อนขณะหลับอยู่ในห้องเรียน แล้วนำไปโพสต์ลงโซเชียลมีเดียพร้อมข้อความล้อเลียนรูปร่าง เพื่อนคนนั้นรู้สึกอับอายมาก ไม่อยากมาโรงเรียน และเริ่มมีอาการเครียด</p>
+      </div>
+      <div id="analysisFormArea5">
+        <label class="field-label">1. พฤติกรรมนี้ละเมิดหลักจริยธรรมสื่อดิจิทัลด้านใดบ้าง? อธิบายเหตุผล</label>
+        <textarea class="work-textarea" id="an5_1" placeholder="ระบุหลักจริยธรรมที่ถูกละเมิดพร้อมอธิบาย..."></textarea>
+        <label class="field-label" style="margin-top:.8rem">2. ผลกระทบที่เกิดขึ้นต่อเหยื่อ ผู้กระทำ และสังคมออนไลน์คืออะไร?</label>
+        <textarea class="work-textarea" id="an5_2" placeholder="วิเคราะห์ผลกระทบในแต่ละด้าน..."></textarea>
+        <label class="field-label" style="margin-top:.8rem">3. ถ้านักเรียนรู้เรื่องนี้ จะทำอย่างไร? ใช้หลัก THINK ประกอบการตอบ</label>
+        <textarea class="work-textarea" id="an5_3" placeholder="แนวทางปฏิบัติที่ถูกต้อง..."></textarea>
+        <button class="submit-btn" id="analysisBtn5" onclick="submitAnalysis5()"><i class="fas fa-paper-plane"></i> ส่งงาน</button>
+        <div class="result-box" id="analysisResult5"></div>
+      </div>
+      <div id="analysisPendingBox5" style="display:none;margin-top:1rem;background:#fffbeb;border:1px solid #fcd34d;border-radius:12px;padding:1.25rem">
+        <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem">
+          <i class="fas fa-clock" style="color:#d97706;font-size:1.3rem"></i>
+          <p style="font-weight:700;color:#92400e;margin:0">ส่งงานแล้ว — รอครูตรวจ</p>
+        </div>
+        <button id="editAnalysisBtn5" style="background:#fff;border:1px solid #fcd34d;color:#b45309;padding:.4rem .9rem;border-radius:8px;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer"><i class="fas fa-pen"></i> แก้ไขคำตอบ</button>
+      </div>
+      <div id="analysisGradedBox5" style="display:none;margin-top:1rem;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:1.25rem;text-align:center">
+        <i class="fas fa-circle-check" style="color:#16a34a;font-size:2rem;margin-bottom:.4rem;display:block"></i>
+        <p style="font-weight:700;color:#166534;margin:0 0 .25rem">ครูตรวจแล้ว!</p>
+        <p id="analysisGradedScore5" style="font-size:.9rem;color:#166534;margin:0"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Work 5: Worksheet (4pt) -->
+  <div class="work-card">
+    <div class="work-card-header">
+      <div class="work-num">5</div>
+      <div class="work-title">
+        <h3>ใบงาน: ตรวจสอบตัวเองในฐานะพลเมืองดิจิทัล</h3>
+        <div class="work-badges">
+          <span class="work-score-badge"><i class="fas fa-star"></i> 4 คะแนน</span>
+          <span class="work-type-badge"><i class="fas fa-clipboard"></i> ใบงาน</span>
+          <span id="badge5_w5" class="work-status-badge open"><i class="fas fa-circle-check"></i> เปิดรับงาน</span>
+        </div>
+      </div>
+    </div>
+    <div class="work-body">
+      <p style="font-size:.88rem;color:#475569;margin-bottom:1rem">สะท้อนตัวเองเกี่ยวกับพฤติกรรมดิจิทัลในชีวิตประจำวัน</p>
+      <div id="worksheetFormArea5">
+        <label class="field-label">1. พฤติกรรมดิจิทัลที่ดีที่ฉันปฏิบัติอยู่แล้ว (อย่างน้อย 2 ข้อ)</label>
+        <textarea class="work-textarea" style="min-height:70px" id="ws5_1" placeholder="เช่น ขออนุญาตก่อนโพสต์รูปเพื่อน, ตรวจสอบข้อมูลก่อนแชร์..."></textarea>
+        <label class="field-label">2. พฤติกรรมที่ฉันต้องปรับปรุง (อย่างน้อย 1 ข้อ)</label>
+        <textarea class="work-textarea" style="min-height:70px" id="ws5_2" placeholder="พฤติกรรมที่รู้ว่าไม่ถูกต้องแต่ยังทำอยู่..."></textarea>
+        <label class="field-label" style="margin-top:.8rem">3. เป้าหมาย 1 ข้อที่จะทำให้ได้ในสัปดาห์นี้เพื่อเป็นพลเมืองดิจิทัลที่ดีขึ้น</label>
+        <input type="text" class="work-input" id="ws5_3" placeholder="เช่น จะใช้หลัก THINK ก่อนโพสต์ทุกครั้ง...">
+        <label class="field-label">4. สิทธิ์ดิจิทัลด้านใดที่ฉันจะช่วยปกป้องในโลกออนไลน์ และทำอย่างไร?</label>
+        <textarea class="work-textarea" style="min-height:70px" id="ws5_4" placeholder="เช่น สิทธิ์ความเป็นส่วนตัว — จะไม่แชร์ข้อมูลของเพื่อนโดยไม่ขออนุญาต..."></textarea>
+        <button class="submit-btn" id="worksheetBtn5" onclick="submitWorksheet5()"><i class="fas fa-paper-plane"></i> ส่งใบงาน</button>
+        <div class="result-box" id="worksheetResult5"></div>
+      </div>
+      <div id="worksheetPendingBox5" style="display:none;margin-top:1rem;background:#fffbeb;border:1px solid #fcd34d;border-radius:12px;padding:1.25rem">
+        <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem">
+          <i class="fas fa-clock" style="color:#d97706;font-size:1.3rem"></i>
+          <p style="font-weight:700;color:#92400e;margin:0">ส่งใบงานแล้ว — รอครูตรวจ</p>
+        </div>
+        <button id="editWorksheetBtn5" style="background:#fff;border:1px solid #fcd34d;color:#b45309;padding:.4rem .9rem;border-radius:8px;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer"><i class="fas fa-pen"></i> แก้ไขคำตอบ</button>
+      </div>
+      <div id="worksheetGradedBox5" style="display:none;margin-top:1rem;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:1.25rem;text-align:center">
+        <i class="fas fa-circle-check" style="color:#16a34a;font-size:2rem;margin-bottom:.4rem;display:block"></i>
+        <p style="font-weight:700;color:#166534;margin:0 0 .25rem">ครูตรวจแล้ว!</p>
+        <p id="worksheetGradedScore5" style="font-size:.9rem;color:#166534;margin:0"></p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /utab-exercises -->
+
+<!-- TAB: แบบทดสอบ -->
+<div id="utab-test" class="unit-tab-content">
+  <div id="testLockedBox5" style="display:none" class="test-locked-box"><i class="fas fa-lock"></i><h3 style="color:#475569;margin-bottom:.5rem">แบบทดสอบยังไม่เปิด</h3><p>รอครูเปิดแบบทดสอบบทที่ 5</p></div>
+  <div id="testGradedBox5" style="display:none;text-align:center;padding:3rem 1.5rem">
+    <i class="fas fa-circle-check" style="color:#16a34a;font-size:3rem;display:block;margin-bottom:1rem"></i>
+    <h3 style="color:#166534;margin-bottom:.5rem">ทำแบบทดสอบแล้ว!</h3>
+    <p id="testGradedScore5" style="font-size:1.1rem;color:#166534;font-weight:700;margin:0"></p>
+  </div>
+  <div id="testStartBox5" style="text-align:center;padding:2rem">
+    <i class="fas fa-file-alt" style="font-size:3rem;color:#7c3aed;display:block;margin-bottom:1rem"></i>
+    <h2 style="color:#1e293b;margin-bottom:.5rem">แบบทดสอบบทที่ 5</h2>
+    <p style="color:#64748b;margin-bottom:.5rem">จริยธรรมและความรับผิดชอบในการใช้สื่อ</p>
+    <div style="display:inline-flex;gap:1.5rem;margin:1rem 0;flex-wrap:wrap;justify-content:center">
+      <div style="text-align:center"><span style="font-size:1.5rem;font-weight:700;color:#7c3aed">10</span><br><span style="font-size:.8rem;color:#64748b">ข้อ</span></div>
+      <div style="text-align:center"><span style="font-size:1.5rem;font-weight:700;color:#7c3aed">20</span><br><span style="font-size:.8rem;color:#64748b">นาที</span></div>
+      <div style="text-align:center"><span style="font-size:1.5rem;font-weight:700;color:#7c3aed">10</span><br><span style="font-size:.8rem;color:#64748b">คะแนน</span></div>
+    </div>
+    <p style="font-size:.85rem;color:#dc2626;margin-bottom:1.5rem"><i class="fas fa-exclamation-triangle"></i> เมื่อเริ่มแล้วจะนับเวลาถอยหลัง ทำได้เพียงครั้งเดียว</p>
+    <button onclick="startTest5()" style="background:linear-gradient(135deg,#7c3aed,#4c1d95);color:white;border:none;border-radius:12px;padding:.9rem 2.5rem;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer"><i class="fas fa-play"></i> เริ่มทำแบบทดสอบ</button>
+  </div>
+  <div id="testArea5" style="display:none">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:.5rem">
+      <div id="testTimerDisplay5" class="test-timer">20:00</div>
+      <div id="testProgressText5" style="font-size:.85rem;color:#64748b">ข้อ 0/10</div>
+    </div>
+    <div id="testQuestionsContainer5"></div>
+    <button style="background:linear-gradient(135deg,#7c3aed,#4c1d95);color:white;border:none;border-radius:10px;padding:.8rem 2rem;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:1.5rem" onclick="submitTest5()"><i class="fas fa-paper-plane"></i> ส่งแบบทดสอบ</button>
+  </div>
+  <div id="testResultBox5" style="background:#f5f3ff;border:2px solid #7c3aed;border-radius:14px;padding:2rem;text-align:center;margin-top:1.5rem;display:none">
+    <i class="fas fa-trophy" style="font-size:3rem;color:#7c3aed;display:block;margin-bottom:1rem"></i>
+    <h3 id="testResultTitle5" style="color:#1e293b;margin-bottom:.5rem"></h3>
+    <p id="testResultScore5" style="font-size:1.5rem;font-weight:700;color:#7c3aed;margin:.5rem 0"></p>
+    <p id="testResultDetail5" style="font-size:.9rem;color:#64748b;margin:0"></p>
+  </div>
+</div>
+
+<!-- TAB: คะแนน -->
+<div id="utab-scores" class="unit-tab-content">
+  <div class="student-score-header" id="scoreStudentHeader"><i class="fas fa-spinner fa-spin"></i> กำลังโหลด...</div>
+  <div id="scoreSummary" class="score-summary-chips" style="display:none"></div>
+  <div class="score-table-wrapper">
+    <table class="score-table">
+      <thead><tr><th>#</th><th>หัวข้อ/งาน</th><th>คะแนน</th><th>ประเภท</th><th>หมายเหตุ</th><th>วันที่</th></tr></thead>
+      <tbody id="scoreTableBody"><tr><td colspan="6" style="text-align:center;padding:2rem;color:#64748b"><i class="fas fa-spinner fa-spin"></i> กำลังโหลด...</td></tr></tbody>
+    </table>
+  </div>
+  <div style="text-align:center;margin-top:1rem">
+    <button onclick="initStudentScoreTab('media-m1')" class="btn btn-outline"><i class="fas fa-rotate-right"></i> โหลดใหม่</button>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2569 <strong>ครูศิริศักดิ์ ปิลอง</strong> &mdash; รายวิชารู้เท่าทันสื่อ ม.1</p>
+</footer>
+
+<script src="js/auth.js"></script>
+<script>requireAuth('1');</script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/app.js"></script>
+<script>
+document.querySelectorAll('.unit-tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = btn.dataset.utab;
+    document.querySelectorAll('.unit-tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.unit-tab-content').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    const pane = document.getElementById(target); if (pane) pane.classList.add('active');
+    if (target === 'utab-scores') initStudentScoreTab('media-m1');
+  });
+});
+if (location.hash === '#exercises') document.querySelector('[data-utab="utab-exercises"]')?.click();
+if (location.hash === '#test') document.querySelector('[data-utab="utab-test"]')?.click();
+
+function toggleSection(header) { header.classList.toggle('open'); const b = header.nextElementSibling; if (b) b.classList.toggle('open'); }
+function getStudent() { return typeof getCurrentStudent === 'function' ? getCurrentStudent() : null; }
+
+let _exLocked5 = false, _testLocked5 = false;
+async function loadUnitSettings5() {
+  const s = await getSubjectSettings('media-m1');
+  _exLocked5 = s.unit5_exercise === false; _testLocked5 = s.unit5_test === false;
+  if (_exLocked5) {
+    document.getElementById('exerciseLockBanner5').style.display = 'block';
+    ['matchBtn5','mcqBtn5','tfBtn5','analysisBtn5','worksheetBtn5'].forEach(id => { const el = document.getElementById(id); if (el) el.disabled = true; });
+    ['badge5_w1','badge5_w2','badge5_w3','badge5_w4','badge5_w5'].forEach(id => { const el = document.getElementById(id); if (el) { el.className = 'work-status-badge locked'; el.innerHTML = '<i class="fas fa-lock"></i> ปิดรับงาน'; }});
+  }
+}
+
+const MATCH5_ANS = { m5_1: 'C', m5_2: 'A', m5_3: 'B', m5_4: 'D' };
+async function submitMatch5() {
+  if (_exLocked5) { showToast('แบบฝึกหัดยังไม่เปิด','warning'); return; }
+  const s = getStudent(); if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน','warning'); return; }
+  const ans = {}; Object.keys(MATCH5_ANS).forEach(k => { ans[k] = document.getElementById(k).value; });
+  if (Object.values(ans).some(v => !v)) { showToast('กรุณาเลือกคำตอบให้ครบ','warning'); return; }
+  let correct = 0; Object.keys(MATCH5_ANS).forEach(k => { if (ans[k] === MATCH5_ANS[k]) correct++; });
+  const score = correct, max = 4;
+  const rb = document.getElementById('matchResult5'); rb.className = 'result-box show '+(score>=3?'pass':'fail'); rb.innerHTML = `ได้ ${score}/${max} คะแนน`;
+  const res = await saveScore('media-m1',{studentId:s.id,name:s.name,room:s.class},{title:'แบบฝึกหัดที่ 1 บทที่ 5: จับคู่จริยธรรมดิจิทัล',score,maxScore:max,type:'exercise',note:''});
+  if (res.ok) showToast('บันทึกคะแนนสำเร็จ','success');
+}
+
+const MCQ5_ANS = { q5_1: 'C', q5_2: 'B', q5_3: 'C', q5_4: 'B' };
+async function submitMCQ5() {
+  if (_exLocked5) { showToast('แบบฝึกหัดยังไม่เปิด','warning'); return; }
+  const s = getStudent(); if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน','warning'); return; }
+  if (!Object.keys(MCQ5_ANS).every(q => document.querySelector(`input[name="${q}"]:checked`))) { showToast('กรุณาตอบให้ครบ','warning'); return; }
+  let correct = 0;
+  Object.keys(MCQ5_ANS).forEach(q => {
+    const chosen = document.querySelector(`input[name="${q}"]:checked`);
+    document.querySelectorAll(`input[name="${q}"]`).forEach(opt => { const l = opt.closest('.mcq-option'); l.classList.remove('correct-ans','wrong-ans'); if (opt.value===MCQ5_ANS[q]) l.classList.add('correct-ans'); else if (chosen&&opt===chosen&&opt.value!==MCQ5_ANS[q]) l.classList.add('wrong-ans'); });
+    if (chosen&&chosen.value===MCQ5_ANS[q]) correct++;
+  });
+  const score = correct, max = 4;
+  const rb = document.getElementById('mcqResult5'); rb.className = 'result-box show '+(score>=3?'pass':'fail'); rb.innerHTML = `ได้ ${score}/${max} คะแนน`;
+  await saveScore('media-m1',{studentId:s.id,name:s.name,room:s.class},{title:'แบบฝึกหัดที่ 2 บทที่ 5: ปรนัยจริยธรรมดิจิทัล',score,maxScore:max,type:'quiz',note:''});
+  showToast('บันทึกคะแนนสำเร็จ','success');
+}
+
+const TF5_ANS = { tf5_1: 'F', tf5_2: 'T', tf5_3: 'T' };
+async function submitTF5() {
+  if (_exLocked5) { showToast('แบบฝึกหัดยังไม่เปิด','warning'); return; }
+  const s = getStudent(); if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน','warning'); return; }
+  if (!Object.keys(TF5_ANS).every(q => document.querySelector(`input[name="${q}"]:checked`))) { showToast('กรุณาตอบให้ครบ','warning'); return; }
+  let correct = 0;
+  Object.keys(TF5_ANS).forEach(q => {
+    const chosen = document.querySelector(`input[name="${q}"]:checked`);
+    document.querySelectorAll(`input[name="${q}"]`).forEach(opt => { const l = opt.closest('.mcq-option'); l.classList.remove('correct-ans','wrong-ans'); if (opt.value===TF5_ANS[q]) l.classList.add('correct-ans'); else if (chosen&&opt===chosen&&opt.value!==TF5_ANS[q]) l.classList.add('wrong-ans'); });
+    if (chosen&&chosen.value===TF5_ANS[q]) correct++;
+  });
+  const score = correct, max = 3;
+  const rb = document.getElementById('tfResult5'); rb.className = 'result-box show '+(score>=2?'pass':'fail'); rb.innerHTML = `ได้ ${score}/${max} คะแนน`;
+  await saveScore('media-m1',{studentId:s.id,name:s.name,room:s.class},{title:'แบบฝึกหัดที่ 3 บทที่ 5: ถูก/ผิดจริยธรรมดิจิทัล',score,maxScore:max,type:'quiz',note:''});
+  showToast('บันทึกคะแนนสำเร็จ','success');
+}
+
+function _loadAnalysisState5() {
+  setupWorkCard({subjectId:'media-m1',title:'แบบฝึกหัดที่ 4 บทที่ 5: วิเคราะห์กรณีศึกษา Cyberbullying',
+    formEl:document.getElementById('analysisFormArea5'),pendingBoxEl:document.getElementById('analysisPendingBox5'),
+    gradedBoxEl:document.getElementById('analysisGradedBox5'),editBtnEl:document.getElementById('editAnalysisBtn5'),
+    onGraded:sub=>{ document.getElementById('analysisGradedScore5').textContent='คะแนน: '+sub.score+'/'+sub.maxScore; }
+  });
+}
+async function submitAnalysis5() {
+  if (_exLocked5) { showToast('แบบฝึกหัดยังไม่เปิด','warning'); return; }
+  const s = getStudent(); if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน','warning'); return; }
+  const a1=document.getElementById('an5_1').value.trim(),a2=document.getElementById('an5_2').value.trim(),a3=document.getElementById('an5_3').value.trim();
+  if (!a1||!a2||!a3) { showToast('กรุณาตอบให้ครบทั้ง 3 ข้อ','warning'); return; }
+  const btn=document.getElementById('analysisBtn5'); btn.disabled=true; btn.textContent='กำลังส่ง...';
+  const note=`1)${a1.slice(0,80)} | 2)${a2.slice(0,60)} | 3)${a3.slice(0,60)}`;
+  const formEl=document.getElementById('analysisFormArea5'); const editId=formEl.dataset.editScoreId;
+  const res=editId?await editPendingNote('media-m1',s.id,editId,note)
+    :await saveScore('media-m1',{studentId:s.id,name:s.name,room:s.class},{title:'แบบฝึกหัดที่ 4 บทที่ 5: วิเคราะห์กรณีศึกษา Cyberbullying',score:0,maxScore:5,type:'exercise',status:'pending',note});
+  btn.disabled=false; btn.innerHTML='<i class="fas fa-paper-plane"></i> ส่งงาน';
+  if (res.ok) { delete formEl.dataset.editScoreId; showToast('ส่งงานสำเร็จ รอครูตรวจ','success'); _loadAnalysisState5(); }
+  else showToast('เกิดข้อผิดพลาด: '+res.error,'error');
+}
+
+function _loadWorksheetState5() {
+  setupWorkCard({subjectId:'media-m1',title:'แบบฝึกหัดที่ 5 บทที่ 5: ใบงานพลเมืองดิจิทัล',
+    formEl:document.getElementById('worksheetFormArea5'),pendingBoxEl:document.getElementById('worksheetPendingBox5'),
+    gradedBoxEl:document.getElementById('worksheetGradedBox5'),editBtnEl:document.getElementById('editWorksheetBtn5'),
+    onGraded:sub=>{ document.getElementById('worksheetGradedScore5').textContent='คะแนน: '+sub.score+'/'+sub.maxScore; }
+  });
+}
+async function submitWorksheet5() {
+  if (_exLocked5) { showToast('แบบฝึกหัดยังไม่เปิด','warning'); return; }
+  const s = getStudent(); if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน','warning'); return; }
+  const w1=document.getElementById('ws5_1').value.trim(),w2=document.getElementById('ws5_2').value.trim(),w3=document.getElementById('ws5_3').value.trim(),w4=document.getElementById('ws5_4').value.trim();
+  if (!w1||!w2||!w3||!w4) { showToast('กรุณากรอกข้อมูลให้ครบ','warning'); return; }
+  const btn=document.getElementById('worksheetBtn5'); btn.disabled=true; btn.textContent='กำลังส่ง...';
+  const note=`ดี:${w1.slice(0,50)} | ปรับ:${w2.slice(0,40)} | เป้า:${w3.slice(0,40)}`;
+  const formEl=document.getElementById('worksheetFormArea5'); const editId=formEl.dataset.editScoreId;
+  const res=editId?await editPendingNote('media-m1',s.id,editId,note)
+    :await saveScore('media-m1',{studentId:s.id,name:s.name,room:s.class},{title:'แบบฝึกหัดที่ 5 บทที่ 5: ใบงานพลเมืองดิจิทัล',score:0,maxScore:4,type:'exercise',status:'pending',note});
+  btn.disabled=false; btn.innerHTML='<i class="fas fa-paper-plane"></i> ส่งใบงาน';
+  if (res.ok) { delete formEl.dataset.editScoreId; showToast('ส่งสำเร็จ รอครูตรวจ','success'); _loadWorksheetState5(); }
+  else showToast('เกิดข้อผิดพลาด: '+res.error,'error');
+}
+
+/* ── Test ── */
+const TEST5_QUESTIONS = [
+  { q: '1. ข้อใดคือความหมายของ "Digital Citizen" (พลเมืองดิจิทัล)?', opts: ['คนที่ใช้คอมพิวเตอร์ตลอดเวลา','คนที่มีบัญชีโซเชียลมีเดียมากที่สุด','บุคคลที่ใช้เทคโนโลยีดิจิทัลอย่างมีความรับผิดชอบและมีจริยธรรม','โปรแกรมเมอร์มืออาชีพ'], ans: 'C' },
+  { q: '2. Creative Commons (CC) คืออะไร?', opts: ['ซอฟต์แวร์ตัดต่อรูปภาพ','ระบบที่ผู้สร้างงานกำหนดเงื่อนไขการอนุญาตให้ใช้ผลงาน','เว็บไซต์แชร์ไฟล์ผิดกฎหมาย','บริษัทผลิตเนื้อหาสื่อ'], ans: 'B' },
+  { q: '3. ข้อใดไม่ใช่ประเภทของ Cyberbullying?', opts: ['Harassment (คุกคามซ้ำๆ)','Doxxing (เปิดเผยข้อมูลส่วนตัว)','Fact-Checking (ตรวจสอบข้อเท็จจริง)','Exclusion (กีดกันออกจากกลุ่ม)'], ans: 'C' },
+  { q: '4. PDPA ของไทยคุ้มครองสิ่งใด?', opts: ['ลิขสิทธิ์ดนตรี','ข้อมูลส่วนบุคคลของประชาชน','ทรัพย์สินดิจิทัล','โครงสร้างพื้นฐานอินเทอร์เน็ต'], ans: 'B' },
+  { q: '5. หลักการ THINK ตัว T ย่อมาจากอะไร?', opts: ['Transparent (โปร่งใส)','Trendy (ทันสมัย)','True (เป็นความจริง)','Tested (ผ่านการทดสอบ)'], ans: 'C' },
+  { q: '6. Digital Footprint หมายถึงอะไร?', opts: ['การออกกำลังกายโดยใช้อุปกรณ์ดิจิทัล','รหัสผ่านที่ปลอดภัยมาก','ร่องรอยข้อมูลทั้งหมดที่เราทิ้งไว้ในโลกออนไลน์','แผนที่ดิจิทัล'], ans: 'C' },
+  { q: '7. เมื่อถูก Cyberbullying ขั้นตอนแรกที่สำคัญที่สุดคืออะไร?', opts: ['ตอบโต้กลับทันทีเพื่อปกป้องตัวเอง','ลบบัญชีโซเชียลมีเดียทั้งหมด','บันทึกหลักฐาน (Screenshot) ก่อนดำเนินการต่อ','เพิกเฉยและหวังว่ามันจะหยุดเอง'], ans: 'C' },
+  { q: '8. ข้อใดคือตัวอย่างของการใช้สื่อที่มีจริยธรรม?', opts: ['แชร์ข่าวลือที่น่าตื่นเต้นทันทีโดยไม่ตรวจสอบ','ขอรับอนุญาตก่อนโพสต์รูปถ่ายของผู้อื่น','ดาวน์โหลดเพลงโดยไม่จ่ายเงินเพราะไม่มีใครรู้','แชร์ข้อมูลส่วนตัวของเพื่อนเพื่อความสนุก'], ans: 'B' },
+  { q: '9. "Fair Use" ในกฎหมายลิขสิทธิ์หมายความว่าอย่างไร?', opts: ['เนื้อหาทุกอย่างในอินเทอร์เน็ตใช้ได้ฟรี','สามารถขายงานของคนอื่นได้ถ้าเปลี่ยนชื่อ','การใช้งานที่ได้รับอนุญาตในขอบเขตจำกัด เช่น การศึกษา การวิจารณ์ ข่าว','การใช้เนื้อหาที่มียอดแชร์เกิน 10,000 ครั้ง'], ans: 'C' },
+  { q: '10. พฤติกรรมใดแสดงถึงการเป็น "พลเมืองดิจิทัลที่ดี"?', opts: ['โพสต์ความคิดเห็นในทุกเรื่องที่พบเห็น','ออนไลน์ตลอด 24 ชั่วโมง','ใช้ภาษาสุภาพ เคารพผู้อื่น และตรวจสอบข้อมูลก่อนแชร์','มีผู้ติดตามในโซเชียลมีเดียมากที่สุด'], ans: 'C' }
+];
+
+let _testTimer5=null, _testTimeLeft5=20*60, _testSubmitted5=false;
+function startTest5() {
+  if (_testLocked5) { showToast('แบบทดสอบยังไม่เปิด','warning'); return; }
+  const s=getStudent(); if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน','warning'); return; }
+  document.getElementById('testStartBox5').style.display='none'; document.getElementById('testArea5').style.display='block';
+  const container=document.getElementById('testQuestionsContainer5');
+  container.innerHTML=TEST5_QUESTIONS.map((q,i)=>`<div class="work-card" style="margin-bottom:1rem"><div class="work-body"><div class="mcq-item"><div class="mcq-q">${q.q}</div><div class="mcq-options">${q.opts.map((opt,j)=>`<label class="mcq-option"><input type="radio" name="test5_q${i+1}" value="${['A','B','C','D'][j]}"> ${opt}</label>`).join('')}</div></div></div></div>`).join('');
+  _testTimeLeft5=20*60;
+  _testTimer5=setInterval(()=>{
+    _testTimeLeft5--;
+    const m=Math.floor(_testTimeLeft5/60).toString().padStart(2,'0'),sec=(_testTimeLeft5%60).toString().padStart(2,'0');
+    const d=document.getElementById('testTimerDisplay5'); if(d){d.textContent=m+':'+sec; if(_testTimeLeft5<=60)d.classList.add('warning');}
+    const answered=TEST5_QUESTIONS.filter((_,i)=>document.querySelector(`input[name="test5_q${i+1}"]:checked`)).length;
+    const p=document.getElementById('testProgressText5'); if(p)p.textContent=`ข้อ ${answered}/10`;
+    if(_testTimeLeft5<=0){clearInterval(_testTimer5);submitTest5(true);}
+  },1000);
+}
+async function submitTest5(auto=false) {
+  if(_testSubmitted5)return; _testSubmitted5=true; clearInterval(_testTimer5);
+  const s=getStudent(); if(!s)return;
+  let correct=0; TEST5_QUESTIONS.forEach((q,i)=>{const c=document.querySelector(`input[name="test5_q${i+1}"]:checked`); if(c&&c.value===q.ans)correct++;});
+  const score=correct,max=10;
+  document.getElementById('testArea5').style.display='none';
+  const rb=document.getElementById('testResultBox5'); rb.style.display='block';
+  document.getElementById('testResultTitle5').textContent=auto?'หมดเวลา — บันทึกคะแนนอัตโนมัติ':'ส่งแบบทดสอบสำเร็จ!';
+  document.getElementById('testResultScore5').textContent=`${score}/${max} คะแนน`;
+  document.getElementById('testResultDetail5').textContent=`ถูก ${correct} ข้อ จาก 10 ข้อ`;
+  await saveScore('media-m1',{studentId:s.id,name:s.name,room:s.class},{title:'แบบทดสอบบทที่ 5: จริยธรรมและความรับผิดชอบในการใช้สื่อ',score,maxScore:max,type:'exam',status:'graded',note:''});
+  showToast(`ได้ ${score}/${max} คะแนน`,score>=7?'success':'info');
+}
+async function checkTestDone5() {
+  const s=getStudent(); if(!s||!firebaseReady)return;
+  const res=await getSubmissionByTitle('media-m1',s.id,'แบบทดสอบบทที่ 5: จริยธรรมและความรับผิดชอบในการใช้สื่อ');
+  if(res.ok&&res.data&&res.data.status==='graded'){document.getElementById('testStartBox5').style.display='none';document.getElementById('testGradedBox5').style.display='block';document.getElementById('testGradedScore5').textContent=`คะแนน: ${res.data.score}/${res.data.maxScore}`;}
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  await loadUnitSettings5();
+  _loadAnalysisState5();
+  _loadWorksheetState5();
+  if (_testLocked5) { document.getElementById('testLockedBox5').style.display='block'; document.getElementById('testStartBox5').style.display='none'; }
+  else { await checkTestDone5(); }
+});
+</script>
+</body>
+</html>

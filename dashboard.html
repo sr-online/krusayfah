@@ -472,6 +472,82 @@
       text-align: center;
     }
 
+    /* ===== Toggle Switch ===== */
+    .toggle-label {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: .88rem;
+      color: var(--text);
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 42px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .toggle-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+
+    .toggle-track {
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      background: #cbd5e1;
+      transition: background .25s;
+    }
+
+    .toggle-track::after {
+      content: '';
+      position: absolute;
+      left: 3px;
+      top: 3px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 1px 3px rgba(0,0,0,.3);
+      transition: transform .25s;
+    }
+
+    .toggle-switch input:checked ~ .toggle-track { background: #059669; }
+    .toggle-switch input:checked ~ .toggle-track::after { transform: translateX(18px); }
+
+    /* ===== Settings Grid ===== */
+    .settings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1rem;
+    }
+
+    .settings-unit-card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .settings-unit-head {
+      padding: .65rem 1rem;
+      font-size: .82rem;
+      font-weight: 700;
+      color: white;
+      background: #7c3aed;
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+    }
+
+    .settings-unit-body {
+      padding: .75rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+      background: var(--card);
+    }
+
     /* ===== Print ===== */
     @media print {
       .navbar, .dash-meta, .subject-filter, .dash-refresh-btn, footer { display: none !important; }
@@ -893,6 +969,133 @@
       <!-- Class summary -->
       <div id="classSummary" style="display:none;margin-top:1rem;padding:.9rem 1rem;background:#f8fafc;border:1px solid var(--border);border-radius:8px;font-size:.88rem;color:var(--text)">
       </div>
+    </div>
+  </div>
+
+  <!-- ===== Settings: Open/Close Exercises & Tests ===== -->
+  <div class="dash-section">
+    <div class="dash-section-head">
+      <h2><i class="fas fa-sliders"></i> ตั้งค่าเปิด/ปิดแบบฝึกหัดและแบบทดสอบ — รู้เท่าทันสื่อ ม.1</h2>
+      <button id="saveSettingsBtn" onclick="saveAllSettings()"
+        style="background:linear-gradient(135deg,#7c3aed,#4c1d95);color:white;border:none;
+               padding:.55rem 1.25rem;border-radius:8px;font-family:inherit;font-size:.85rem;
+               font-weight:600;cursor:pointer;display:flex;align-items:center;gap:.4rem">
+        <i class="fas fa-save"></i> บันทึกการตั้งค่า
+      </button>
+    </div>
+    <div class="dash-section-body">
+      <p style="font-size:.85rem;color:var(--text-muted);margin:0 0 1rem">
+        <i class="fas fa-info-circle"></i> เปิด = นักเรียนส่งได้ &nbsp;|&nbsp; ปิด = ปุ่มส่งถูกล็อก (นักเรียนยังดูบทเรียนได้)
+      </p>
+      <div class="settings-grid" id="settingsGrid">
+        <!-- Unit 1 -->
+        <div class="settings-unit-card">
+          <div class="settings-unit-head"><i class="fas fa-tv"></i> บทที่ 1: รู้จักสื่อในยุคดิจิทัล</div>
+          <div class="settings-unit-body">
+            <label class="toggle-label">
+              <span class="toggle-switch">
+                <input type="checkbox" id="tog_unit1_exercise" checked>
+                <span class="toggle-track"></span>
+              </span>
+              <span>แบบฝึกหัด (20 คะแนน)</span>
+            </label>
+          </div>
+        </div>
+        <!-- Unit 2 -->
+        <div class="settings-unit-card">
+          <div class="settings-unit-head"><i class="fas fa-magnifying-glass"></i> บทที่ 2: การวิเคราะห์และประเมินสื่อ</div>
+          <div class="settings-unit-body">
+            <label class="toggle-label">
+              <span class="toggle-switch">
+                <input type="checkbox" id="tog_unit2_exercise" checked>
+                <span class="toggle-track"></span>
+              </span>
+              <span>แบบฝึกหัด (20 คะแนน)</span>
+            </label>
+            <label class="toggle-label">
+              <span class="toggle-switch">
+                <input type="checkbox" id="tog_unit2_test" checked>
+                <span class="toggle-track"></span>
+              </span>
+              <span>แบบทดสอบ (10 คะแนน, 20 นาที)</span>
+            </label>
+          </div>
+        </div>
+        <!-- Unit 3 -->
+        <div class="settings-unit-card">
+          <div class="settings-unit-head"><i class="fas fa-bullhorn"></i> บทที่ 3: อิทธิพลของสื่อและการโน้มน้าวใจ</div>
+          <div class="settings-unit-body">
+            <label class="toggle-label">
+              <span class="toggle-switch">
+                <input type="checkbox" id="tog_unit3_exercise" checked>
+                <span class="toggle-track"></span>
+              </span>
+              <span>แบบฝึกหัด (20 คะแนน)</span>
+            </label>
+            <label class="toggle-label">
+              <span class="toggle-switch">
+                <input type="checkbox" id="tog_unit3_test" checked>
+                <span class="toggle-track"></span>
+              </span>
+              <span>แบบทดสอบ (10 คะแนน, 20 นาที)</span>
+            </label>
+          </div>
+        </div>
+        <!-- Unit 4 -->
+        <div class="settings-unit-card">
+          <div class="settings-unit-head"><i class="fas fa-newspaper"></i> บทที่ 4: ข่าวปลอมและการตรวจสอบข้อเท็จจริง</div>
+          <div class="settings-unit-body">
+            <label class="toggle-label">
+              <span class="toggle-switch">
+                <input type="checkbox" id="tog_unit4_exercise" checked>
+                <span class="toggle-track"></span>
+              </span>
+              <span>แบบฝึกหัด (20 คะแนน)</span>
+            </label>
+            <label class="toggle-label">
+              <span class="toggle-switch">
+                <input type="checkbox" id="tog_unit4_test" checked>
+                <span class="toggle-track"></span>
+              </span>
+              <span>แบบทดสอบ (10 คะแนน, 20 นาที)</span>
+            </label>
+          </div>
+        </div>
+        <!-- Unit 5 -->
+        <div class="settings-unit-card">
+          <div class="settings-unit-head"><i class="fas fa-scale-balanced"></i> บทที่ 5: จริยธรรมและความรับผิดชอบ</div>
+          <div class="settings-unit-body">
+            <label class="toggle-label">
+              <span class="toggle-switch">
+                <input type="checkbox" id="tog_unit5_exercise" checked>
+                <span class="toggle-track"></span>
+              </span>
+              <span>แบบฝึกหัด (20 คะแนน)</span>
+            </label>
+            <label class="toggle-label">
+              <span class="toggle-switch">
+                <input type="checkbox" id="tog_unit5_test" checked>
+                <span class="toggle-track"></span>
+              </span>
+              <span>แบบทดสอบ (10 คะแนน, 20 นาที)</span>
+            </label>
+          </div>
+        </div>
+        <!-- Unit 6 -->
+        <div class="settings-unit-card">
+          <div class="settings-unit-head"><i class="fas fa-pen-ruler"></i> บทที่ 6: การสร้างสรรค์สื่ออย่างมีความรับผิดชอบ</div>
+          <div class="settings-unit-body">
+            <label class="toggle-label">
+              <span class="toggle-switch">
+                <input type="checkbox" id="tog_unit6_exercise" checked>
+                <span class="toggle-track"></span>
+              </span>
+              <span>แบบฝึกหัด (20 คะแนน)</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div id="settingsStatus" style="margin-top:.75rem;font-size:.85rem;display:none"></div>
     </div>
   </div>
 
@@ -1705,6 +1908,56 @@ document.getElementById('loadClassBtn').addEventListener('click', async () => {
 });
 
 /* =========================================================
+   Settings Panel — Open/Close Exercises & Tests
+   ========================================================= */
+const SETTINGS_KEYS = [
+  'unit1_exercise',
+  'unit2_exercise', 'unit2_test',
+  'unit3_exercise', 'unit3_test',
+  'unit4_exercise', 'unit4_test',
+  'unit5_exercise', 'unit5_test',
+  'unit6_exercise'
+];
+
+async function loadSettings() {
+  if (!firebaseReady) return;
+  const settings = await getSubjectSettings('media-m1');
+  SETTINGS_KEYS.forEach(key => {
+    const el = document.getElementById('tog_' + key);
+    if (el) el.checked = settings[key] !== false; // default: open
+  });
+}
+
+async function saveAllSettings() {
+  const btn    = document.getElementById('saveSettingsBtn');
+  const status = document.getElementById('settingsStatus');
+
+  const updates = {};
+  SETTINGS_KEYS.forEach(key => {
+    const el = document.getElementById('tog_' + key);
+    if (el) updates[key] = el.checked;
+  });
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังบันทึก...';
+
+  const result = await saveSubjectSettings('media-m1', updates);
+
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fas fa-save"></i> บันทึกการตั้งค่า';
+  status.style.display = 'block';
+
+  if (result.ok) {
+    status.innerHTML = '<span style="color:#059669"><i class="fas fa-circle-check"></i> บันทึกการตั้งค่าสำเร็จ</span>';
+    showToast('บันทึกการตั้งค่าสำเร็จ', 'success');
+  } else {
+    status.innerHTML = '<span style="color:#dc2626"><i class="fas fa-circle-xmark"></i> เกิดข้อผิดพลาด: ' + result.error + '</span>';
+    showToast('บันทึกไม่สำเร็จ: ' + result.error, 'error');
+  }
+  setTimeout(() => { status.style.display = 'none'; }, 4000);
+}
+
+/* =========================================================
    Init
    ========================================================= */
 document.addEventListener('DOMContentLoaded', async () => {
@@ -1721,7 +1974,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }, 600);
 
-  await loadAllData();
+  await Promise.all([loadAllData(), loadSettings()]);
   _updateClassRoomSel(); // init room selector after STUDENTS loaded
 });
 </script>
