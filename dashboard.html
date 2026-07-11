@@ -1618,13 +1618,45 @@ let _inboxData = [];
 function _renderNote(note) {
   if (!note) return '<span style="color:#94a3b8">—</span>';
   if (note.startsWith('http')) {
-    const short = note.replace(/^https?:\/\//, '').slice(0, 45);
-    return `<a href="${note}" target="_blank" style="color:#2563eb;font-size:.82rem;display:flex;align-items:center;gap:.3rem;max-width:260px;word-break:break-all">
+    const short = escapeHtml(note.replace(/^https?:\/\//, '').slice(0, 45));
+    return `<a href="${escapeHtml(note)}" target="_blank" style="color:#2563eb;font-size:.82rem;display:flex;align-items:center;gap:.3rem;max-width:260px;word-break:break-all">
       <i class="fas fa-external-link-alt" style="flex-shrink:0;font-size:.7rem"></i>${short}${note.length > 48 ? '…' : ''}
     </a>`;
   }
-  const t = note.slice(0, 120);
-  return `<span style="font-size:.82rem;color:#374151;line-height:1.4;display:block;max-width:300px">${t}${note.length > 120 ? '…' : ''}</span>`;
+  const looksLikeCode = note.includes('<') && note.length > 40;
+  const t = escapeHtml(note.slice(0, 120)) + (note.length > 120 ? '…' : '');
+  const textBlock = `<span style="font-size:.82rem;color:#374151;line-height:1.4;display:block;max-width:300px${looksLikeCode ? ';font-family:monospace' : ''}">${t}</span>`;
+  if (!looksLikeCode) return textBlock;
+  return textBlock +
+    `<button onclick="viewCodeModal(this)" data-code="${escapeHtml(note)}"
+      style="margin-top:.35rem;background:#eef2ff;color:#4338ca;border:none;padding:.25rem .65rem;border-radius:6px;font-size:.75rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:.3rem">
+      <i class="fas fa-code"></i> ดูโค้ด/พรีวิว
+    </button>`;
+}
+
+/* Full-code viewer for code-exercise submissions — escaped <pre> + sandboxed preview (no allow-scripts) */
+function viewCodeModal(btn) {
+  const code = btn.dataset.code || '';
+  const overlay = document.createElement('div');
+  overlay.id = 'codeViewOverlay';
+  overlay.innerHTML = `
+    <div style="background:#fff;border-radius:16px;max-width:940px;width:94%;max-height:88vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.35)">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;border-bottom:1px solid #e2e8f0;background:#f8fafc;flex-shrink:0">
+        <strong style="color:#1e293b"><i class="fas fa-code" style="color:#4338ca;margin-right:.4rem"></i>โค้ด HTML ที่นักเรียนส่ง</strong>
+        <button onclick="document.getElementById('codeViewOverlay').remove()" style="background:none;border:none;font-size:1.3rem;color:#64748b;cursor:pointer;line-height:1">&times;</button>
+      </div>
+      <div style="display:flex;flex:1;min-height:0;flex-wrap:wrap">
+        <pre style="flex:1 1 320px;margin:0;padding:1rem;overflow:auto;background:#0f172a;color:#e2e8f0;font-size:.78rem;line-height:1.55;white-space:pre-wrap;word-break:break-word"><code>${escapeHtml(code)}</code></pre>
+        <iframe sandbox="allow-same-origin" style="flex:1 1 320px;border:none;border-left:1px solid #e2e8f0;background:#fff;min-height:280px"></iframe>
+      </div>
+    </div>`;
+  Object.assign(overlay.style, {
+    position: 'fixed', inset: '0', background: 'rgba(0,0,0,.55)',
+    zIndex: '9999', display: 'flex', alignItems: 'center', justifyContent: 'center',
+    fontFamily: 'Sarabun, sans-serif', padding: '1rem'
+  });
+  document.body.appendChild(overlay);
+  overlay.querySelector('iframe').srcdoc = code;
 }
 
 function _renderInbox() {

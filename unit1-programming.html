@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>หน่วยที่ 1 รู้จัก HTML และเว็บเพจแรก | โปรแกรมเบื้องต้น 1</title>
+  <script>(function(){try{var s=JSON.parse(localStorage.getItem('srr_student_2569'));if(!s||!s.grade||!s.name)window.location.replace('login.html');}catch(e){window.location.replace('login.html');}})();</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ===== Unit Page Specific (Programming — green theme) ===== */
+    .unit-hero {
+      background: linear-gradient(135deg, #059669 0%, #047857 60%, #065f46 100%);
+      color: white;
+      padding: 2.5rem 1rem 0;
+    }
+    .unit-hero-content { max-width: 1200px; margin: 0 auto; }
+    .unit-hero h1 { font-size: 1.7rem; font-weight: 700; margin-bottom: .4rem; }
+    .unit-hero p { opacity: .85; font-size: .95rem; margin-bottom: .3rem; }
+    .unit-hero .indicator-box {
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 10px;
+      padding: .75rem 1rem;
+      margin: 1rem 0;
+      font-size: .9rem;
+    }
+
+    .unit-tabs { display: flex; gap: .5rem; flex-wrap: wrap; padding-top: 1rem; }
+    .unit-tab-btn {
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.3);
+      color: white; padding: .55rem 1.1rem;
+      border-radius: 8px 8px 0 0; cursor: pointer;
+      font-family: 'Sarabun', sans-serif; font-size: .9rem;
+      transition: all .2s; display: flex; align-items: center; gap: .4rem;
+    }
+    .unit-tab-btn.active { background: white; color: #059669; border-color: white; font-weight: 700; }
+    .unit-tab-btn:hover:not(.active) { background: rgba(255,255,255,.25); }
+
+    .unit-tab-content { display: none; }
+    .unit-tab-content.active { display: block; }
+
+    .lesson-section {
+      background: white; border-radius: 14px; box-shadow: var(--shadow);
+      margin-bottom: 1.5rem; overflow: hidden;
+    }
+    .section-header {
+      background: linear-gradient(90deg, #059669, #047857);
+      color: white; padding: 1rem 1.25rem;
+      display: flex; align-items: center; gap: .75rem;
+      cursor: pointer; user-select: none;
+    }
+    .section-header .section-num {
+      width: 32px; height: 32px; background: rgba(255,255,255,.25);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: .95rem; flex-shrink: 0;
+    }
+    .section-header h2 { font-size: 1.05rem; font-weight: 700; flex: 1; }
+    .section-header .toggle-icon { transition: transform .3s; }
+    .section-header.collapsed .toggle-icon { transform: rotate(-90deg); }
+    .section-body { padding: 1.5rem; }
+    .section-body.hidden { display: none; }
+
+    .info-card {
+      background: #f8fafc; border: 1px solid #e2e8f0;
+      border-radius: 10px; padding: 1.25rem; margin-bottom: 1rem;
+    }
+    .info-card h3 {
+      font-size: 1rem; font-weight: 700; color: #059669;
+      margin-bottom: .75rem; display: flex; align-items: center; gap: .5rem;
+    }
+    .info-card p { color: #374151; line-height: 1.8; margin-bottom: .5rem; }
+
+    .highlight-box {
+      background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+      border-left: 4px solid #059669;
+      border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0;
+    }
+    .highlight-box h4 { color: #065f46; font-weight: 700; margin-bottom: .5rem; }
+    .highlight-box p, .highlight-box li { color: #374151; line-height: 1.8; }
+
+    .blue-box {
+      background: linear-gradient(135deg, #eff6ff, #dbeafe);
+      border-left: 4px solid #3b82f6; border-radius: 8px;
+      padding: 1rem 1.25rem; margin: 1rem 0;
+    }
+    .blue-box h4 { color: #1e40af; font-weight: 700; margin-bottom: .5rem; }
+
+    .orange-box {
+      background: linear-gradient(135deg, #fff7ed, #fed7aa);
+      border-left: 4px solid #ea580c; border-radius: 8px;
+      padding: 1rem 1.25rem; margin: 1rem 0;
+    }
+    .orange-box h4 { color: #9a3412; font-weight: 700; margin-bottom: .5rem; }
+
+    .step-list { list-style: none; padding: 0; }
+    .step-list li {
+      display: flex; align-items: flex-start; gap: .75rem;
+      padding: .6rem 0; border-bottom: 1px solid #f1f5f9;
+    }
+    .step-list li:last-child { border-bottom: none; }
+    .step-num {
+      min-width: 28px; height: 28px; background: #059669; color: white;
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; font-size: .8rem; font-weight: 700; flex-shrink: 0;
+    }
+
+    .check-list { list-style: none; padding: 0; }
+    .check-list li {
+      padding: .45rem 0; display: flex; align-items: flex-start; gap: .6rem;
+      color: #374151; line-height: 1.7;
+    }
+    .check-list li i { color: #059669; margin-top: .2rem; flex-shrink: 0; }
+
+    .tool-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem; margin-top: 1rem;
+    }
+    .tool-card {
+      background: white; border: 1px solid #e2e8f0;
+      border-radius: 10px; padding: 1rem; text-align: center;
+      transition: all .2s; box-shadow: 0 2px 4px rgba(0,0,0,.06);
+    }
+    .tool-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+    .tool-card .tool-icon { font-size: 2rem; margin-bottom: .5rem; }
+    .tool-card h4 { font-size: .9rem; font-weight: 700; color: #1e293b; margin-bottom: .3rem; }
+    .tool-card p { font-size: .8rem; color: #64748b; }
+
+    /* ===== Tag reference table ===== */
+    .tag-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: .88rem; }
+    .tag-table th {
+      background: #059669; color: white; padding: .65rem 1rem;
+      text-align: left; font-weight: 700;
+    }
+    .tag-table td { padding: .6rem 1rem; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+    .tag-table tr:nth-child(even) td { background: #f0fdf4; }
+    .tag-table code { background: #e2e8f0; color: #0f172a; padding: .1rem .4rem; border-radius: 4px; font-size: .85rem; }
+
+    /* ===== Inline code ===== */
+    .info-card code, .highlight-box code, .blue-box code, .orange-box code, li code {
+      background: #e2e8f0; color: #0f172a; padding: .1rem .4rem; border-radius: 4px;
+      font-family: 'Consolas','Courier New',monospace; font-size: .85rem;
+    }
+
+    /* ===== Code block (static, non-editable example) ===== */
+    .code-block {
+      background: #0f172a; color: #e2e8f0; border-radius: 10px;
+      padding: 1rem 1.25rem; margin: 1rem 0; overflow-x: auto;
+      font-family: 'Consolas','Courier New',monospace; font-size: .85rem; line-height: 1.7;
+      white-space: pre;
+    }
+    .code-block .cm { color: #64748b; }
+    .code-block .tg { color: #5eead4; }
+    .code-block .at { color: #fbbf24; }
+    .code-block .st { color: #86efac; }
+
+    /* ===== Live Code Playground ===== */
+    .playground {
+      background: #0f172a; border-radius: 12px; overflow: hidden;
+      margin: 1rem 0; box-shadow: 0 4px 14px rgba(0,0,0,.15);
+    }
+    .playground-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: .6rem 1rem; background: #1e293b; color: #e2e8f0;
+      font-size: .82rem; font-weight: 700;
+    }
+    .playground-bar button {
+      background: #334155; color: #e2e8f0; border: none;
+      padding: .35rem .85rem; border-radius: 6px; font-size: .78rem;
+      cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: .35rem;
+    }
+    .playground-bar button:hover { background: #475569; }
+    .playground-body { display: flex; flex-wrap: wrap; }
+    .playground-body textarea {
+      flex: 1 1 300px; min-height: 220px; background: #0f172a; color: #e2e8f0;
+      border: none; padding: 1rem; font-family: 'Consolas','Courier New',monospace;
+      font-size: .82rem; line-height: 1.6; resize: vertical; outline: none;
+    }
+    .playground-body iframe {
+      flex: 1 1 300px; min-height: 220px; border: none; background: #fff;
+      border-left: 1px solid #334155;
+    }
+    .playground-label {
+      font-size: .7rem; color: #94a3b8; padding: .35rem 1rem 0; background: #0f172a;
+    }
+    @media (max-width: 700px) {
+      .playground-body { flex-direction: column; }
+      .playground-body iframe { border-left: none; border-top: 1px solid #334155; }
+    }
+
+    /* ===== Work/Exercise Cards ===== */
+    .work-card {
+      background: white; border-radius: 14px;
+      box-shadow: var(--shadow); margin-bottom: 1.5rem;
+      overflow: hidden; border: 1px solid #e2e8f0;
+    }
+    .work-card-header {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: 1.25rem; border-bottom: 1px solid #e2e8f0;
+      background: #f8fafc;
+    }
+    .work-num {
+      min-width: 42px; height: 42px;
+      background: linear-gradient(135deg, #059669, #34d399);
+      color: white; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; font-weight: 700; flex-shrink: 0;
+    }
+    .work-title { flex: 1; min-width: 0; }
+    .work-title h3 { font-size: 1rem; font-weight: 700; color: #1e293b; margin: 0 0 .25rem; }
+    .work-title p  { font-size: .85rem; color: #64748b; margin: 0; line-height: 1.5; }
+    .work-badges { display: flex; flex-direction: column; align-items: flex-end; gap: .4rem; flex-shrink: 0; }
+    .work-score-badge {
+      background: #d1fae5; color: #065f46;
+      padding: .25rem .8rem; border-radius: 999px;
+      font-size: .8rem; font-weight: 700; white-space: nowrap;
+    }
+    .work-status-badge {
+      padding: .2rem .75rem; border-radius: 999px;
+      font-size: .78rem; font-weight: 600; white-space: nowrap;
+    }
+    .work-status-badge.open    { background: #d1fae5; color: #065f46; }
+    .work-status-badge.coming  { background: #f1f5f9; color: #64748b; }
+    .work-status-badge.done    { background: #ede9fe; color: #5b21b6; }
+    .work-card-body { padding: 1.25rem; }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      .unit-hero h1 { font-size: 1.3rem; }
+      .tool-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .tool-grid { grid-template-columns: 1fr; }
+      .tag-table { font-size: .8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-icon"><i class="fas fa-chalkboard-user"></i></div>
+      <span>ครูศิริศักดิ์ ปิลอง</span>
+    </a>
+    <ul class="navbar-menu">
+      <li><a href="home.html"><i class="fas fa-house"></i> หน้าหลัก</a></li>
+      <li><a href="subject-programming.html"><i class="fas fa-code"></i> โปรแกรมเบื้องต้น 1 ม.2</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="เมนู">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="home.html"><i class="fas fa-house"></i> หน้าหลัก</a>
+    <a href="subject-programming.html"><i class="fas fa-code"></i> โปรแกรมเบื้องต้น 1 ม.2</a>
+  </div>
+</nav>
+
+<!-- ===== UNIT HERO ===== -->
+<div class="unit-hero">
+  <div class="unit-hero-content container">
+    <p style="opacity:.75;font-size:.83rem;margin-bottom:.5rem">
+      <a href="home.html" style="color:rgba(255,255,255,.8)">หน้าหลัก</a>
+      <i class="fas fa-chevron-right" style="font-size:.65rem;margin:0 .35rem"></i>
+      <a href="subject-programming.html" style="color:rgba(255,255,255,.8)">โปรแกรมเบื้องต้น 1</a>
+      <i class="fas fa-chevron-right" style="font-size:.65rem;margin:0 .35rem"></i>
+      หน่วยที่ 1
+    </p>
+    <h1>🌐 หน่วยที่ 1: รู้จัก HTML และเว็บเพจแรกของฉัน</h1>
+    <p>โปรแกรมเบื้องต้น 1 &bull; มัธยมศึกษาปีที่ 2 &bull; ภาคเรียนที่ 1/2569</p>
+
+    <div class="indicator-box">
+      <strong>ตัวชี้วัด:</strong> อธิบายหลักการทำงานของเว็บไซต์และภาษา HTML เขียนโครงสร้างเอกสาร HTML พื้นฐาน
+      และสร้างเว็บเพจอย่างง่ายได้ด้วยตนเอง <em style="opacity:.8">(ว. 4.2 ม. 2/1-2/2)</em>
+    </div>
+
+    <div class="unit-tabs">
+      <button class="unit-tab-btn active" data-utab="lesson">
+        <i class="fas fa-book-open"></i> เนื้อหาบทเรียน
+      </button>
+      <button class="unit-tab-btn" data-utab="exercises">
+        <i class="fas fa-pencil-alt"></i> แบบฝึกหัด
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LESSON TAB ===== -->
+<div id="utab-lesson" class="unit-tab-content active">
+<div class="content-section">
+
+  <!-- ========== SECTION 1: อินเทอร์เน็ตและเว็บไซต์ ========== -->
+  <div class="lesson-section" id="section-internet">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-num">1</div>
+      <h2>อินเทอร์เน็ตและเว็บไซต์ทำงานอย่างไร</h2>
+      <i class="fas fa-chevron-down toggle-icon"></i>
+    </div>
+    <div class="section-body">
+
+      <div class="info-card">
+        <h3><i class="fas fa-globe"></i> เว็บไซต์คืออะไร</h3>
+        <p>
+          เว็บไซต์ (Website) คือ<strong>กลุ่มของหน้าเว็บเพจ (Web Page)</strong> ที่เก็บอยู่บนเครื่องคอมพิวเตอร์
+          ที่เรียกว่า <strong>เว็บเซิร์ฟเวอร์ (Web Server)</strong> ซึ่งเปิดให้ผู้ใช้ทั่วโลกเข้าถึงผ่านอินเทอร์เน็ตได้
+          โดยใช้โปรแกรมที่เรียกว่า <strong>เว็บเบราว์เซอร์ (Web Browser)</strong> เช่น Chrome, Edge, Firefox
+        </p>
+      </div>
+
+      <div class="highlight-box">
+        <h4><i class="fas fa-arrows-left-right"></i> หลักการทำงานแบบ Client-Server</h4>
+        <ul class="step-list">
+          <li><div class="step-num">1</div><span>ผู้ใช้ (<strong>Client</strong>) พิมพ์ที่อยู่เว็บไซต์ หรือ <strong>URL</strong> ลงในเบราว์เซอร์</span></li>
+          <li><div class="step-num">2</div><span>เบราว์เซอร์ส่ง<strong>คำขอ (Request)</strong> ไปยังเว็บเซิร์ฟเวอร์ที่เก็บเว็บไซต์นั้น</span></li>
+          <li><div class="step-num">3</div><span>เซิร์ฟเวอร์ส่ง<strong>ไฟล์ HTML</strong> กลับมาให้ (<strong>Response</strong>)</span></li>
+          <li><div class="step-num">4</div><span>เบราว์เซอร์<strong>แปลความหมาย (Render)</strong> ไฟล์ HTML แล้วแสดงผลเป็นหน้าเว็บให้เราเห็น</span></li>
+        </ul>
+      </div>
+
+      <div class="info-card">
+        <h3><i class="fas fa-link"></i> URL คืออะไร</h3>
+        <p>
+          URL (Uniform Resource Locator) คือ <strong>ที่อยู่ของหน้าเว็บ</strong> แต่ละหน้าบนอินเทอร์เน็ต
+          เช่น <code>https://www.wikipedia.org/</code>
+        </p>
+        <table class="tag-table">
+          <thead><tr><th>ส่วนประกอบ</th><th>ตัวอย่าง</th><th>ความหมาย</th></tr></thead>
+          <tbody>
+            <tr><td><code>https://</code></td><td>โพรโทคอล</td><td>วิธีการรับส่งข้อมูลอย่างปลอดภัย</td></tr>
+            <tr><td><code>www.wikipedia.org</code></td><td>โดเมนเนม</td><td>ชื่อของเว็บไซต์/เซิร์ฟเวอร์</td></tr>
+            <tr><td><code>/wiki/HTML</code></td><td>เส้นทาง (Path)</td><td>ตำแหน่งของหน้าเว็บภายในเว็บไซต์</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="blue-box">
+        <h4><i class="fas fa-layer-group"></i> 3 ภาษาหลักที่ใช้สร้างเว็บไซต์</h4>
+        <div class="tool-grid">
+          <div class="tool-card"><div class="tool-icon">🏗️</div><h4>HTML</h4><p>สร้าง<strong>โครงสร้าง</strong>และเนื้อหาของหน้าเว็บ (สิ่งที่เราจะเรียนในวิชานี้)</p></div>
+          <div class="tool-card"><div class="tool-icon">🎨</div><h4>CSS</h4><p>ตกแต่ง<strong>รูปลักษณ์</strong> สี ฟอนต์ และเลย์เอาต์ให้สวยงาม</p></div>
+          <div class="tool-card"><div class="tool-icon">⚙️</div><h4>JavaScript</h4><p>เพิ่ม<strong>การโต้ตอบ</strong>และพฤติกรรมแบบไดนามิกให้หน้าเว็บ</p></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== SECTION 2: HTML คืออะไร ========== -->
+  <div class="lesson-section" id="section-whatishtml">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-num">2</div>
+      <h2>HTML คืออะไร</h2>
+      <i class="fas fa-chevron-down toggle-icon"></i>
+    </div>
+    <div class="section-body">
+
+      <div class="info-card">
+        <h3><i class="fas fa-file-code"></i> ความหมายของ HTML</h3>
+        <p>
+          <strong>HTML</strong> ย่อมาจาก <strong>HyperText Markup Language</strong>
+          เป็น<strong>ภาษามาร์กอัป (Markup Language)</strong> ที่ใช้กำหนด<strong>โครงสร้าง</strong>ของเนื้อหาบนหน้าเว็บ
+          ไม่ใช่ภาษาโปรแกรมมิ่งทั่วไปที่มีการคำนวณหรือเงื่อนไข แต่ใช้ "แท็ก" (Tag) เพื่อบอกเบราว์เซอร์ว่า
+          "ข้อความส่วนนี้คือหัวข้อ" "ส่วนนี้คือย่อหน้า" "ส่วนนี้คือรูปภาพ" เป็นต้น
+        </p>
+        <ul class="check-list">
+          <li><i class="fas fa-check-circle"></i> <strong>Hyper</strong>Text หมายถึงข้อความที่เชื่อมโยงถึงกันได้ (ไฮเปอร์ลิงก์)</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Markup</strong> หมายถึงการ "กำกับ" เนื้อหาด้วยแท็ก</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Language</strong> คือภาษาที่มีกฎไวยากรณ์ของตัวเอง</li>
+        </ul>
+      </div>
+
+      <div class="highlight-box">
+        <h4><i class="fas fa-question-circle"></i> ทำไมต้องเรียน HTML</h4>
+        <ul class="check-list">
+          <li><i class="fas fa-check-circle"></i> เป็นภาษาพื้นฐานที่สุดในการสร้างเว็บไซต์ทุกเว็บบนโลก</li>
+          <li><i class="fas fa-check-circle"></i> เรียนรู้ง่าย ไม่ต้องใช้เครื่องมือพิเศษ เขียนแล้วเห็นผลทันที</li>
+          <li><i class="fas fa-check-circle"></i> เป็นพื้นฐานสำคัญก่อนต่อยอดไปเรียน CSS และ JavaScript</li>
+          <li><i class="fas fa-check-circle"></i> ใช้สร้างผลงาน พอร์ตโฟลิโอ หรือเว็บไซต์ส่วนตัวได้จริง</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== SECTION 3: โครงสร้างพื้นฐาน ========== -->
+  <div class="lesson-section" id="section-structure">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-num">3</div>
+      <h2>โครงสร้างพื้นฐานของเอกสาร HTML</h2>
+      <i class="fas fa-chevron-down toggle-icon"></i>
+    </div>
+    <div class="section-body">
+
+      <div class="info-card">
+        <h3><i class="fas fa-sitemap"></i> เอกสาร HTML ทุกไฟล์ต้องมีโครงสร้างนี้</h3>
+        <div class="code-block"><span class="cm">&lt;!-- บอกเบราว์เซอร์ว่านี่คือเอกสาร HTML5 --&gt;</span>
+&lt;<span class="tg">!DOCTYPE html</span>&gt;
+&lt;<span class="tg">html</span> <span class="at">lang</span>=<span class="st">"th"</span>&gt;
+  &lt;<span class="tg">head</span>&gt;
+    <span class="cm">&lt;!-- ข้อมูลเกี่ยวกับหน้าเว็บ ไม่แสดงบนหน้าจอ --&gt;</span>
+    &lt;<span class="tg">meta</span> <span class="at">charset</span>=<span class="st">"UTF-8"</span>&gt;
+    &lt;<span class="tg">title</span>&gt;ชื่อหน้าเว็บของฉัน&lt;/<span class="tg">title</span>&gt;
+  &lt;/<span class="tg">head</span>&gt;
+  &lt;<span class="tg">body</span>&gt;
+    <span class="cm">&lt;!-- เนื้อหาที่แสดงบนหน้าจอทั้งหมดอยู่ตรงนี้ --&gt;</span>
+    &lt;<span class="tg">h1</span>&gt;สวัสดีชาวโลก!&lt;/<span class="tg">h1</span>&gt;
+  &lt;/<span class="tg">body</span>&gt;
+&lt;/<span class="tg">html</span>&gt;</div>
+
+        <table class="tag-table">
+          <thead><tr><th>ส่วน</th><th>หน้าที่</th></tr></thead>
+          <tbody>
+            <tr><td><code>&lt;!DOCTYPE html&gt;</code></td><td>บอกเบราว์เซอร์ว่าเอกสารนี้เป็น HTML5 (ต้องอยู่บรรทัดแรกสุดเสมอ)</td></tr>
+            <tr><td><code>&lt;html&gt;...&lt;/html&gt;</code></td><td>แท็กหลักที่ครอบเนื้อหาทั้งหมดของเอกสาร</td></tr>
+            <tr><td><code>&lt;head&gt;...&lt;/head&gt;</code></td><td>ข้อมูลเบื้องหลังของหน้าเว็บ เช่น ชื่อหน้า, การเชื่อม CSS (ไม่แสดงในหน้าจอ)</td></tr>
+            <tr><td><code>&lt;meta charset="UTF-8"&gt;</code></td><td>กำหนดรหัสตัวอักษร เพื่อให้แสดงภาษาไทยได้ถูกต้อง</td></tr>
+            <tr><td><code>&lt;title&gt;...&lt;/title&gt;</code></td><td>ชื่อที่แสดงบนแท็บของเบราว์เซอร์</td></tr>
+            <tr><td><code>&lt;body&gt;...&lt;/body&gt;</code></td><td>เนื้อหาทั้งหมดที่ผู้ใช้มองเห็นบนหน้าเว็บ</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="orange-box">
+        <h4><i class="fas fa-triangle-exclamation"></i> ข้อควรระวัง</h4>
+        <ul class="check-list">
+          <li><i class="fas fa-check-circle"></i> แท็กส่วนใหญ่ต้อง<strong>เปิด-ปิดเป็นคู่</strong> เช่น <code>&lt;body&gt;</code> ต้องมี <code>&lt;/body&gt;</code></li>
+          <li><i class="fas fa-check-circle"></i> ต้อง<strong>ซ้อนแท็กให้ถูกลำดับ</strong> แท็กที่เปิดทีหลังต้องปิดก่อนเสมอ</li>
+          <li><i class="fas fa-check-circle"></i> ตั้งชื่อไฟล์เป็นภาษาอังกฤษ ลงท้ายด้วย <code>.html</code> เช่น <code>index.html</code></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== SECTION 4: Tag / Element / Attribute ========== -->
+  <div class="lesson-section" id="section-tags">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-num">4</div>
+      <h2>Tag, Element และ Attribute คืออะไร</h2>
+      <i class="fas fa-chevron-down toggle-icon"></i>
+    </div>
+    <div class="section-body">
+
+      <div class="info-card">
+        <h3><i class="fas fa-tag"></i> Tag (แท็ก)</h3>
+        <p>สัญลักษณ์ที่เขียนอยู่ระหว่างเครื่องหมาย <code>&lt; &gt;</code> ใช้บอกความหมายของเนื้อหา ส่วนใหญ่มาเป็นคู่ คือ<strong>แท็กเปิด</strong>และ<strong>แท็กปิด</strong> (แท็กปิดจะมี <code>/</code> นำหน้าชื่อแท็ก)</p>
+        <div class="code-block">&lt;<span class="tg">p</span>&gt;นี่คือย่อหน้าหนึ่งย่อหน้า&lt;/<span class="tg">p</span>&gt;</div>
+      </div>
+
+      <div class="info-card">
+        <h3><i class="fas fa-cube"></i> Element (อิลิเมนต์)</h3>
+        <p>คือ<strong>แท็กเปิด + เนื้อหาข้างใน + แท็กปิด</strong> รวมกันทั้งหมด เรียกว่า 1 อิลิเมนต์</p>
+        <div class="highlight-box">
+          <p style="margin:0">
+            <code>&lt;p&gt;</code> <span style="color:#059669;font-weight:700">← แท็กเปิด</span> &nbsp;
+            สวัสดี <span style="color:#dc2626;font-weight:700">← เนื้อหา</span> &nbsp;
+            <code>&lt;/p&gt;</code> <span style="color:#2563eb;font-weight:700">← แท็กปิด</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <h3><i class="fas fa-sliders"></i> Attribute (แอตทริบิวต์)</h3>
+        <p>คือ<strong>ข้อมูลเพิ่มเติม</strong>ที่ใส่ไว้ใน "แท็กเปิด" เพื่อกำหนดคุณสมบัติพิเศษของอิลิเมนต์นั้น เขียนในรูปแบบ <code>ชื่อแอตทริบิวต์="ค่า"</code></p>
+        <div class="code-block">&lt;<span class="tg">html</span> <span class="at">lang</span>=<span class="st">"th"</span>&gt;
+&lt;<span class="tg">img</span> <span class="at">src</span>=<span class="st">"cat.jpg"</span> <span class="at">alt</span>=<span class="st">"รูปแมว"</span>&gt;</div>
+        <p style="margin-top:.5rem">ในตัวอย่าง <code>lang</code>, <code>src</code>, <code>alt</code> คือชื่อแอตทริบิวต์ ส่วน <code>"th"</code>, <code>"cat.jpg"</code>, <code>"รูปแมว"</code> คือค่าของแอตทริบิวต์นั้น ๆ</p>
+      </div>
+
+      <div class="blue-box">
+        <h4><i class="fas fa-circle-info"></i> แท็กที่ไม่ต้องมีแท็กปิด (Void / Self-closing tag)</h4>
+        <p>แท็กบางตัวไม่มีเนื้อหาข้างในจึงไม่ต้องมีแท็กปิด เช่น <code>&lt;img&gt;</code>, <code>&lt;br&gt;</code>, <code>&lt;hr&gt;</code>, <code>&lt;meta&gt;</code> — จะเรียนรายละเอียดในหน่วยถัด ๆ ไป</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== SECTION 5: เครื่องมือ + ลองเขียนโค้ด ========== -->
+  <div class="lesson-section" id="section-tools">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-num">5</div>
+      <h2>เครื่องมือเขียนเว็บและลองเขียนโค้ดจริง</h2>
+      <i class="fas fa-chevron-down toggle-icon"></i>
+    </div>
+    <div class="section-body">
+
+      <div class="info-card">
+        <h3><i class="fas fa-toolbox"></i> อุปกรณ์ที่ต้องใช้ในการเขียนเว็บ</h3>
+        <div class="tool-grid">
+          <div class="tool-card"><div class="tool-icon">💻</div><h4>โปรแกรมแก้ไขโค้ด</h4><p>เช่น Visual Studio Code (VS Code) — ฟรี ใช้งานง่าย มีตัวช่วยเขียนโค้ด</p></div>
+          <div class="tool-card"><div class="tool-icon">🌍</div><h4>เว็บเบราว์เซอร์</h4><p>เช่น Chrome หรือ Edge — ใช้เปิดไฟล์ .html เพื่อดูผลลัพธ์</p></div>
+        </div>
+        <div class="blue-box" style="margin-top:1rem">
+          <h4><i class="fas fa-list-ol"></i> ขั้นตอนสร้างหน้าเว็บแรกด้วย VS Code</h4>
+          <ul class="step-list">
+            <li><div class="step-num">1</div><span>เปิด VS Code แล้วสร้างไฟล์ใหม่ ตั้งชื่อว่า <code>index.html</code></span></li>
+            <li><div class="step-num">2</div><span>พิมพ์โครงสร้าง HTML พื้นฐานตามที่เรียนไปในหัวข้อที่ 3</span></li>
+            <li><div class="step-num">3</div><span>กด <strong>Ctrl+S</strong> เพื่อบันทึกไฟล์</span></li>
+            <li><div class="step-num">4</div><span>คลิกขวาที่ไฟล์ แล้วเลือก <strong>"Open with Live Server"</strong> หรือดับเบิลคลิกไฟล์เพื่อเปิดด้วยเบราว์เซอร์</span></li>
+            <li><div class="step-num">5</div><span>ดูผลลัพธ์ ถ้าแก้โค้ดแล้วบันทึกใหม่ ก็รีเฟรชเบราว์เซอร์เพื่อดูการเปลี่ยนแปลง</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <h4><i class="fas fa-laptop-code"></i> ลองเขียนโค้ดได้ทันทีที่นี่!</h4>
+        <p>พิมพ์แก้ไขโค้ดในกล่องสีดำด้านล่าง แล้วดูผลลัพธ์ที่เปลี่ยนไปทันทีทางขวา (หรือด้านล่างถ้าใช้มือถือ) ลองเปลี่ยนข้อความใน <code>&lt;title&gt;</code> และ <code>&lt;h1&gt;</code> ดูสิ!</p>
+      </div>
+
+      <div class="playground">
+        <div class="playground-bar">
+          <span><i class="fas fa-flask"></i> Live Code Playground</span>
+          <button onclick="resetCodePlayground('pg1Editor','pg1Preview', PG1_STARTER)"><i class="fas fa-rotate-left"></i> รีเซ็ตโค้ด</button>
+        </div>
+        <div class="playground-label">เขียนโค้ด HTML</div>
+        <div class="playground-body">
+          <textarea id="pg1Editor" spellcheck="false"></textarea>
+          <iframe id="pg1Preview" title="ตัวอย่างผลลัพธ์"></iframe>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- end content-section -->
+</div><!-- end utab-lesson -->
+
+<!-- ===== EXERCISES TAB ===== -->
+<div id="utab-exercises" class="unit-tab-content">
+<div class="content-section">
+
+  <!-- ===== แบบฝึกหัดบทที่ 1 ===== -->
+  <div class="work-card">
+    <div class="work-card-header">
+      <div class="work-num">1</div>
+      <div class="work-title">
+        <h3><i class="fas fa-code" style="color:#059669;margin-right:.4rem"></i>แบบฝึกหัดบทที่ 1 — โครงสร้างหน้าเว็บแรกของฉัน</h3>
+        <p>เขียนเอกสาร HTML ให้ครบโครงสร้างพื้นฐาน พร้อมข้อมูลของตัวเอง แล้วส่งโค้ดให้ครูตรวจ</p>
+      </div>
+      <div class="work-badges">
+        <span class="work-score-badge"><i class="fas fa-star" style="font-size:.75rem"></i> 10 คะแนน</span>
+        <span class="work-status-badge open"><i class="fas fa-circle-check" style="font-size:.7rem"></i> เปิดรับงาน</span>
+      </div>
+    </div>
+    <div class="work-card-body">
+
+      <div class="blue-box" style="margin-top:0;margin-bottom:1.25rem">
+        <h4><i class="fas fa-list-ol"></i> โจทย์</h4>
+        <p style="margin:0 0 .5rem;color:#374151">เขียนไฟล์ HTML 1 หน้า ที่มีองค์ประกอบครบดังนี้:</p>
+        <ul class="check-list">
+          <li><i class="fas fa-check-circle"></i> มี <code>&lt;!DOCTYPE html&gt;</code>, <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, <code>&lt;body&gt;</code> ครบถ้วน</li>
+          <li><i class="fas fa-check-circle"></i> <code>&lt;title&gt;</code> เป็นชื่อ-นามสกุลของนักเรียน</li>
+          <li><i class="fas fa-check-circle"></i> ใน <code>&lt;body&gt;</code> มี <code>&lt;h1&gt;</code> ทักทายผู้เข้าชม เช่น "สวัสดีครับ/ค่ะ ยินดีต้อนรับ"</li>
+          <li><i class="fas fa-check-circle"></i> มี <code>&lt;p&gt;</code> อย่างน้อย 1 ย่อหน้า แนะนำตัวเองสั้น ๆ</li>
+        </ul>
+      </div>
+
+      <div id="ex1SubmitForm">
+        <div id="ex1StudentInfo" style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:.65rem .9rem;font-size:.88rem;color:#475569;margin-bottom:.75rem">
+          <i class="fas fa-user-graduate" style="color:#059669"></i> กำลังโหลด...
+        </div>
+
+        <div class="playground">
+          <div class="playground-bar">
+            <span><i class="fas fa-pen"></i> เขียนโค้ดคำตอบของคุณที่นี่</span>
+            <button onclick="resetCodePlayground('ex1Editor','ex1Preview', EX1_STARTER)"><i class="fas fa-rotate-left"></i> รีเซ็ต</button>
+          </div>
+          <div class="playground-body">
+            <textarea id="ex1Editor" spellcheck="false"></textarea>
+            <iframe id="ex1Preview" title="ตัวอย่างผลลัพธ์"></iframe>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:.5rem;align-items:center;margin-top:.75rem;flex-wrap:wrap">
+          <button id="ex1SubmitBtn" onclick="_submitEx1()"
+            style="background:linear-gradient(135deg,#059669,#34d399);color:#fff;border:none;padding:.65rem 1.25rem;border-radius:8px;font-family:inherit;font-size:.9rem;font-weight:600;cursor:pointer">
+            <i class="fas fa-paper-plane"></i> ส่งงาน
+          </button>
+          <span id="ex1Msg" style="font-size:.85rem;display:none"></span>
+        </div>
+      </div>
+
+      <!-- รอตรวจ -->
+      <div id="ex1PendingBox" style="display:none;margin-top:1.25rem;background:#fffbeb;border:1px solid #fcd34d;border-radius:12px;padding:1.5rem">
+        <div style="display:flex;align-items:flex-start;gap:.75rem;margin-bottom:1rem">
+          <i class="fas fa-clock" style="color:#d97706;font-size:1.5rem;margin-top:.1rem"></i>
+          <div>
+            <p style="font-weight:700;color:#92400e;margin:0">ส่งงานแล้ว — รอครูตรวจ</p>
+            <p style="font-size:.85rem;color:#b45309;margin:.25rem 0 0">นี่คือตัวอย่างหน้าเว็บที่นักเรียนส่งไป</p>
+          </div>
+        </div>
+        <iframe id="ex1PendingPreview" title="โค้ดที่ส่ง" style="width:100%;min-height:200px;border:1px solid #fcd34d;border-radius:8px;background:#fff"></iframe>
+        <div style="margin-top:.75rem">
+          <button id="ex1EditBtn"
+            style="background:#fff;border:1px solid #fcd34d;color:#b45309;padding:.45rem 1rem;border-radius:8px;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer">
+            <i class="fas fa-pen"></i> แก้ไขโค้ด
+          </button>
+        </div>
+      </div>
+
+      <!-- ตรวจแล้ว -->
+      <div id="ex1GradedBox" style="display:none;margin-top:1.25rem;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:1.5rem">
+        <div style="text-align:center;margin-bottom:1rem">
+          <i class="fas fa-circle-check" style="color:#16a34a;font-size:2.5rem;margin-bottom:.6rem;display:block"></i>
+          <p style="font-weight:700;color:#166534;font-size:1.05rem;margin:0 0 .3rem">ครูตรวจแล้ว!</p>
+          <p id="ex1GradedScore" style="font-size:.9rem;color:#166534;margin:0"></p>
+        </div>
+        <iframe id="ex1GradedPreview" title="โค้ดที่ส่ง" style="width:100%;min-height:200px;border:1px solid #86efac;border-radius:8px;background:#fff"></iframe>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- end content-section -->
+</div><!-- end utab-exercises -->
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <p>&copy; 2569 <strong>ครูศิริศักดิ์ ปิลอง</strong> &mdash; โปรแกรมเบื้องต้น 1 ม.2 | หน่วยที่ 1</p>
+</footer>
+
+<script src="js/auth.js"></script>
+<script>requireAuth('2');</script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/app.js"></script>
+<script>
+  /* ===== TAB ===== */
+  document.querySelectorAll('.unit-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.utab;
+      document.querySelectorAll('.unit-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.unit-tab-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('utab-' + target).classList.add('active');
+    });
+  });
+  if (location.hash === '#exercises') {
+    const exBtn = document.querySelector('[data-utab="exercises"]');
+    if (exBtn) exBtn.click();
+  }
+
+  /* ===== SECTION TOGGLE ===== */
+  function toggleSection(header) {
+    const body = header.nextElementSibling;
+    header.classList.toggle('collapsed');
+    body.classList.toggle('hidden');
+  }
+
+  /* ===== HAMBURGER ===== */
+  const ham = document.getElementById('hamburger');
+  const mob = document.getElementById('mobileMenu');
+  if (ham) ham.addEventListener('click', () => mob.classList.toggle('open'));
+
+  /* ===== PLAYGROUND (lesson demo) ===== */
+  const PG1_STARTER = `<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8">
+    <title>หน้าเว็บของฉัน</title>
+  </head>
+  <body>
+    <h1>สวัสดีชาวโลก!</h1>
+    <p>นี่คือหน้าเว็บแรกที่ฉันเขียนเอง</p>
+  </body>
+</html>`;
+  initCodePlayground('pg1Editor', 'pg1Preview', PG1_STARTER);
+
+  /* ===== EXERCISE 1: code submission ===== */
+  const EX1_TITLE = 'แบบฝึกหัดบทที่ 1: โครงสร้างหน้าเว็บแรกของฉัน';
+  const EX1_STARTER = `<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8">
+    <title>ชื่อ-นามสกุลของฉัน</title>
+  </head>
+  <body>
+    <h1>สวัสดีครับ/ค่ะ ยินดีต้อนรับ</h1>
+    <p>แนะนำตัวเองสั้น ๆ ตรงนี้...</p>
+  </body>
+</html>`;
+
+  initCodePlayground('ex1Editor', 'ex1Preview', EX1_STARTER);
+
+  async function _loadEx1State() {
+    await setupWorkCard({
+      subjectId:    'programming-m2',
+      title:        EX1_TITLE,
+      formEl:       document.getElementById('ex1SubmitForm'),
+      pendingBoxEl: document.getElementById('ex1PendingBox'),
+      gradedBoxEl:  document.getElementById('ex1GradedBox'),
+      editBtnEl:    document.getElementById('ex1EditBtn'),
+      noteInputEl:  document.getElementById('ex1Editor'),
+      onPending: sub => { document.getElementById('ex1PendingPreview').srcdoc = sub.note || ''; },
+      onGraded: sub => {
+        document.getElementById('ex1GradedScore').textContent = 'คะแนน: ' + sub.score + '/' + sub.maxScore;
+        document.getElementById('ex1GradedPreview').srcdoc = sub.note || '';
+      }
+    });
+    wireEditPreview('ex1EditBtn', 'ex1Editor');
+  }
+
+  function _submitEx1() {
+    submitCodeExercise({
+      subjectId: 'programming-m2',
+      title:     EX1_TITLE,
+      maxScore:  10,
+      editorId:  'ex1Editor',
+      btnId:     'ex1SubmitBtn',
+      msgId:     'ex1Msg',
+      formEl:    document.getElementById('ex1SubmitForm'),
+      onDone:    _loadEx1State
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const s = getCurrentStudent();
+    if (s) {
+      document.getElementById('ex1StudentInfo').innerHTML =
+        '<i class="fas fa-user-graduate" style="color:#059669"></i> ' +
+        s.name + '&nbsp;&nbsp;|&nbsp;&nbsp;' + s.class +
+        '&nbsp;&nbsp;เลขที่ ' + s.no + '&nbsp;&nbsp;(รหัส ' + s.id + ')';
+    }
+    _loadEx1State();
+  });
+</script>
+</body>
+</html>

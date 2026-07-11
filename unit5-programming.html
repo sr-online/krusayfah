@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>หน่วยที่ 5 CSS เบื้องต้น | โปรแกรมเบื้องต้น 1</title>
+  <script>(function(){try{var s=JSON.parse(localStorage.getItem('srr_student_2569'));if(!s||!s.grade||!s.name)window.location.replace('login.html');}catch(e){window.location.replace('login.html');}})();</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ===== Unit Page Specific (Programming — green theme) ===== */
+    .unit-hero {
+      background: linear-gradient(135deg, #059669 0%, #047857 60%, #065f46 100%);
+      color: white;
+      padding: 2.5rem 1rem 0;
+    }
+    .unit-hero-content { max-width: 1200px; margin: 0 auto; }
+    .unit-hero h1 { font-size: 1.7rem; font-weight: 700; margin-bottom: .4rem; }
+    .unit-hero p { opacity: .85; font-size: .95rem; margin-bottom: .3rem; }
+    .unit-hero .indicator-box {
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 10px;
+      padding: .75rem 1rem;
+      margin: 1rem 0;
+      font-size: .9rem;
+    }
+
+    .unit-tabs { display: flex; gap: .5rem; flex-wrap: wrap; padding-top: 1rem; }
+    .unit-tab-btn {
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.3);
+      color: white; padding: .55rem 1.1rem;
+      border-radius: 8px 8px 0 0; cursor: pointer;
+      font-family: 'Sarabun', sans-serif; font-size: .9rem;
+      transition: all .2s; display: flex; align-items: center; gap: .4rem;
+    }
+    .unit-tab-btn.active { background: white; color: #059669; border-color: white; font-weight: 700; }
+    .unit-tab-btn:hover:not(.active) { background: rgba(255,255,255,.25); }
+
+    .unit-tab-content { display: none; }
+    .unit-tab-content.active { display: block; }
+
+    .lesson-section {
+      background: white; border-radius: 14px; box-shadow: var(--shadow);
+      margin-bottom: 1.5rem; overflow: hidden;
+    }
+    .section-header {
+      background: linear-gradient(90deg, #059669, #047857);
+      color: white; padding: 1rem 1.25rem;
+      display: flex; align-items: center; gap: .75rem;
+      cursor: pointer; user-select: none;
+    }
+    .section-header .section-num {
+      width: 32px; height: 32px; background: rgba(255,255,255,.25);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: .95rem; flex-shrink: 0;
+    }
+    .section-header h2 { font-size: 1.05rem; font-weight: 700; flex: 1; }
+    .section-header .toggle-icon { transition: transform .3s; }
+    .section-header.collapsed .toggle-icon { transform: rotate(-90deg); }
+    .section-body { padding: 1.5rem; }
+    .section-body.hidden { display: none; }
+
+    .info-card {
+      background: #f8fafc; border: 1px solid #e2e8f0;
+      border-radius: 10px; padding: 1.25rem; margin-bottom: 1rem;
+    }
+    .info-card h3 {
+      font-size: 1rem; font-weight: 700; color: #059669;
+      margin-bottom: .75rem; display: flex; align-items: center; gap: .5rem;
+    }
+    .info-card p { color: #374151; line-height: 1.8; margin-bottom: .5rem; }
+
+    .highlight-box {
+      background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+      border-left: 4px solid #059669;
+      border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0;
+    }
+    .highlight-box h4 { color: #065f46; font-weight: 700; margin-bottom: .5rem; }
+    .highlight-box p, .highlight-box li { color: #374151; line-height: 1.8; }
+
+    .blue-box {
+      background: linear-gradient(135deg, #eff6ff, #dbeafe);
+      border-left: 4px solid #3b82f6; border-radius: 8px;
+      padding: 1rem 1.25rem; margin: 1rem 0;
+    }
+    .blue-box h4 { color: #1e40af; font-weight: 700; margin-bottom: .5rem; }
+
+    .orange-box {
+      background: linear-gradient(135deg, #fff7ed, #fed7aa);
+      border-left: 4px solid #ea580c; border-radius: 8px;
+      padding: 1rem 1.25rem; margin: 1rem 0;
+    }
+    .orange-box h4 { color: #9a3412; font-weight: 700; margin-bottom: .5rem; }
+
+    .step-list { list-style: none; padding: 0; }
+    .step-list li {
+      display: flex; align-items: flex-start; gap: .75rem;
+      padding: .6rem 0; border-bottom: 1px solid #f1f5f9;
+    }
+    .step-list li:last-child { border-bottom: none; }
+    .step-num {
+      min-width: 28px; height: 28px; background: #059669; color: white;
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; font-size: .8rem; font-weight: 700; flex-shrink: 0;
+    }
+
+    .check-list { list-style: none; padding: 0; }
+    .check-list li {
+      padding: .45rem 0; display: flex; align-items: flex-start; gap: .6rem;
+      color: #374151; line-height: 1.7;
+    }
+    .check-list li i { color: #059669; margin-top: .2rem; flex-shrink: 0; }
+
+    .tool-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem; margin-top: 1rem;
+    }
+    .tool-card {
+      background: white; border: 1px solid #e2e8f0;
+      border-radius: 10px; padding: 1rem; text-align: center;
+      transition: all .2s; box-shadow: 0 2px 4px rgba(0,0,0,.06);
+    }
+    .tool-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+    .tool-card .tool-icon { font-size: 2rem; margin-bottom: .5rem; }
+    .tool-card h4 { font-size: .9rem; font-weight: 700; color: #1e293b; margin-bottom: .3rem; }
+    .tool-card p { font-size: .8rem; color: #64748b; }
+
+    .tag-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: .88rem; }
+    .tag-table th {
+      background: #059669; color: white; padding: .65rem 1rem;
+      text-align: left; font-weight: 700;
+    }
+    .tag-table td { padding: .6rem 1rem; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+    .tag-table tr:nth-child(even) td { background: #f0fdf4; }
+
+    .info-card code, .highlight-box code, .blue-box code, .orange-box code, li code {
+      background: #e2e8f0; color: #0f172a; padding: .1rem .4rem; border-radius: 4px;
+      font-family: 'Consolas','Courier New',monospace; font-size: .85rem;
+    }
+
+    .code-block {
+      background: #0f172a; color: #e2e8f0; border-radius: 10px;
+      padding: 1rem 1.25rem; margin: 1rem 0; overflow-x: auto;
+      font-family: 'Consolas','Courier New',monospace; font-size: .85rem; line-height: 1.7;
+      white-space: pre;
+    }
+    .code-block .cm { color: #64748b; }
+    .code-block .tg { color: #5eead4; }
+    .code-block .at { color: #fbbf24; }
+    .code-block .st { color: #86efac; }
+    .code-block .pr { color: #93c5fd; }
+    .code-block .vl { color: #fca5a5; }
+    .code-block .sl { color: #fde68a; }
+
+    .playground {
+      background: #0f172a; border-radius: 12px; overflow: hidden;
+      margin: 1rem 0; box-shadow: 0 4px 14px rgba(0,0,0,.15);
+    }
+    .playground-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: .6rem 1rem; background: #1e293b; color: #e2e8f0;
+      font-size: .82rem; font-weight: 700;
+    }
+    .playground-bar button {
+      background: #334155; color: #e2e8f0; border: none;
+      padding: .35rem .85rem; border-radius: 6px; font-size: .78rem;
+      cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: .35rem;
+    }
+    .playground-bar button:hover { background: #475569; }
+    .playground-body { display: flex; flex-wrap: wrap; }
+    .playground-body textarea {
+      flex: 1 1 300px; min-height: 260px; background: #0f172a; color: #e2e8f0;
+      border: none; padding: 1rem; font-family: 'Consolas','Courier New',monospace;
+      font-size: .82rem; line-height: 1.6; resize: vertical; outline: none;
+    }
+    .playground-body iframe {
+      flex: 1 1 300px; min-height: 260px; border: none; background: #fff;
+      border-left: 1px solid #334155;
+    }
+    .playground-label {
+      font-size: .7rem; color: #94a3b8; padding: .35rem 1rem 0; background: #0f172a;
+    }
+    @media (max-width: 700px) {
+      .playground-body { flex-direction: column; }
+      .playground-body iframe { border-left: none; border-top: 1px solid #334155; }
+    }
+
+    /* Box model diagram */
+    .box-model-demo { display: flex; justify-content: center; margin: 1rem 0; }
+    .bm-margin { background: #fef3c7; padding: 20px; border: 2px dashed #d97706; text-align:center; }
+    .bm-border { background: #fecaca; padding: 16px; border: 2px dashed #dc2626; }
+    .bm-padding { background: #bfdbfe; padding: 16px; border: 2px dashed #2563eb; }
+    .bm-content { background: #bbf7d0; padding: 12px 24px; border: 2px dashed #16a34a; font-weight: 700; color: #14532d; font-size: .85rem; }
+    .bm-label { font-size: .7rem; font-weight: 700; margin-bottom: 4px; }
+
+    .work-card {
+      background: white; border-radius: 14px;
+      box-shadow: var(--shadow); margin-bottom: 1.5rem;
+      overflow: hidden; border: 1px solid #e2e8f0;
+    }
+    .work-card-header {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: 1.25rem; border-bottom: 1px solid #e2e8f0;
+      background: #f8fafc;
+    }
+    .work-num {
+      min-width: 42px; height: 42px;
+      background: linear-gradient(135deg, #059669, #34d399);
+      color: white; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; font-weight: 700; flex-shrink: 0;
+    }
+    .work-title { flex: 1; min-width: 0; }
+    .work-title h3 { font-size: 1rem; font-weight: 700; color: #1e293b; margin: 0 0 .25rem; }
+    .work-title p  { font-size: .85rem; color: #64748b; margin: 0; line-height: 1.5; }
+    .work-badges { display: flex; flex-direction: column; align-items: flex-end; gap: .4rem; flex-shrink: 0; }
+    .work-score-badge {
+      background: #d1fae5; color: #065f46;
+      padding: .25rem .8rem; border-radius: 999px;
+      font-size: .8rem; font-weight: 700; white-space: nowrap;
+    }
+    .work-status-badge {
+      padding: .2rem .75rem; border-radius: 999px;
+      font-size: .78rem; font-weight: 600; white-space: nowrap;
+    }
+    .work-status-badge.open    { background: #d1fae5; color: #065f46; }
+    .work-status-badge.coming  { background: #f1f5f9; color: #64748b; }
+    .work-status-badge.done    { background: #ede9fe; color: #5b21b6; }
+    .work-card-body { padding: 1.25rem; }
+
+    @media (max-width: 768px) {
+      .unit-hero h1 { font-size: 1.3rem; }
+      .tool-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .tool-grid { grid-template-columns: 1fr; }
+      .tag-table { font-size: .8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-icon"><i class="fas fa-chalkboard-user"></i></div>
+      <span>ครูศิริศักดิ์ ปิลอง</span>
+    </a>
+    <ul class="navbar-menu">
+      <li><a href="home.html"><i class="fas fa-house"></i> หน้าหลัก</a></li>
+      <li><a href="subject-programming.html"><i class="fas fa-code"></i> โปรแกรมเบื้องต้น 1 ม.2</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="เมนู">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="home.html"><i class="fas fa-house"></i> หน้าหลัก</a>
+    <a href="subject-programming.html"><i class="fas fa-code"></i> โปรแกรมเบื้องต้น 1 ม.2</a>
+  </div>
+</nav>
+
+<!-- ===== UNIT HERO ===== -->
+<div class="unit-hero">
+  <div class="unit-hero-content container">
+    <p style="opacity:.75;font-size:.83rem;margin-bottom:.5rem">
+      <a href="home.html" style="color:rgba(255,255,255,.8)">หน้าหลัก</a>
+      <i class="fas fa-chevron-right" style="font-size:.65rem;margin:0 .35rem"></i>
+      <a href="subject-programming.html" style="color:rgba(255,255,255,.8)">โปรแกรมเบื้องต้น 1</a>
+      <i class="fas fa-chevron-right" style="font-size:.65rem;margin:0 .35rem"></i>
+      หน่วยที่ 5
+    </p>
+    <h1>🎨 หน่วยที่ 5: CSS เบื้องต้น จัดสวยหน้าเว็บ</h1>
+    <p>โปรแกรมเบื้องต้น 1 &bull; มัธยมศึกษาปีที่ 2 &bull; ภาคเรียนที่ 1/2569</p>
+
+    <div class="indicator-box">
+      <strong>ตัวชี้วัด:</strong> อธิบายหลักการทำงานของ CSS และใช้ CSS พื้นฐานตกแต่งสี ตัวอักษร และระยะห่าง
+      ของหน้าเว็บที่เขียนด้วย HTML ได้ <em style="opacity:.8">(ว. 4.2 ม. 2/1-2/2)</em>
+    </div>
+
+    <div class="unit-tabs">
+      <button class="unit-tab-btn active" data-utab="lesson">
+        <i class="fas fa-book-open"></i> เนื้อหาบทเรียน
+      </button>
+      <button class="unit-tab-btn" data-utab="exercises">
+        <i class="fas fa-pencil-alt"></i> แบบฝึกหัด
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LESSON TAB ===== -->
+<div id="utab-lesson" class="unit-tab-content active">
+<div class="content-section">
+
+  <!-- ========== SECTION 1: What is CSS ========== -->
+  <div class="lesson-section" id="section-whatiscss">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-num">1</div>
+      <h2>CSS คืออะไร และวิธีเชื่อมกับ HTML</h2>
+      <i class="fas fa-chevron-down toggle-icon"></i>
+    </div>
+    <div class="section-body">
+
+      <div class="info-card">
+        <h3><i class="fas fa-palette"></i> CSS คืออะไร</h3>
+        <p>
+          <strong>CSS</strong> ย่อมาจาก <strong>Cascading Style Sheets</strong> เป็นภาษาที่ใช้กำหนด<strong>รูปลักษณ์</strong>
+          ของหน้าเว็บ เช่น สี ขนาดตัวอักษร ระยะห่าง ตำแหน่ง — ถ้า HTML คือ "โครงกระดูก" CSS ก็คือ "เสื้อผ้าและการแต่งหน้า" ให้หน้าเว็บ
+        </p>
+      </div>
+
+      <div class="highlight-box">
+        <h4><i class="fas fa-code-branch"></i> 3 วิธีเชื่อม CSS เข้ากับ HTML</h4>
+        <table class="tag-table">
+          <thead><tr><th>วิธี</th><th>ลักษณะ</th></tr></thead>
+          <tbody>
+            <tr><td><strong>1. Inline CSS</strong></td><td>เขียนใน attribute <code>style</code> ของแท็กนั้นโดยตรง — เหมาะกับการทดลองเร็ว ๆ</td></tr>
+            <tr><td><strong>2. Internal CSS</strong></td><td>เขียนรวมไว้ใน <code>&lt;style&gt;</code> ภายใน <code>&lt;head&gt;</code> — ใช้ได้ทั้งหน้า</td></tr>
+            <tr><td><strong>3. External CSS</strong></td><td>เขียนแยกเป็นไฟล์ <code>.css</code> ต่างหาก แล้วเชื่อมด้วย <code>&lt;link&gt;</code> — เป็นวิธีที่นิยมที่สุด</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="info-card">
+        <h3><i class="fas fa-1"></i> ตัวอย่าง Inline CSS</h3>
+        <div class="code-block">&lt;<span class="tg">h1</span> <span class="at">style</span>=<span class="st">"color: green; text-align: center;"</span>&gt;สวัสดี&lt;/<span class="tg">h1</span>&gt;</div>
+      </div>
+
+      <div class="info-card">
+        <h3><i class="fas fa-2"></i> ตัวอย่าง Internal CSS</h3>
+        <div class="code-block">&lt;<span class="tg">head</span>&gt;
+  &lt;<span class="tg">style</span>&gt;
+    <span class="sl">h1</span> {
+      <span class="pr">color</span>: <span class="vl">green</span>;
+      <span class="pr">text-align</span>: <span class="vl">center</span>;
+    }
+  &lt;/<span class="tg">style</span>&gt;
+&lt;/<span class="tg">head</span>&gt;</div>
+        <p style="margin-top:.5rem">ในแบบฝึกหัดออนไลน์นี้ เราจะใช้ <strong>Internal CSS</strong> เป็นหลัก เพราะเขียนไว้ในไฟล์เดียวกัน ทดสอบง่าย</p>
+      </div>
+
+      <div class="info-card">
+        <h3><i class="fas fa-3"></i> ตัวอย่าง External CSS (ใช้งานจริงเมื่อทำเว็บไซต์)</h3>
+        <div class="code-block"><span class="cm">// ไฟล์ style.css</span>
+<span class="sl">h1</span> { <span class="pr">color</span>: <span class="vl">green</span>; }
+
+<span class="cm">&lt;!-- ไฟล์ index.html --&gt;</span>
+&lt;<span class="tg">head</span>&gt;
+  &lt;<span class="tg">link</span> <span class="at">rel</span>=<span class="st">"stylesheet"</span> <span class="at">href</span>=<span class="st">"style.css"</span>&gt;
+&lt;/<span class="tg">head</span>&gt;</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== SECTION 2: Selector ========== -->
+  <div class="lesson-section" id="section-selector">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-num">2</div>
+      <h2>Selector พื้นฐาน</h2>
+      <i class="fas fa-chevron-down toggle-icon"></i>
+    </div>
+    <div class="section-body">
+
+      <div class="info-card">
+        <h3><i class="fas fa-crosshairs"></i> Selector คืออะไร</h3>
+        <p><strong>Selector</strong> คือส่วนที่บอกว่า "จะตกแต่งอิลิเมนต์ตัวไหน" ไวยากรณ์ CSS พื้นฐานคือ:</p>
+        <div class="code-block"><span class="sl">selector</span> {
+  <span class="pr">property</span>: <span class="vl">value</span>;
+}</div>
+      </div>
+
+      <div class="info-card">
+        <h3><i class="fas fa-tag"></i> Tag Selector</h3>
+        <p>เลือกจาก<strong>ชื่อแท็ก</strong>โดยตรง มีผลกับทุกอิลิเมนต์ที่เป็นแท็กนั้นในหน้าเว็บ</p>
+        <div class="code-block"><span class="sl">p</span> {
+  <span class="pr">color</span>: <span class="vl">blue</span>;
+}</div>
+      </div>
+
+      <div class="info-card">
+        <h3><i class="fas fa-hashtag"></i> Class Selector</h3>
+        <p>ใช้ attribute <code>class="ชื่อคลาส"</code> ในแท็ก HTML แล้วเรียกใช้ด้วยเครื่องหมาย <strong>จุด (.)</strong> นำหน้าใน CSS — ใช้ซ้ำได้กับหลายอิลิเมนต์</p>
+        <div class="code-block"><span class="cm">&lt;!-- HTML --&gt;</span>
+&lt;<span class="tg">p</span> <span class="at">class</span>=<span class="st">"highlight"</span>&gt;ข้อความสำคัญ&lt;/<span class="tg">p</span>&gt;
+&lt;<span class="tg">p</span> <span class="at">class</span>=<span class="st">"highlight"</span>&gt;อีกข้อความสำคัญ&lt;/<span class="tg">p</span>&gt;
+
+<span class="cm">/* CSS */</span>
+<span class="sl">.highlight</span> {
+  <span class="pr">background-color</span>: <span class="vl">yellow</span>;
+}</div>
+      </div>
+
+      <div class="info-card">
+        <h3><i class="fas fa-i-cursor"></i> ID Selector</h3>
+        <p>ใช้ attribute <code>id="ชื่อไอดี"</code> เรียกใช้ด้วยเครื่องหมาย <strong>ชาร์ป (#)</strong> นำหน้าใน CSS — <strong>id ต้องไม่ซ้ำกัน</strong>ในหน้าเดียว (ใช้ได้แค่ 1 อิลิเมนต์เท่านั้น)</p>
+        <div class="code-block"><span class="cm">&lt;!-- HTML --&gt;</span>
+&lt;<span class="tg">h1</span> <span class="at">id</span>=<span class="st">"main-title"</span>&gt;ชื่อเว็บไซต์&lt;/<span class="tg">h1</span>&gt;
+
+<span class="cm">/* CSS */</span>
+<span class="sl">#main-title</span> {
+  <span class="pr">color</span>: <span class="vl">darkgreen</span>;
+}</div>
+      </div>
+
+      <div class="orange-box">
+        <h4><i class="fas fa-scale-balanced"></i> ใช้ class หรือ id ดี</h4>
+        <p style="margin:0">ทั่วไปแนะนำให้ใช้ <code>class</code> เป็นหลัก เพราะใช้ซ้ำได้หลายที่ ส่วน <code>id</code> เก็บไว้ใช้กับจุดที่มีแค่แห่งเดียวในหน้า เช่น หัวข้อหลักของหน้า</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== SECTION 3: Properties ========== -->
+  <div class="lesson-section" id="section-properties">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-num">3</div>
+      <h2>คุณสมบัติ CSS ยอดฮิต</h2>
+      <i class="fas fa-chevron-down toggle-icon"></i>
+    </div>
+    <div class="section-body">
+
+      <div class="info-card">
+        <h3><i class="fas fa-star"></i> คุณสมบัติที่ใช้บ่อยที่สุด</h3>
+        <table class="tag-table">
+          <thead><tr><th>Property</th><th>หน้าที่</th><th>ตัวอย่างค่า</th></tr></thead>
+          <tbody>
+            <tr><td><code>color</code></td><td>สีตัวอักษร</td><td><code>red</code>, <code>#ff0000</code></td></tr>
+            <tr><td><code>background-color</code></td><td>สีพื้นหลัง</td><td><code>yellow</code>, <code>#fef08a</code></td></tr>
+            <tr><td><code>font-size</code></td><td>ขนาดตัวอักษร</td><td><code>16px</code>, <code>1.2rem</code></td></tr>
+            <tr><td><code>font-family</code></td><td>รูปแบบตัวอักษร (ฟอนต์)</td><td><code>'Sarabun', sans-serif</code></td></tr>
+            <tr><td><code>text-align</code></td><td>จัดตำแหน่งข้อความ</td><td><code>left</code>, <code>center</code>, <code>right</code></td></tr>
+            <tr><td><code>margin</code></td><td>ระยะห่าง<strong>ภายนอก</strong>ขอบอิลิเมนต์</td><td><code>10px</code>, <code>1rem auto</code></td></tr>
+            <tr><td><code>padding</code></td><td>ระยะห่าง<strong>ภายใน</strong>ก่อนถึงขอบอิลิเมนต์</td><td><code>10px</code>, <code>1rem 2rem</code></td></tr>
+            <tr><td><code>border</code></td><td>เส้นขอบ</td><td><code>2px solid black</code></td></tr>
+          </tbody>
+        </table>
+        <div class="code-block"><span class="sl">.card</span> {
+  <span class="pr">color</span>: <span class="vl">white</span>;
+  <span class="pr">background-color</span>: <span class="vl">#059669</span>;
+  <span class="pr">font-size</span>: <span class="vl">18px</span>;
+  <span class="pr">text-align</span>: <span class="vl">center</span>;
+  <span class="pr">padding</span>: <span class="vl">20px</span>;
+  <span class="pr">border</span>: <span class="vl">2px solid #047857</span>;
+}</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== SECTION 4: Box Model ========== -->
+  <div class="lesson-section" id="section-boxmodel">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-num">4</div>
+      <h2>Box Model เบื้องต้น</h2>
+      <i class="fas fa-chevron-down toggle-icon"></i>
+    </div>
+    <div class="section-body">
+
+      <div class="info-card">
+        <h3><i class="fas fa-box"></i> ทุกอิลิเมนต์คือ "กล่อง"</h3>
+        <p>ในสายตาของ CSS ทุกอิลิเมนต์ HTML จะถูกมองเป็น<strong>กล่องสี่เหลี่ยม</strong> ประกอบด้วย 4 ชั้น จากในสุดไปนอกสุด:</p>
+
+        <div class="box-model-demo">
+          <div class="bm-margin">
+            <div class="bm-label" style="color:#92400e">margin</div>
+            <div class="bm-border">
+              <div class="bm-label" style="color:#991b1b">border</div>
+              <div class="bm-padding">
+                <div class="bm-label" style="color:#1e3a8a">padding</div>
+                <div class="bm-content">content</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <table class="tag-table">
+          <thead><tr><th>ชั้น</th><th>ความหมาย</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Content</strong></td><td>เนื้อหาจริง เช่น ข้อความหรือรูปภาพ</td></tr>
+            <tr><td><strong>Padding</strong></td><td>ที่ว่าง<strong>ภายใน</strong> ระหว่างเนื้อหากับเส้นขอบ</td></tr>
+            <tr><td><strong>Border</strong></td><td>เส้นขอบของกล่อง</td></tr>
+            <tr><td><strong>Margin</strong></td><td>ที่ว่าง<strong>ภายนอก</strong> ระหว่างกล่องนี้กับอิลิเมนต์ข้างเคียง</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="highlight-box">
+        <h4><i class="fas fa-laptop-code"></i> ลองเขียนโค้ดได้ทันทีที่นี่!</h4>
+        <p style="margin:0">ลองปรับสี ขนาด และระยะห่างของกล่องข้อความในโค้ดด้านล่างดู</p>
+      </div>
+
+      <div class="playground">
+        <div class="playground-bar">
+          <span><i class="fas fa-flask"></i> Live Code Playground</span>
+          <button onclick="resetCodePlayground('pg5Editor','pg5Preview', PG5_STARTER)"><i class="fas fa-rotate-left"></i> รีเซ็ตโค้ด</button>
+        </div>
+        <div class="playground-label">เขียนโค้ด HTML + CSS</div>
+        <div class="playground-body">
+          <textarea id="pg5Editor" spellcheck="false"></textarea>
+          <iframe id="pg5Preview" title="ตัวอย่างผลลัพธ์"></iframe>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- end content-section -->
+</div><!-- end utab-lesson -->
+
+<!-- ===== EXERCISES TAB ===== -->
+<div id="utab-exercises" class="unit-tab-content">
+<div class="content-section">
+
+  <!-- ===== แบบฝึกหัดบทที่ 5 ===== -->
+  <div class="work-card">
+    <div class="work-card-header">
+      <div class="work-num">5</div>
+      <div class="work-title">
+        <h3><i class="fas fa-code" style="color:#059669;margin-right:.4rem"></i>แบบฝึกหัดบทที่ 5 — ตกแต่งหน้าเว็บด้วย CSS</h3>
+        <p>นำ Internal CSS มาตกแต่งหน้าเว็บแนะนำตัวเองที่เคยเขียนในหน่วยที่ 2 ให้สวยงามขึ้น</p>
+      </div>
+      <div class="work-badges">
+        <span class="work-score-badge"><i class="fas fa-star" style="font-size:.75rem"></i> 10 คะแนน</span>
+        <span class="work-status-badge open"><i class="fas fa-circle-check" style="font-size:.7rem"></i> เปิดรับงาน</span>
+      </div>
+    </div>
+    <div class="work-card-body">
+
+      <div class="blue-box" style="margin-top:0;margin-bottom:1.25rem">
+        <h4><i class="fas fa-list-ol"></i> โจทย์</h4>
+        <p style="margin:0 0 .5rem;color:#374151">เขียนหน้าเว็บที่มี <code>&lt;style&gt;</code> ใน <code>&lt;head&gt;</code> (Internal CSS) และตกแต่งให้ครบดังนี้:</p>
+        <ul class="check-list">
+          <li><i class="fas fa-check-circle"></i> กำหนด <code>color</code> และ <code>background-color</code> อย่างน้อย 1 จุด</li>
+          <li><i class="fas fa-check-circle"></i> กำหนด <code>font-size</code> หรือ <code>font-family</code> อย่างน้อย 1 จุด</li>
+          <li><i class="fas fa-check-circle"></i> ใช้ <strong>class selector</strong> (<code>.ชื่อคลาส</code>) อย่างน้อย 1 จุด</li>
+          <li><i class="fas fa-check-circle"></i> กำหนด <code>margin</code> หรือ <code>padding</code> อย่างน้อย 1 จุด</li>
+          <li><i class="fas fa-check-circle"></i> กำหนด <code>text-align: center;</code> ให้หัวข้ออย่างน้อย 1 จุด</li>
+        </ul>
+      </div>
+
+      <div id="ex5SubmitForm">
+        <div id="ex5StudentInfo" style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:.65rem .9rem;font-size:.88rem;color:#475569;margin-bottom:.75rem">
+          <i class="fas fa-user-graduate" style="color:#059669"></i> กำลังโหลด...
+        </div>
+
+        <div class="playground">
+          <div class="playground-bar">
+            <span><i class="fas fa-pen"></i> เขียนโค้ดคำตอบของคุณที่นี่</span>
+            <button onclick="resetCodePlayground('ex5Editor','ex5Preview', EX5_STARTER)"><i class="fas fa-rotate-left"></i> รีเซ็ต</button>
+          </div>
+          <div class="playground-body">
+            <textarea id="ex5Editor" spellcheck="false"></textarea>
+            <iframe id="ex5Preview" title="ตัวอย่างผลลัพธ์"></iframe>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:.5rem;align-items:center;margin-top:.75rem;flex-wrap:wrap">
+          <button id="ex5SubmitBtn" onclick="_submitEx5()"
+            style="background:linear-gradient(135deg,#059669,#34d399);color:#fff;border:none;padding:.65rem 1.25rem;border-radius:8px;font-family:inherit;font-size:.9rem;font-weight:600;cursor:pointer">
+            <i class="fas fa-paper-plane"></i> ส่งงาน
+          </button>
+          <span id="ex5Msg" style="font-size:.85rem;display:none"></span>
+        </div>
+      </div>
+
+      <!-- รอตรวจ -->
+      <div id="ex5PendingBox" style="display:none;margin-top:1.25rem;background:#fffbeb;border:1px solid #fcd34d;border-radius:12px;padding:1.5rem">
+        <div style="display:flex;align-items:flex-start;gap:.75rem;margin-bottom:1rem">
+          <i class="fas fa-clock" style="color:#d97706;font-size:1.5rem;margin-top:.1rem"></i>
+          <div>
+            <p style="font-weight:700;color:#92400e;margin:0">ส่งงานแล้ว — รอครูตรวจ</p>
+            <p style="font-size:.85rem;color:#b45309;margin:.25rem 0 0">นี่คือตัวอย่างหน้าเว็บที่นักเรียนส่งไป</p>
+          </div>
+        </div>
+        <iframe id="ex5PendingPreview" title="โค้ดที่ส่ง" style="width:100%;min-height:240px;border:1px solid #fcd34d;border-radius:8px;background:#fff"></iframe>
+        <div style="margin-top:.75rem">
+          <button id="ex5EditBtn"
+            style="background:#fff;border:1px solid #fcd34d;color:#b45309;padding:.45rem 1rem;border-radius:8px;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer">
+            <i class="fas fa-pen"></i> แก้ไขโค้ด
+          </button>
+        </div>
+      </div>
+
+      <!-- ตรวจแล้ว -->
+      <div id="ex5GradedBox" style="display:none;margin-top:1.25rem;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:1.5rem">
+        <div style="text-align:center;margin-bottom:1rem">
+          <i class="fas fa-circle-check" style="color:#16a34a;font-size:2.5rem;margin-bottom:.6rem;display:block"></i>
+          <p style="font-weight:700;color:#166534;font-size:1.05rem;margin:0 0 .3rem">ครูตรวจแล้ว!</p>
+          <p id="ex5GradedScore" style="font-size:.9rem;color:#166534;margin:0"></p>
+        </div>
+        <iframe id="ex5GradedPreview" title="โค้ดที่ส่ง" style="width:100%;min-height:240px;border:1px solid #86efac;border-radius:8px;background:#fff"></iframe>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- end content-section -->
+</div><!-- end utab-exercises -->
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <p>&copy; 2569 <strong>ครูศิริศักดิ์ ปิลอง</strong> &mdash; โปรแกรมเบื้องต้น 1 ม.2 | หน่วยที่ 5</p>
+</footer>
+
+<script src="js/auth.js"></script>
+<script>requireAuth('2');</script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/app.js"></script>
+<script>
+  /* ===== TAB ===== */
+  document.querySelectorAll('.unit-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.utab;
+      document.querySelectorAll('.unit-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.unit-tab-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('utab-' + target).classList.add('active');
+    });
+  });
+  if (location.hash === '#exercises') {
+    const exBtn = document.querySelector('[data-utab="exercises"]');
+    if (exBtn) exBtn.click();
+  }
+
+  /* ===== SECTION TOGGLE ===== */
+  function toggleSection(header) {
+    const body = header.nextElementSibling;
+    header.classList.toggle('collapsed');
+    body.classList.toggle('hidden');
+  }
+
+  /* ===== HAMBURGER ===== */
+  const ham = document.getElementById('hamburger');
+  const mob = document.getElementById('mobileMenu');
+  if (ham) ham.addEventListener('click', () => mob.classList.toggle('open'));
+
+  /* ===== PLAYGROUND (lesson demo) ===== */
+  const PG5_STARTER = `<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8">
+    <style>
+      body {
+        font-family: 'Sarabun', sans-serif;
+      }
+      .title {
+        color: white;
+        background-color: #059669;
+        text-align: center;
+        padding: 20px;
+      }
+      .box {
+        border: 2px solid #059669;
+        margin: 16px;
+        padding: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 class="title">ลองแก้ไข CSS ดูสิ!</h1>
+    <div class="box">
+      <p>ลองเปลี่ยนสี ขนาด หรือระยะห่างดู</p>
+    </div>
+  </body>
+</html>`;
+  initCodePlayground('pg5Editor', 'pg5Preview', PG5_STARTER);
+
+  /* ===== EXERCISE 5: code submission ===== */
+  const EX5_TITLE = 'แบบฝึกหัดบทที่ 5: ตกแต่งหน้าเว็บด้วย CSS';
+  const EX5_STARTER = `<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8">
+    <title>แนะนำตัวเอง</title>
+    <style>
+      /* เขียน CSS ของคุณตรงนี้ */
+      .title {
+        color: white;
+        background-color: #059669;
+        text-align: center;
+        padding: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 class="title">ชื่อ-นามสกุลของฉัน</h1>
+
+    <h2>ข้อมูลส่วนตัว</h2>
+    <p>ฉันเรียนอยู่ชั้น <strong>มัธยมศึกษาปีที่ 2</strong> ...</p>
+
+    <h2>งานอดิเรก</h2>
+    <ul>
+      <li>งานอดิเรกที่ 1</li>
+      <li>งานอดิเรกที่ 2</li>
+    </ul>
+  </body>
+</html>`;
+
+  initCodePlayground('ex5Editor', 'ex5Preview', EX5_STARTER);
+
+  async function _loadEx5State() {
+    await setupWorkCard({
+      subjectId:    'programming-m2',
+      title:        EX5_TITLE,
+      formEl:       document.getElementById('ex5SubmitForm'),
+      pendingBoxEl: document.getElementById('ex5PendingBox'),
+      gradedBoxEl:  document.getElementById('ex5GradedBox'),
+      editBtnEl:    document.getElementById('ex5EditBtn'),
+      noteInputEl:  document.getElementById('ex5Editor'),
+      onPending: sub => { document.getElementById('ex5PendingPreview').srcdoc = sub.note || ''; },
+      onGraded: sub => {
+        document.getElementById('ex5GradedScore').textContent = 'คะแนน: ' + sub.score + '/' + sub.maxScore;
+        document.getElementById('ex5GradedPreview').srcdoc = sub.note || '';
+      }
+    });
+    wireEditPreview('ex5EditBtn', 'ex5Editor');
+  }
+
+  function _submitEx5() {
+    submitCodeExercise({
+      subjectId: 'programming-m2',
+      title:     EX5_TITLE,
+      maxScore:  10,
+      editorId:  'ex5Editor',
+      btnId:     'ex5SubmitBtn',
+      msgId:     'ex5Msg',
+      formEl:    document.getElementById('ex5SubmitForm'),
+      onDone:    _loadEx5State
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const s = getCurrentStudent();
+    if (s) {
+      document.getElementById('ex5StudentInfo').innerHTML =
+        '<i class="fas fa-user-graduate" style="color:#059669"></i> ' +
+        s.name + '&nbsp;&nbsp;|&nbsp;&nbsp;' + s.class +
+        '&nbsp;&nbsp;เลขที่ ' + s.no + '&nbsp;&nbsp;(รหัส ' + s.id + ')';
+    }
+    _loadEx5State();
+  });
+</script>
+</body>
+</html>

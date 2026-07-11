@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>หน่วยที่ 6 โปรเจกต์จบภาค | โปรแกรมเบื้องต้น 1</title>
+  <script>(function(){try{var s=JSON.parse(localStorage.getItem('srr_student_2569'));if(!s||!s.grade||!s.name)window.location.replace('login.html');}catch(e){window.location.replace('login.html');}})();</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ===== Unit Page Specific (Programming — green theme) ===== */
+    .unit-hero {
+      background: linear-gradient(135deg, #059669 0%, #047857 60%, #065f46 100%);
+      color: white;
+      padding: 2.5rem 1rem 0;
+    }
+    .unit-hero-content { max-width: 1200px; margin: 0 auto; }
+    .unit-hero h1 { font-size: 1.7rem; font-weight: 700; margin-bottom: .4rem; }
+    .unit-hero p { opacity: .85; font-size: .95rem; margin-bottom: .3rem; }
+    .unit-hero .indicator-box {
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 10px;
+      padding: .75rem 1rem;
+      margin: 1rem 0;
+      font-size: .9rem;
+    }
+
+    .unit-tabs { display: flex; gap: .5rem; flex-wrap: wrap; padding-top: 1rem; }
+    .unit-tab-btn {
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.3);
+      color: white; padding: .55rem 1.1rem;
+      border-radius: 8px 8px 0 0; cursor: pointer;
+      font-family: 'Sarabun', sans-serif; font-size: .9rem;
+      transition: all .2s; display: flex; align-items: center; gap: .4rem;
+    }
+    .unit-tab-btn.active { background: white; color: #059669; border-color: white; font-weight: 700; }
+    .unit-tab-btn:hover:not(.active) { background: rgba(255,255,255,.25); }
+
+    .unit-tab-content { display: none; }
+    .unit-tab-content.active { display: block; }
+
+    .lesson-section {
+      background: white; border-radius: 14px; box-shadow: var(--shadow);
+      margin-bottom: 1.5rem; overflow: hidden;
+    }
+    .section-header {
+      background: linear-gradient(90deg, #059669, #047857);
+      color: white; padding: 1rem 1.25rem;
+      display: flex; align-items: center; gap: .75rem;
+      cursor: pointer; user-select: none;
+    }
+    .section-header .section-num {
+      width: 32px; height: 32px; background: rgba(255,255,255,.25);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: .95rem; flex-shrink: 0;
+    }
+    .section-header h2 { font-size: 1.05rem; font-weight: 700; flex: 1; }
+    .section-header .toggle-icon { transition: transform .3s; }
+    .section-header.collapsed .toggle-icon { transform: rotate(-90deg); }
+    .section-body { padding: 1.5rem; }
+    .section-body.hidden { display: none; }
+
+    .info-card {
+      background: #f8fafc; border: 1px solid #e2e8f0;
+      border-radius: 10px; padding: 1.25rem; margin-bottom: 1rem;
+    }
+    .info-card h3 {
+      font-size: 1rem; font-weight: 700; color: #059669;
+      margin-bottom: .75rem; display: flex; align-items: center; gap: .5rem;
+    }
+    .info-card p { color: #374151; line-height: 1.8; margin-bottom: .5rem; }
+
+    .highlight-box {
+      background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+      border-left: 4px solid #059669;
+      border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0;
+    }
+    .highlight-box h4 { color: #065f46; font-weight: 700; margin-bottom: .5rem; }
+    .highlight-box p, .highlight-box li { color: #374151; line-height: 1.8; }
+
+    .blue-box {
+      background: linear-gradient(135deg, #eff6ff, #dbeafe);
+      border-left: 4px solid #3b82f6; border-radius: 8px;
+      padding: 1rem 1.25rem; margin: 1rem 0;
+    }
+    .blue-box h4 { color: #1e40af; font-weight: 700; margin-bottom: .5rem; }
+
+    .orange-box {
+      background: linear-gradient(135deg, #fff7ed, #fed7aa);
+      border-left: 4px solid #ea580c; border-radius: 8px;
+      padding: 1rem 1.25rem; margin: 1rem 0;
+    }
+    .orange-box h4 { color: #9a3412; font-weight: 700; margin-bottom: .5rem; }
+
+    .step-list { list-style: none; padding: 0; }
+    .step-list li {
+      display: flex; align-items: flex-start; gap: .75rem;
+      padding: .6rem 0; border-bottom: 1px solid #f1f5f9;
+    }
+    .step-list li:last-child { border-bottom: none; }
+    .step-num {
+      min-width: 28px; height: 28px; background: #059669; color: white;
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; font-size: .8rem; font-weight: 700; flex-shrink: 0;
+    }
+
+    .check-list { list-style: none; padding: 0; }
+    .check-list li {
+      padding: .45rem 0; display: flex; align-items: flex-start; gap: .6rem;
+      color: #374151; line-height: 1.7;
+    }
+    .check-list li i { color: #059669; margin-top: .2rem; flex-shrink: 0; }
+
+    .tool-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem; margin-top: 1rem;
+    }
+    .tool-card {
+      background: white; border: 1px solid #e2e8f0;
+      border-radius: 10px; padding: 1rem; text-align: center;
+      transition: all .2s; box-shadow: 0 2px 4px rgba(0,0,0,.06);
+    }
+    .tool-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+    .tool-card .tool-icon { font-size: 2rem; margin-bottom: .5rem; }
+    .tool-card h4 { font-size: .9rem; font-weight: 700; color: #1e293b; margin-bottom: .3rem; }
+    .tool-card p { font-size: .8rem; color: #64748b; }
+
+    .tag-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: .88rem; }
+    .tag-table th {
+      background: #059669; color: white; padding: .65rem 1rem;
+      text-align: left; font-weight: 700;
+    }
+    .tag-table td { padding: .6rem 1rem; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+    .tag-table tr:nth-child(even) td { background: #f0fdf4; }
+
+    .info-card code, .highlight-box code, .blue-box code, .orange-box code, li code {
+      background: #e2e8f0; color: #0f172a; padding: .1rem .4rem; border-radius: 4px;
+      font-family: 'Consolas','Courier New',monospace; font-size: .85rem;
+    }
+
+    .code-block {
+      background: #0f172a; color: #e2e8f0; border-radius: 10px;
+      padding: 1rem 1.25rem; margin: 1rem 0; overflow-x: auto;
+      font-family: 'Consolas','Courier New',monospace; font-size: .85rem; line-height: 1.7;
+      white-space: pre;
+    }
+    .code-block .cm { color: #64748b; }
+    .code-block .tg { color: #5eead4; }
+    .code-block .at { color: #fbbf24; }
+    .code-block .st { color: #86efac; }
+
+    .playground {
+      background: #0f172a; border-radius: 12px; overflow: hidden;
+      margin: 1rem 0; box-shadow: 0 4px 14px rgba(0,0,0,.15);
+    }
+    .playground-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: .6rem 1rem; background: #1e293b; color: #e2e8f0;
+      font-size: .82rem; font-weight: 700;
+    }
+    .playground-bar button {
+      background: #334155; color: #e2e8f0; border: none;
+      padding: .35rem .85rem; border-radius: 6px; font-size: .78rem;
+      cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: .35rem;
+    }
+    .playground-bar button:hover { background: #475569; }
+    .playground-body { display: flex; flex-wrap: wrap; }
+    .playground-body textarea {
+      flex: 1 1 340px; min-height: 380px; background: #0f172a; color: #e2e8f0;
+      border: none; padding: 1rem; font-family: 'Consolas','Courier New',monospace;
+      font-size: .82rem; line-height: 1.6; resize: vertical; outline: none;
+    }
+    .playground-body iframe {
+      flex: 1 1 340px; min-height: 380px; border: none; background: #fff;
+      border-left: 1px solid #334155;
+    }
+    .playground-label {
+      font-size: .7rem; color: #94a3b8; padding: .35rem 1rem 0; background: #0f172a;
+    }
+    @media (max-width: 700px) {
+      .playground-body { flex-direction: column; }
+      .playground-body iframe { border-left: none; border-top: 1px solid #334155; }
+    }
+
+    .folder-tree {
+      background: #0f172a; color: #e2e8f0; border-radius: 10px;
+      padding: 1rem 1.25rem; margin: 1rem 0; font-family: 'Consolas','Courier New',monospace;
+      font-size: .85rem; line-height: 1.9; white-space: pre;
+    }
+    .folder-tree .fd { color: #fbbf24; }
+    .folder-tree .fl { color: #5eead4; }
+
+    .work-card {
+      background: white; border-radius: 14px;
+      box-shadow: var(--shadow); margin-bottom: 1.5rem;
+      overflow: hidden; border: 1px solid #e2e8f0;
+    }
+    .work-card-header {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: 1.25rem; border-bottom: 1px solid #e2e8f0;
+      background: #f8fafc;
+    }
+    .work-num {
+      min-width: 42px; height: 42px;
+      background: linear-gradient(135deg, #0d9488, #059669);
+      color: white; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; font-weight: 700; flex-shrink: 0;
+    }
+    .work-title { flex: 1; min-width: 0; }
+    .work-title h3 { font-size: 1rem; font-weight: 700; color: #1e293b; margin: 0 0 .25rem; }
+    .work-title p  { font-size: .85rem; color: #64748b; margin: 0; line-height: 1.5; }
+    .work-badges { display: flex; flex-direction: column; align-items: flex-end; gap: .4rem; flex-shrink: 0; }
+    .work-score-badge {
+      background: #ccfbf1; color: #0f766e;
+      padding: .25rem .8rem; border-radius: 999px;
+      font-size: .8rem; font-weight: 700; white-space: nowrap;
+    }
+    .work-status-badge {
+      padding: .2rem .75rem; border-radius: 999px;
+      font-size: .78rem; font-weight: 600; white-space: nowrap;
+    }
+    .work-status-badge.open    { background: #d1fae5; color: #065f46; }
+    .work-status-badge.coming  { background: #f1f5f9; color: #64748b; }
+    .work-status-badge.done    { background: #ede9fe; color: #5b21b6; }
+    .work-card-body { padding: 1.25rem; }
+
+    @media (max-width: 768px) {
+      .unit-hero h1 { font-size: 1.3rem; }
+      .tool-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .tool-grid { grid-template-columns: 1fr; }
+      .tag-table { font-size: .8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-icon"><i class="fas fa-chalkboard-user"></i></div>
+      <span>ครูศิริศักดิ์ ปิลอง</span>
+    </a>
+    <ul class="navbar-menu">
+      <li><a href="home.html"><i class="fas fa-house"></i> หน้าหลัก</a></li>
+      <li><a href="subject-programming.html"><i class="fas fa-code"></i> โปรแกรมเบื้องต้น 1 ม.2</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="เมนู">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="home.html"><i class="fas fa-house"></i> หน้าหลัก</a>
+    <a href="subject-programming.html"><i class="fas fa-code"></i> โปรแกรมเบื้องต้น 1 ม.2</a>
+  </div>
+</nav>
+
+<!-- ===== UNIT HERO ===== -->
+<div class="unit-hero">
+  <div class="unit-hero-content container">
+    <p style="opacity:.75;font-size:.83rem;margin-bottom:.5rem">
+      <a href="home.html" style="color:rgba(255,255,255,.8)">หน้าหลัก</a>
+      <i class="fas fa-chevron-right" style="font-size:.65rem;margin:0 .35rem"></i>
+      <a href="subject-programming.html" style="color:rgba(255,255,255,.8)">โปรแกรมเบื้องต้น 1</a>
+      <i class="fas fa-chevron-right" style="font-size:.65rem;margin:0 .35rem"></i>
+      หน่วยที่ 6
+    </p>
+    <h1>🏆 หน่วยที่ 6: โปรเจกต์จบภาค — เว็บไซต์แนะนำตัวเอง</h1>
+    <p>โปรแกรมเบื้องต้น 1 &bull; มัธยมศึกษาปีที่ 2 &bull; ภาคเรียนที่ 1/2569</p>
+
+    <div class="indicator-box">
+      <strong>ตัวชี้วัด:</strong> วางแผนและสร้างเว็บไซต์อย่างง่ายโดยใช้ความรู้ HTML และ CSS ที่เรียนมาทั้งหมด
+      เพื่อนำเสนอผลงานของตนเอง <em style="opacity:.8">(ว. 4.2 ม. 2/1-2/2)</em>
+    </div>
+
+    <div class="unit-tabs">
+      <button class="unit-tab-btn active" data-utab="lesson">
+        <i class="fas fa-book-open"></i> เนื้อหาบทเรียน
+      </button>
+      <button class="unit-tab-btn" data-utab="exercises">
+        <i class="fas fa-pencil-alt"></i> โปรเจกต์
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LESSON TAB ===== -->
+<div id="utab-lesson" class="unit-tab-content active">
+<div class="content-section">
+
+  <!-- ========== SECTION 1: Plan ========== -->
+  <div class="lesson-section" id="section-plan">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-num">1</div>
+      <h2>วางแผนโครงสร้างเว็บไซต์ (Wireframe)</h2>
+      <i class="fas fa-chevron-down toggle-icon"></i>
+    </div>
+    <div class="section-body">
+
+      <div class="info-card">
+        <h3><i class="fas fa-drafting-compass"></i> ทำไมต้องวางแผนก่อนเขียนโค้ด</h3>
+        <p>
+          <strong>Wireframe</strong> คือโครงร่างคร่าว ๆ ของหน้าเว็บ (ไม่ต้องสวย แค่ร่างด้วยมือในกระดาษก็ได้)
+          ช่วยให้เรารู้ว่าจะจัดวางส่วนไหนตรงไหนก่อนลงมือเขียนโค้ดจริง ทำให้เขียนโค้ดได้เร็วขึ้นและไม่หลงทาง
+        </p>
+      </div>
+
+      <div class="highlight-box">
+        <h4><i class="fas fa-list-check"></i> ส่วนประกอบที่เว็บไซต์แนะนำตัวเองควรมี</h4>
+        <ul class="check-list">
+          <li><i class="fas fa-check-circle"></i> <strong>ส่วนหัว (Header):</strong> ชื่อ-นามสกุล, รูปโปรไฟล์</li>
+          <li><i class="fas fa-check-circle"></i> <strong>ข้อมูลส่วนตัว:</strong> อายุ ระดับชั้น โรงเรียน</li>
+          <li><i class="fas fa-check-circle"></i> <strong>งานอดิเรก/ความสามารถพิเศษ:</strong> แสดงเป็นรายการ</li>
+          <li><i class="fas fa-check-circle"></i> <strong>ผลงาน/รูปภาพ:</strong> รูปกิจกรรมหรือผลงานที่ภูมิใจ</li>
+          <li><i class="fas fa-check-circle"></i> <strong>ช่องทางติดต่อ:</strong> ลิงก์ social media หรือฟอร์มติดต่อ</li>
+        </ul>
+      </div>
+
+      <div class="info-card">
+        <h3><i class="fas fa-pencil-ruler"></i> ตัวอย่างการร่าง Wireframe อย่างง่าย</h3>
+        <div class="folder-tree"><span class="fd">┌─────────────────────────────┐</span>
+<span class="fd">│</span>  🖼️  ชื่อ-นามสกุล (Header)      <span class="fd">│</span>
+<span class="fd">├─────────────────────────────┤</span>
+<span class="fd">│</span>  ข้อมูลส่วนตัว               <span class="fd">│</span>
+<span class="fd">│</span>  งานอดิเรก (รายการ)          <span class="fd">│</span>
+<span class="fd">├─────────────────────────────┤</span>
+<span class="fd">│</span>  🖼️ 🖼️ 🖼️  ผลงาน/รูปภาพ       <span class="fd">│</span>
+<span class="fd">├─────────────────────────────┤</span>
+<span class="fd">│</span>  📩 ช่องทางติดต่อ            <span class="fd">│</span>
+<span class="fd">└─────────────────────────────┘</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== SECTION 2: Build ========== -->
+  <div class="lesson-section" id="section-build">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-num">2</div>
+      <h2>ลงมือสร้างเว็บไซต์แนะนำตัวเอง</h2>
+      <i class="fas fa-chevron-down toggle-icon"></i>
+    </div>
+    <div class="section-body">
+
+      <div class="info-card">
+        <h3><i class="fas fa-hammer"></i> ทบทวนแท็กที่เรียนมาทั้งหมด</h3>
+        <table class="tag-table">
+          <thead><tr><th>หน่วย</th><th>แท็ก/ความรู้ที่ใช้ได้ในโปรเจกต์นี้</th></tr></thead>
+          <tbody>
+            <tr><td>หน่วย 1</td><td><code>&lt;!DOCTYPE&gt;</code>, <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, <code>&lt;title&gt;</code>, <code>&lt;body&gt;</code></td></tr>
+            <tr><td>หน่วย 2</td><td><code>&lt;h1&gt;-&lt;h6&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;strong&gt;</code>, <code>&lt;em&gt;</code>, <code>&lt;ul&gt;</code>, <code>&lt;ol&gt;</code>, <code>&lt;hr&gt;</code></td></tr>
+            <tr><td>หน่วย 3</td><td><code>&lt;a href&gt;</code>, <code>&lt;img src alt&gt;</code>, anchor <code>#id</code></td></tr>
+            <tr><td>หน่วย 4</td><td><code>&lt;table&gt;</code>, <code>&lt;form&gt;</code>, <code>&lt;input&gt;</code></td></tr>
+            <tr><td>หน่วย 5</td><td><code>&lt;style&gt;</code>, <code>color</code>, <code>background-color</code>, <code>margin</code>, <code>padding</code>, class selector</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="blue-box">
+        <h4><i class="fas fa-lightbulb"></i> เคล็ดลับการทำโปรเจกต์ให้สำเร็จ</h4>
+        <ul class="check-list">
+          <li><i class="fas fa-check-circle"></i> เริ่มจากโครงสร้าง HTML ให้ครบก่อน ค่อยตกแต่งด้วย CSS ทีหลัง</li>
+          <li><i class="fas fa-check-circle"></i> ทำทีละส่วน ทดสอบดูผลลัพธ์บ่อย ๆ อย่าเขียนรวดเดียวยาว ๆ</li>
+          <li><i class="fas fa-check-circle"></i> ถ้าไม่รู้จะเขียนอะไร ย้อนกลับไปดูตัวอย่างโค้ดในหน่วยที่ 1-5 ได้เสมอ</li>
+        </ul>
+      </div>
+
+      <div class="highlight-box">
+        <h4><i class="fas fa-laptop-code"></i> ลองแก้ไขโค้ดตัวอย่างเว็บไซต์แนะนำตัวเองเต็มรูปแบบได้ที่นี่!</h4>
+        <p style="margin:0">นี่คือตัวอย่างเว็บไซต์แนะนำตัวเองแบบเต็ม ลองแก้ไขให้เป็นของตัวเองดู หรือใช้เป็นจุดเริ่มต้นสำหรับโปรเจกต์ในแท็บ "โปรเจกต์"</p>
+      </div>
+
+      <div class="playground">
+        <div class="playground-bar">
+          <span><i class="fas fa-flask"></i> Live Code Playground</span>
+          <button onclick="resetCodePlayground('pg6Editor','pg6Preview', PG6_STARTER)"><i class="fas fa-rotate-left"></i> รีเซ็ตโค้ด</button>
+        </div>
+        <div class="playground-label">เขียนโค้ด HTML + CSS</div>
+        <div class="playground-body">
+          <textarea id="pg6Editor" spellcheck="false"></textarea>
+          <iframe id="pg6Preview" title="ตัวอย่างผลลัพธ์"></iframe>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== SECTION 3: Checklist ========== -->
+  <div class="lesson-section" id="section-checklist">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-num">3</div>
+      <h2>Checklist ก่อนส่งงานและนำเสนอผลงาน</h2>
+      <i class="fas fa-chevron-down toggle-icon"></i>
+    </div>
+    <div class="section-body">
+
+      <div class="info-card">
+        <h3><i class="fas fa-clipboard-check"></i> ตรวจสอบก่อนส่งงาน</h3>
+        <ul class="check-list">
+          <li><i class="fas fa-check-circle"></i> มีโครงสร้าง <code>&lt;!DOCTYPE html&gt;</code>, <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, <code>&lt;body&gt;</code> ครบถ้วน</li>
+          <li><i class="fas fa-check-circle"></i> <code>&lt;title&gt;</code> เป็นชื่อของนักเรียนหรือชื่อเว็บไซต์ที่มีความหมาย</li>
+          <li><i class="fas fa-check-circle"></i> ใช้แท็กจัดรูปแบบข้อความ (heading, paragraph, list) อย่างเหมาะสม</li>
+          <li><i class="fas fa-check-circle"></i> มีรูปภาพอย่างน้อย 1 รูป พร้อม <code>alt</code> ที่อธิบายรูปได้ถูกต้อง</li>
+          <li><i class="fas fa-check-circle"></i> มีลิงก์อย่างน้อย 1 ลิงก์ที่ใช้งานได้จริง</li>
+          <li><i class="fas fa-check-circle"></i> มี CSS ตกแต่งให้ดูเป็นระเบียบ อ่านง่าย สีไม่ตัดกันจนอ่านไม่ออก</li>
+          <li><i class="fas fa-check-circle"></i> ไม่มีข้อผิดพลาดโครงสร้าง เช่น ลืมปิดแท็ก หรือซ้อนแท็กผิดลำดับ</li>
+        </ul>
+      </div>
+
+      <div class="orange-box">
+        <h4><i class="fas fa-microphone"></i> การนำเสนอผลงาน</h4>
+        <p style="margin:0">เมื่อส่งงานแล้ว ครูจะนัดให้นักเรียนนำเสนอเว็บไซต์ของตนเองหน้าชั้นเรียนสั้น ๆ (2-3 นาที) โดยอธิบายว่าเว็บไซต์มีส่วนประกอบอะไรบ้าง และใช้แท็กอะไรในการสร้างแต่ละส่วน</p>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- end content-section -->
+</div><!-- end utab-lesson -->
+
+<!-- ===== EXERCISES (PROJECT) TAB ===== -->
+<div id="utab-exercises" class="unit-tab-content">
+<div class="content-section">
+
+  <!-- ===== โปรเจกต์จบภาค ===== -->
+  <div class="work-card">
+    <div class="work-card-header">
+      <div class="work-num"><i class="fas fa-trophy"></i></div>
+      <div class="work-title">
+        <h3><i class="fas fa-code" style="color:#0d9488;margin-right:.4rem"></i>โปรเจกต์จบภาค — เว็บไซต์แนะนำตัวเอง</h3>
+        <p>รวมทุกความรู้ HTML และ CSS ที่เรียนมาตลอดภาคเรียน สร้างเว็บไซต์แนะนำตัวเองฉบับสมบูรณ์ของตัวเอง</p>
+      </div>
+      <div class="work-badges">
+        <span class="work-score-badge"><i class="fas fa-star" style="font-size:.75rem"></i> 30 คะแนน</span>
+        <span class="work-status-badge open"><i class="fas fa-circle-check" style="font-size:.7rem"></i> เปิดรับงาน</span>
+      </div>
+    </div>
+    <div class="work-card-body">
+
+      <div class="blue-box" style="margin-top:0;margin-bottom:1.25rem">
+        <h4><i class="fas fa-list-ol"></i> เกณฑ์การให้คะแนน (รวม 30 คะแนน)</h4>
+        <ul class="check-list">
+          <li><i class="fas fa-check-circle"></i> <strong>โครงสร้าง HTML ถูกต้องครบถ้วน</strong> (doctype, head, body, title) — 5 คะแนน</li>
+          <li><i class="fas fa-check-circle"></i> <strong>การจัดรูปแบบข้อความ</strong> (heading, paragraph, list, เน้นข้อความ) — 5 คะแนน</li>
+          <li><i class="fas fa-check-circle"></i> <strong>ลิงก์และรูปภาพ</strong> ใช้งานได้จริง มี alt ครบ — 5 คะแนน</li>
+          <li><i class="fas fa-check-circle"></i> <strong>ตารางหรือฟอร์ม</strong> อย่างน้อย 1 อย่าง — 5 คะแนน</li>
+          <li><i class="fas fa-check-circle"></i> <strong>การตกแต่งด้วย CSS</strong> สวยงาม อ่านง่าย — 5 คะแนน</li>
+          <li><i class="fas fa-check-circle"></i> <strong>ความคิดสร้างสรรค์และความสมบูรณ์โดยรวม</strong> — 5 คะแนน</li>
+        </ul>
+      </div>
+
+      <div id="ex6SubmitForm">
+        <div id="ex6StudentInfo" style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:.65rem .9rem;font-size:.88rem;color:#475569;margin-bottom:.75rem">
+          <i class="fas fa-user-graduate" style="color:#059669"></i> กำลังโหลด...
+        </div>
+
+        <div class="playground">
+          <div class="playground-bar">
+            <span><i class="fas fa-pen"></i> เขียนโค้ดโปรเจกต์ของคุณที่นี่</span>
+            <button onclick="resetCodePlayground('ex6Editor','ex6Preview', EX6_STARTER)"><i class="fas fa-rotate-left"></i> รีเซ็ต</button>
+          </div>
+          <div class="playground-body">
+            <textarea id="ex6Editor" spellcheck="false"></textarea>
+            <iframe id="ex6Preview" title="ตัวอย่างผลลัพธ์"></iframe>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:.5rem;align-items:center;margin-top:.75rem;flex-wrap:wrap">
+          <button id="ex6SubmitBtn" onclick="_submitEx6()"
+            style="background:linear-gradient(135deg,#0d9488,#059669);color:#fff;border:none;padding:.65rem 1.25rem;border-radius:8px;font-family:inherit;font-size:.9rem;font-weight:600;cursor:pointer">
+            <i class="fas fa-paper-plane"></i> ส่งโปรเจกต์
+          </button>
+          <span id="ex6Msg" style="font-size:.85rem;display:none"></span>
+        </div>
+      </div>
+
+      <!-- รอตรวจ -->
+      <div id="ex6PendingBox" style="display:none;margin-top:1.25rem;background:#fffbeb;border:1px solid #fcd34d;border-radius:12px;padding:1.5rem">
+        <div style="display:flex;align-items:flex-start;gap:.75rem;margin-bottom:1rem">
+          <i class="fas fa-clock" style="color:#d97706;font-size:1.5rem;margin-top:.1rem"></i>
+          <div>
+            <p style="font-weight:700;color:#92400e;margin:0">ส่งโปรเจกต์แล้ว — รอครูตรวจ</p>
+            <p style="font-size:.85rem;color:#b45309;margin:.25rem 0 0">นี่คือตัวอย่างเว็บไซต์ที่นักเรียนส่งไป</p>
+          </div>
+        </div>
+        <iframe id="ex6PendingPreview" title="โค้ดที่ส่ง" style="width:100%;min-height:300px;border:1px solid #fcd34d;border-radius:8px;background:#fff"></iframe>
+        <div style="margin-top:.75rem">
+          <button id="ex6EditBtn"
+            style="background:#fff;border:1px solid #fcd34d;color:#b45309;padding:.45rem 1rem;border-radius:8px;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer">
+            <i class="fas fa-pen"></i> แก้ไขโค้ด
+          </button>
+        </div>
+      </div>
+
+      <!-- ตรวจแล้ว -->
+      <div id="ex6GradedBox" style="display:none;margin-top:1.25rem;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:1.5rem">
+        <div style="text-align:center;margin-bottom:1rem">
+          <i class="fas fa-trophy" style="color:#d97706;font-size:2.5rem;margin-bottom:.6rem;display:block"></i>
+          <p style="font-weight:700;color:#166534;font-size:1.05rem;margin:0 0 .3rem">ครูตรวจแล้ว! ยินดีด้วย 🎉</p>
+          <p id="ex6GradedScore" style="font-size:.9rem;color:#166534;margin:0"></p>
+        </div>
+        <iframe id="ex6GradedPreview" title="โค้ดที่ส่ง" style="width:100%;min-height:300px;border:1px solid #86efac;border-radius:8px;background:#fff"></iframe>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- end content-section -->
+</div><!-- end utab-exercises -->
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <p>&copy; 2569 <strong>ครูศิริศักดิ์ ปิลอง</strong> &mdash; โปรแกรมเบื้องต้น 1 ม.2 | หน่วยที่ 6</p>
+</footer>
+
+<script src="js/auth.js"></script>
+<script>requireAuth('2');</script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/app.js"></script>
+<script>
+  /* ===== TAB ===== */
+  document.querySelectorAll('.unit-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.utab;
+      document.querySelectorAll('.unit-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.unit-tab-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('utab-' + target).classList.add('active');
+    });
+  });
+  if (location.hash === '#exercises') {
+    const exBtn = document.querySelector('[data-utab="exercises"]');
+    if (exBtn) exBtn.click();
+  }
+
+  /* ===== SECTION TOGGLE ===== */
+  function toggleSection(header) {
+    const body = header.nextElementSibling;
+    header.classList.toggle('collapsed');
+    body.classList.toggle('hidden');
+  }
+
+  /* ===== HAMBURGER ===== */
+  const ham = document.getElementById('hamburger');
+  const mob = document.getElementById('mobileMenu');
+  if (ham) ham.addEventListener('click', () => mob.classList.toggle('open'));
+
+  /* ===== PLAYGROUND (lesson demo — full example site) ===== */
+  const PG6_STARTER = `<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8">
+    <title>ตัวอย่างเว็บไซต์แนะนำตัวเอง</title>
+    <style>
+      body { font-family: 'Sarabun', sans-serif; margin: 0; }
+      header {
+        background-color: #059669;
+        color: white;
+        text-align: center;
+        padding: 30px;
+      }
+      .content { padding: 20px; }
+      .hobby-box {
+        background-color: #ecfdf5;
+        border: 1px solid #059669;
+        border-radius: 8px;
+        padding: 12px 20px;
+        margin: 12px 0;
+      }
+      footer {
+        text-align: center;
+        padding: 12px;
+        color: #64748b;
+        font-size: 0.85rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>สวัสดี ฉันชื่อ...</h1>
+      <p>นักเรียนชั้นมัธยมศึกษาปีที่ 2</p>
+    </header>
+
+    <div class="content">
+      <h2>ข้อมูลส่วนตัว</h2>
+      <p>ฉันเรียนอยู่ที่โรงเรียน... ชอบ <strong>เขียนโค้ด HTML</strong> มาก!</p>
+
+      <img src="https://picsum.photos/400/200" alt="รูปภาพตัวอย่าง" width="400">
+
+      <div class="hobby-box">
+        <h3>งานอดิเรก</h3>
+        <ul>
+          <li>เล่นกีฬา</li>
+          <li>อ่านหนังสือ</li>
+        </ul>
+      </div>
+
+      <p><a href="https://www.google.com" target="_blank">ติดต่อฉันได้ที่นี่</a></p>
+    </div>
+
+    <footer>
+      &copy; 2569 เว็บไซต์แนะนำตัวเอง
+    </footer>
+  </body>
+</html>`;
+  initCodePlayground('pg6Editor', 'pg6Preview', PG6_STARTER);
+
+  /* ===== FINAL PROJECT: code submission ===== */
+  const EX6_TITLE = 'โปรเจกต์จบภาค: เว็บไซต์แนะนำตัวเอง';
+  const EX6_STARTER = `<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8">
+    <title>เว็บไซต์แนะนำตัวเองของ...</title>
+    <style>
+      body { font-family: 'Sarabun', sans-serif; margin: 0; }
+      header {
+        background-color: #059669;
+        color: white;
+        text-align: center;
+        padding: 30px;
+      }
+      .content { padding: 20px; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>ชื่อ-นามสกุลของฉัน</h1>
+      <p>นักเรียนชั้นมัธยมศึกษาปีที่ 2</p>
+    </header>
+
+    <div class="content">
+      <h2>ข้อมูลส่วนตัว</h2>
+      <p>เขียนแนะนำตัวเองตรงนี้...</p>
+
+      <img src="https://picsum.photos/400/200" alt="อธิบายรูปภาพของคุณตรงนี้" width="400">
+
+      <h2>งานอดิเรก</h2>
+      <ul>
+        <li>งานอดิเรกที่ 1</li>
+        <li>งานอดิเรกที่ 2</li>
+      </ul>
+
+      <h2>ตารางกิจกรรมประจำวัน</h2>
+      <table border="1">
+        <tr><th>เวลา</th><th>กิจกรรม</th></tr>
+        <tr><td>07:00</td><td>...</td></tr>
+      </table>
+
+      <h2>ติดต่อฉัน</h2>
+      <p><a href="https://www.google.com" target="_blank">ช่องทางติดต่อ / Social Media</a></p>
+    </div>
+  </body>
+</html>`;
+
+  initCodePlayground('ex6Editor', 'ex6Preview', EX6_STARTER);
+
+  async function _loadEx6State() {
+    await setupWorkCard({
+      subjectId:    'programming-m2',
+      title:        EX6_TITLE,
+      formEl:       document.getElementById('ex6SubmitForm'),
+      pendingBoxEl: document.getElementById('ex6PendingBox'),
+      gradedBoxEl:  document.getElementById('ex6GradedBox'),
+      editBtnEl:    document.getElementById('ex6EditBtn'),
+      noteInputEl:  document.getElementById('ex6Editor'),
+      onPending: sub => { document.getElementById('ex6PendingPreview').srcdoc = sub.note || ''; },
+      onGraded: sub => {
+        document.getElementById('ex6GradedScore').textContent = 'คะแนน: ' + sub.score + '/' + sub.maxScore;
+        document.getElementById('ex6GradedPreview').srcdoc = sub.note || '';
+      }
+    });
+    wireEditPreview('ex6EditBtn', 'ex6Editor');
+  }
+
+  function _submitEx6() {
+    submitCodeExercise({
+      subjectId: 'programming-m2',
+      title:     EX6_TITLE,
+      maxScore:  30,
+      editorId:  'ex6Editor',
+      btnId:     'ex6SubmitBtn',
+      msgId:     'ex6Msg',
+      formEl:    document.getElementById('ex6SubmitForm'),
+      onDone:    _loadEx6State
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const s = getCurrentStudent();
+    if (s) {
+      document.getElementById('ex6StudentInfo').innerHTML =
+        '<i class="fas fa-user-graduate" style="color:#059669"></i> ' +
+        s.name + '&nbsp;&nbsp;|&nbsp;&nbsp;' + s.class +
+        '&nbsp;&nbsp;เลขที่ ' + s.no + '&nbsp;&nbsp;(รหัส ' + s.id + ')';
+    }
+    _loadEx6State();
+  });
+</script>
+</body>
+</html>
