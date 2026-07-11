@@ -296,6 +296,85 @@ function typeLabel(type) {
   return map[type] || type || '-';
 }
 
+/* ---------- HTML escaping (avoid stored XSS when rendering student-submitted code) ---------- */
+function escapeHtml(str) {
+  return String(str == null ? '' : str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/* ---------- Code Playground (live HTML preview for practice) ---------- */
+// Wires a <textarea id=editorId> to a sandboxed <iframe id=previewId> so students
+// see their HTML render instantly. sandbox="allow-same-origin" only — no allow-scripts,
+// since this course doesn't teach JS and we don't want submitted/practice code executing.
+function initCodePlayground(editorId, previewId, starterCode) {
+  const editor = document.getElementById(editorId);
+  const preview = document.getElementById(previewId);
+  if (!editor || !preview) return;
+  preview.setAttribute('sandbox', 'allow-same-origin');
+  if (starterCode && !editor.value) editor.value = starterCode;
+  const render = () => { preview.srcdoc = editor.value; };
+  editor.addEventListener('input', render);
+  render();
+}
+
+function resetCodePlayground(editorId, previewId, starterCode) {
+  const editor = document.getElementById(editorId);
+  if (!editor) return;
+  editor.value = starterCode || '';
+  editor.dispatchEvent(new Event('input'));
+}
+
+/* ---------- Generic code-exercise submission (student writes HTML, teacher grades) ---------- */
+// opts: { subjectId, title, maxScore, editorId, btnId, msgId, formEl, onDone }
+async function submitCodeExercise(opts) {
+  const s    = typeof getCurrentStudent === 'function' ? getCurrentStudent() : null;
+  const code = document.getElementById(opts.editorId).value;
+  const btn  = document.getElementById(opts.btnId);
+  const msg  = document.getElementById(opts.msgId);
+
+  msg.style.display = 'none';
+
+  if (!s) {
+    msg.style.color = '#dc2626';
+    msg.textContent = 'กรุณาเข้าสู่ระบบก่อนส่งงาน';
+    msg.style.display = 'block';
+    return;
+  }
+  if (!code || code.trim().length < 15) {
+    msg.style.color = '#dc2626';
+    msg.textContent = 'กรุณาเขียนโค้ด HTML ก่อนส่งงาน';
+    msg.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังส่ง...';
+
+  const editId = opts.formEl.dataset.editScoreId;
+  const result = editId
+    ? await editPendingNote(opts.subjectId, s.id, editId, code)
+    : await saveScore(opts.subjectId,
+        { name: s.name, studentId: s.id, room: s.class },
+        { title: opts.title, score: 0, maxScore: opts.maxScore, type: 'exercise', status: 'pending', note: code }
+      );
+
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fas fa-paper-plane"></i> ส่งงาน';
+
+  if (result.ok) {
+    delete opts.formEl.dataset.editScoreId;
+    if (opts.onDone) opts.onDone();
+  } else {
+    msg.style.color = '#dc2626';
+    msg.textContent = '❌ เกิดข้อผิดพลาด: ' + result.error;
+    msg.style.display = 'block';
+  }
+}
+
 /* ---------- Work Card State Manager ---------- */
 async function setupWorkCard({ subjectId, title, formEl, pendingBoxEl, gradedBoxEl, editBtnEl, noteInputEl, onPending, onGraded }) {
   const s = typeof getCurrentStudent === 'function' ? getCurrentStudent() : null;
@@ -332,6 +411,20 @@ async function setupWorkCard({ subjectId, title, formEl, pendingBoxEl, gradedBox
       if (onGraded) onGraded(sub);
     }
   }
+}
+
+// After setupWorkCard wires an "edit" button to restore a previous submission's
+// text into noteInputEl, this also re-renders the code playground preview so it
+// reflects the restored code (setupWorkCard only sets .value, no input event).
+function wireEditPreview(editBtnId, editorId) {
+  const editBtn = document.getElementById(editBtnId);
+  if (!editBtn) return;
+  const prev = editBtn.onclick;
+  editBtn.onclick = function (e) {
+    if (prev) prev(e);
+    const editor = document.getElementById(editorId);
+    if (editor) editor.dispatchEvent(new Event('input'));
+  };
 }
 
 /* ---------- Init on DOM ready ---------- */
