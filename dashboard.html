@@ -2129,7 +2129,7 @@ document.getElementById('loadClassBtn').addEventListener('click', async () => {
     (gtMax > 0 ? ` <span style="color:#059669;font-weight:700">(${gtPct}%)</span>` : '');
 });
 
-/* ----- Export ตารางคะแนนแบบละเอียด: รายชิ้นงาน + ไฮไลต์สีแดงงานที่ยังไม่ทำ + คะแนนสัดส่วนเต็ม 100 ----- */
+/* ----- Export ตารางคะแนนแบบละเอียด: รายชิ้นงาน + ไฮไลต์สีแดงงานที่ยังไม่ทำ + คะแนนสัดส่วนเต็ม 60 ----- */
 document.getElementById('exportClassBtn').addEventListener('click', async () => {
   if (!_currentClassExport || !_currentClassExport.students.length) { showToast('กรุณาโหลดรายชื่อก่อน', 'warning'); return; }
   if (typeof ExcelJS === 'undefined') { showToast('ไม่สามารถโหลดไลบรารี Export ได้', 'error'); return; }
@@ -2143,6 +2143,7 @@ document.getElementById('exportClassBtn').addEventListener('click', async () => 
     const exList  = catalog.exercises;
     const tstList = catalog.tests;
     const totMaxPerStudent = subjExMax + subjTstMax;
+    const SCALE_TO = 60; // สัดส่วนคะแนนเต็มที่ใช้แปลงคะแนนรวม
 
     const wb = new ExcelJS.Workbook();
     wb.creator = 'ครูศิริศักดิ์ ปิลอง';
@@ -2172,7 +2173,7 @@ document.getElementById('exportClassBtn').addEventListener('click', async () => 
     const headers = ['เลขที่', 'รหัสนักเรียน', 'ชื่อ-นามสกุล', 'ห้อง',
       ...exList.map(a => `${a.title} (เต็ม ${a.maxScore})`),
       ...tstList.map(a => `${a.title} (เต็ม ${a.maxScore})`),
-      'คะแนนแบบฝึกหัดที่ได้', 'คะแนนแบบทดสอบที่ได้', 'คะแนนรวมที่ได้', 'คะแนนเต็มจริง', 'คะแนน (เต็ม 100)'
+      'คะแนนแบบฝึกหัดที่ได้', 'คะแนนแบบทดสอบที่ได้', 'คะแนนรวมที่ได้', 'คะแนนเต็มจริง', `คะแนน (เต็ม ${SCALE_TO})`
     ];
     headers.forEach((h, i) => { ws.getCell(2, i + 1).value = h; });
 
@@ -2209,7 +2210,7 @@ document.getElementById('exportClassBtn').addEventListener('click', async () => 
       const sc = fbScores[s.studentId] || { exScore: 0, tstScore: 0, byTitle: new Map() };
       const byTitle = sc.byTitle || new Map();
       const tot = sc.exScore + sc.tstScore;
-      const scaled = totMaxPerStudent > 0 ? Math.round((tot / totMaxPerStudent) * 10000) / 100 : '';
+      const scaled = totMaxPerStudent > 0 ? Math.round((tot / totMaxPerStudent) * SCALE_TO * 100) / 100 : '';
 
       const row = ws.getRow(rowNum);
       row.getCell(1).value = s.no || '';
@@ -2250,7 +2251,7 @@ document.getElementById('exportClassBtn').addEventListener('click', async () => 
     ws.getCell(legendRow + 2, 1).value = 'ช่องสีเขียว = นักเรียนทำ/ส่งงานชิ้นนั้นแล้ว';
     ws.getCell(legendRow + 2, 1).fill = doneFill;
     ws.getCell(legendRow + 2, 1).font = doneFont;
-    ws.getCell(legendRow + 3, 1).value = `คะแนน (เต็ม 100) = (คะแนนรวมที่ได้ ÷ คะแนนเต็มจริง ${totMaxPerStudent}) × 100`;
+    ws.getCell(legendRow + 3, 1).value = `คะแนน (เต็ม ${SCALE_TO}) = (คะแนนรวมที่ได้ ÷ คะแนนเต็มจริง ${totMaxPerStudent}) × ${SCALE_TO}`;
 
     const buf = await wb.xlsx.writeBuffer();
     const blob = new Blob([buf], { type: 'application/octet-stream' });
