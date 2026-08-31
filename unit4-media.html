@@ -517,7 +517,7 @@
           <i class="fas fa-clock" style="color:#d97706;font-size:1.3rem"></i>
           <p style="font-weight:700;color:#92400e;margin:0">ส่งงานแล้ว — รอครูตรวจ</p>
         </div>
-        <button id="editAnalysisBtn4" style="background:#fff;border:1px solid #fcd34d;color:#b45309;padding:.4rem .9rem;border-radius:8px;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer"><i class="fas fa-pen"></i> แก้ไขคำตอบ</button>
+        <p style="margin:.75rem 0 0;font-size:.8rem;color:#b45309"><i class="fas fa-lock"></i> ส่งงานแล้ว ไม่สามารถแก้ไขคำตอบได้อีก</p>
       </div>
       <div id="analysisGradedBox4" style="display:none;margin-top:1rem;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:1.25rem;text-align:center">
         <i class="fas fa-circle-check" style="color:#16a34a;font-size:2rem;margin-bottom:.4rem;display:block"></i>
@@ -559,7 +559,7 @@
           <i class="fas fa-clock" style="color:#d97706;font-size:1.3rem"></i>
           <p style="font-weight:700;color:#92400e;margin:0">ส่งใบงานแล้ว — รอครูตรวจ</p>
         </div>
-        <button id="editWorksheetBtn4" style="background:#fff;border:1px solid #fcd34d;color:#b45309;padding:.4rem .9rem;border-radius:8px;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer"><i class="fas fa-pen"></i> แก้ไขคำตอบ</button>
+        <p style="margin:.75rem 0 0;font-size:.8rem;color:#b45309"><i class="fas fa-lock"></i> ส่งงานแล้ว ไม่สามารถแก้ไขคำตอบได้อีก</p>
       </div>
       <div id="worksheetGradedBox4" style="display:none;margin-top:1rem;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:1.25rem;text-align:center">
         <i class="fas fa-circle-check" style="color:#16a34a;font-size:2rem;margin-bottom:.4rem;display:block"></i>
@@ -660,57 +660,83 @@ async function loadUnitSettings4() {
   }
 }
 
+/* ── Lock helpers: กันทำแบบฝึกหัดซ้ำ (auto-graded) ── */
+const _LOCKED_LABEL = '<i class="fas fa-lock"></i> ทำแบบฝึกหัดนี้แล้ว';
+function _lockAutoGraded(btn, inputEls) {
+  if (btn) { btn.disabled = true; btn.innerHTML = _LOCKED_LABEL; }
+  (inputEls || []).forEach(el => el.disabled = true);
+}
+async function _checkAutoGradedDone(title, btn, inputEls, resultBoxEl) {
+  const s = getStudent();
+  if (!s || typeof getSubmissionByTitle !== 'function') return;
+  const res = await getSubmissionByTitle('media-m1', s.id, title);
+  if (res.ok && res.data) {
+    _lockAutoGraded(btn, inputEls);
+    if (resultBoxEl) { resultBoxEl.className = 'result-box show pass'; resultBoxEl.innerHTML = `<i class="fas fa-lock"></i> ทำแบบฝึกหัดนี้แล้ว ได้ ${res.data.score}/${res.data.maxScore} คะแนน`; }
+  }
+}
+
 const MATCH4_ANS = { m4_1: 'C', m4_2: 'A', m4_3: 'B', m4_4: 'D' };
 async function submitMatch4() {
   if (_exLocked4) { showToast('แบบฝึกหัดยังไม่เปิด','warning'); return; }
+  const btn = document.getElementById('matchBtn4'); if (btn.disabled) return;
   const s = getStudent(); if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน','warning'); return; }
+  const inputEls = Object.keys(MATCH4_ANS).map(k => document.getElementById(k));
   const ans = {}; Object.keys(MATCH4_ANS).forEach(k => { ans[k] = document.getElementById(k).value; });
   if (Object.values(ans).some(v => !v)) { showToast('กรุณาเลือกคำตอบให้ครบ','warning'); return; }
   let correct = 0; Object.keys(MATCH4_ANS).forEach(k => { if (ans[k] === MATCH4_ANS[k]) correct++; });
   const score = correct, max = 4;
   const rb = document.getElementById('matchResult4'); rb.className = 'result-box show '+(score>=3?'pass':'fail'); rb.innerHTML = `ได้ ${score}/${max} คะแนน`;
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังบันทึก...';
   const res = await saveScore('media-m1',{studentId:s.id,name:s.name,room:s.class},{title:'แบบฝึกหัดที่ 1 บทที่ 4: จับคู่ประเภทข่าวปลอม',score,maxScore:max,type:'exercise',note:''});
-  if (res.ok) showToast('บันทึกคะแนนสำเร็จ','success');
+  if (res.ok) { showToast('บันทึกคะแนนสำเร็จ','success'); _lockAutoGraded(btn, inputEls); }
+  else { showToast('บันทึกไม่สำเร็จ: '+res.error,'error'); btn.disabled=false; btn.innerHTML='<i class="fas fa-check-circle"></i> ตรวจคำตอบและส่งคะแนน'; }
 }
 
 const MCQ4_ANS = { q4_1: 'B', q4_2: 'C', q4_3: 'C', q4_4: 'C' };
 async function submitMCQ4() {
   if (_exLocked4) { showToast('แบบฝึกหัดยังไม่เปิด','warning'); return; }
+  const btn = document.getElementById('mcqBtn4'); if (btn.disabled) return;
   const s = getStudent(); if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน','warning'); return; }
   if (!Object.keys(MCQ4_ANS).every(q => document.querySelector(`input[name="${q}"]:checked`))) { showToast('กรุณาตอบให้ครบ','warning'); return; }
-  let correct = 0;
+  let correct = 0; const inputEls = [];
   Object.keys(MCQ4_ANS).forEach(q => {
     const chosen = document.querySelector(`input[name="${q}"]:checked`);
-    document.querySelectorAll(`input[name="${q}"]`).forEach(opt => { const l = opt.closest('.mcq-option'); l.classList.remove('correct-ans','wrong-ans'); if (opt.value===MCQ4_ANS[q]) l.classList.add('correct-ans'); else if (chosen&&opt===chosen&&opt.value!==MCQ4_ANS[q]) l.classList.add('wrong-ans'); });
+    document.querySelectorAll(`input[name="${q}"]`).forEach(opt => { inputEls.push(opt); const l = opt.closest('.mcq-option'); l.classList.remove('correct-ans','wrong-ans'); if (opt.value===MCQ4_ANS[q]) l.classList.add('correct-ans'); else if (chosen&&opt===chosen&&opt.value!==MCQ4_ANS[q]) l.classList.add('wrong-ans'); });
     if (chosen&&chosen.value===MCQ4_ANS[q]) correct++;
   });
   const score = correct, max = 4;
   const rb = document.getElementById('mcqResult4'); rb.className = 'result-box show '+(score>=3?'pass':'fail'); rb.innerHTML = `ได้ ${score}/${max} คะแนน`;
-  await saveScore('media-m1',{studentId:s.id,name:s.name,room:s.class},{title:'แบบฝึกหัดที่ 2 บทที่ 4: ปรนัย Fact-Check',score,maxScore:max,type:'quiz',note:''});
-  showToast('บันทึกคะแนนสำเร็จ','success');
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังบันทึก...';
+  const res = await saveScore('media-m1',{studentId:s.id,name:s.name,room:s.class},{title:'แบบฝึกหัดที่ 2 บทที่ 4: ปรนัย Fact-Check',score,maxScore:max,type:'quiz',note:''});
+  if (res.ok) { showToast('บันทึกคะแนนสำเร็จ','success'); _lockAutoGraded(btn, inputEls); }
+  else { showToast('บันทึกไม่สำเร็จ: '+res.error,'error'); btn.disabled=false; btn.innerHTML='<i class="fas fa-check-circle"></i> ตรวจคำตอบและส่งคะแนน'; }
 }
 
 const TF4_ANS = { tf4_1: 'F', tf4_2: 'F', tf4_3: 'T' };
 async function submitTF4() {
   if (_exLocked4) { showToast('แบบฝึกหัดยังไม่เปิด','warning'); return; }
+  const btn = document.getElementById('tfBtn4'); if (btn.disabled) return;
   const s = getStudent(); if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน','warning'); return; }
   if (!Object.keys(TF4_ANS).every(q => document.querySelector(`input[name="${q}"]:checked`))) { showToast('กรุณาตอบให้ครบ','warning'); return; }
-  let correct = 0;
+  let correct = 0; const inputEls = [];
   Object.keys(TF4_ANS).forEach(q => {
     const chosen = document.querySelector(`input[name="${q}"]:checked`);
-    document.querySelectorAll(`input[name="${q}"]`).forEach(opt => { const l = opt.closest('.mcq-option'); l.classList.remove('correct-ans','wrong-ans'); if (opt.value===TF4_ANS[q]) l.classList.add('correct-ans'); else if (chosen&&opt===chosen&&opt.value!==TF4_ANS[q]) l.classList.add('wrong-ans'); });
+    document.querySelectorAll(`input[name="${q}"]`).forEach(opt => { inputEls.push(opt); const l = opt.closest('.mcq-option'); l.classList.remove('correct-ans','wrong-ans'); if (opt.value===TF4_ANS[q]) l.classList.add('correct-ans'); else if (chosen&&opt===chosen&&opt.value!==TF4_ANS[q]) l.classList.add('wrong-ans'); });
     if (chosen&&chosen.value===TF4_ANS[q]) correct++;
   });
   const score = correct, max = 3;
   const rb = document.getElementById('tfResult4'); rb.className = 'result-box show '+(score>=2?'pass':'fail'); rb.innerHTML = `ได้ ${score}/${max} คะแนน`;
-  await saveScore('media-m1',{studentId:s.id,name:s.name,room:s.class},{title:'แบบฝึกหัดที่ 3 บทที่ 4: ถูก/ผิดข่าวปลอม',score,maxScore:max,type:'quiz',note:''});
-  showToast('บันทึกคะแนนสำเร็จ','success');
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังบันทึก...';
+  const res = await saveScore('media-m1',{studentId:s.id,name:s.name,room:s.class},{title:'แบบฝึกหัดที่ 3 บทที่ 4: ถูก/ผิดข่าวปลอม',score,maxScore:max,type:'quiz',note:''});
+  if (res.ok) { showToast('บันทึกคะแนนสำเร็จ','success'); _lockAutoGraded(btn, inputEls); }
+  else { showToast('บันทึกไม่สำเร็จ: '+res.error,'error'); btn.disabled=false; btn.innerHTML='<i class="fas fa-check-circle"></i> ตรวจคำตอบและส่งคะแนน'; }
 }
 
 function _loadAnalysisState4() {
   setupWorkCard({subjectId:'media-m1',title:'แบบฝึกหัดที่ 4 บทที่ 4: Fact-Check กล้วยหอมรักษามะเร็ง',
     formEl:document.getElementById('analysisFormArea4'),pendingBoxEl:document.getElementById('analysisPendingBox4'),
-    gradedBoxEl:document.getElementById('analysisGradedBox4'),editBtnEl:document.getElementById('editAnalysisBtn4'),
+    gradedBoxEl:document.getElementById('analysisGradedBox4'),
     onGraded:sub=>{ document.getElementById('analysisGradedScore4').textContent='คะแนน: '+sub.score+'/'+sub.maxScore; }
   });
 }
@@ -732,7 +758,7 @@ async function submitAnalysis4() {
 function _loadWorksheetState4() {
   setupWorkCard({subjectId:'media-m1',title:'แบบฝึกหัดที่ 5 บทที่ 4: ล่าข่าวปลอมรอบตัว',
     formEl:document.getElementById('worksheetFormArea4'),pendingBoxEl:document.getElementById('worksheetPendingBox4'),
-    gradedBoxEl:document.getElementById('worksheetGradedBox4'),editBtnEl:document.getElementById('editWorksheetBtn4'),
+    gradedBoxEl:document.getElementById('worksheetGradedBox4'),
     onGraded:sub=>{ document.getElementById('worksheetGradedScore4').textContent='คะแนน: '+sub.score+'/'+sub.maxScore; }
   });
 }
@@ -805,6 +831,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadUnitSettings4();
   _loadAnalysisState4();
   _loadWorksheetState4();
+  await _checkAutoGradedDone('แบบฝึกหัดที่ 1 บทที่ 4: จับคู่ประเภทข่าวปลอม', document.getElementById('matchBtn4'), Object.keys(MATCH4_ANS).map(k => document.getElementById(k)), document.getElementById('matchResult4'));
+  await _checkAutoGradedDone('แบบฝึกหัดที่ 2 บทที่ 4: ปรนัย Fact-Check', document.getElementById('mcqBtn4'), Array.from(document.querySelectorAll('input[name^="q4_"]')), document.getElementById('mcqResult4'));
+  await _checkAutoGradedDone('แบบฝึกหัดที่ 3 บทที่ 4: ถูก/ผิดข่าวปลอม', document.getElementById('tfBtn4'), Array.from(document.querySelectorAll('input[name^="tf4_"]')), document.getElementById('tfResult4'));
   if (_testLocked4) { document.getElementById('testLockedBox4').style.display='block'; document.getElementById('testStartBox4').style.display='none'; }
   else { await checkTestDone4(); }
 });

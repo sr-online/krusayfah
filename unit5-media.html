@@ -571,7 +571,7 @@
           <i class="fas fa-clock" style="color:#d97706;font-size:1.3rem"></i>
           <p style="font-weight:700;color:#92400e;margin:0">ส่งงานแล้ว — รอครูตรวจ</p>
         </div>
-        <button id="editAnalysisBtn5" style="background:#fff;border:1px solid #fcd34d;color:#b45309;padding:.4rem .9rem;border-radius:8px;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer"><i class="fas fa-pen"></i> แก้ไขคำตอบ</button>
+        <p style="margin:.75rem 0 0;font-size:.8rem;color:#b45309"><i class="fas fa-lock"></i> ส่งงานแล้ว ไม่สามารถแก้ไขคำตอบได้อีก</p>
       </div>
       <div id="analysisGradedBox5" style="display:none;margin-top:1rem;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:1.25rem;text-align:center">
         <i class="fas fa-circle-check" style="color:#16a34a;font-size:2rem;margin-bottom:.4rem;display:block"></i>
@@ -613,7 +613,7 @@
           <i class="fas fa-clock" style="color:#d97706;font-size:1.3rem"></i>
           <p style="font-weight:700;color:#92400e;margin:0">ส่งใบงานแล้ว — รอครูตรวจ</p>
         </div>
-        <button id="editWorksheetBtn5" style="background:#fff;border:1px solid #fcd34d;color:#b45309;padding:.4rem .9rem;border-radius:8px;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer"><i class="fas fa-pen"></i> แก้ไขคำตอบ</button>
+        <p style="margin:.75rem 0 0;font-size:.8rem;color:#b45309"><i class="fas fa-lock"></i> ส่งงานแล้ว ไม่สามารถแก้ไขคำตอบได้อีก</p>
       </div>
       <div id="worksheetGradedBox5" style="display:none;margin-top:1rem;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:1.25rem;text-align:center">
         <i class="fas fa-circle-check" style="color:#16a34a;font-size:2rem;margin-bottom:.4rem;display:block"></i>
@@ -714,57 +714,83 @@ async function loadUnitSettings5() {
   }
 }
 
+/* ── Lock helpers: กันทำแบบฝึกหัดซ้ำ (auto-graded) ── */
+const _LOCKED_LABEL = '<i class="fas fa-lock"></i> ทำแบบฝึกหัดนี้แล้ว';
+function _lockAutoGraded(btn, inputEls) {
+  if (btn) { btn.disabled = true; btn.innerHTML = _LOCKED_LABEL; }
+  (inputEls || []).forEach(el => el.disabled = true);
+}
+async function _checkAutoGradedDone(title, btn, inputEls, resultBoxEl) {
+  const s = getStudent();
+  if (!s || typeof getSubmissionByTitle !== 'function') return;
+  const res = await getSubmissionByTitle('media-m1', s.id, title);
+  if (res.ok && res.data) {
+    _lockAutoGraded(btn, inputEls);
+    if (resultBoxEl) { resultBoxEl.className = 'result-box show pass'; resultBoxEl.innerHTML = `<i class="fas fa-lock"></i> ทำแบบฝึกหัดนี้แล้ว ได้ ${res.data.score}/${res.data.maxScore} คะแนน`; }
+  }
+}
+
 const MATCH5_ANS = { m5_1: 'C', m5_2: 'A', m5_3: 'B', m5_4: 'D' };
 async function submitMatch5() {
   if (_exLocked5) { showToast('แบบฝึกหัดยังไม่เปิด','warning'); return; }
+  const btn = document.getElementById('matchBtn5'); if (btn.disabled) return;
   const s = getStudent(); if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน','warning'); return; }
+  const inputEls = Object.keys(MATCH5_ANS).map(k => document.getElementById(k));
   const ans = {}; Object.keys(MATCH5_ANS).forEach(k => { ans[k] = document.getElementById(k).value; });
   if (Object.values(ans).some(v => !v)) { showToast('กรุณาเลือกคำตอบให้ครบ','warning'); return; }
   let correct = 0; Object.keys(MATCH5_ANS).forEach(k => { if (ans[k] === MATCH5_ANS[k]) correct++; });
   const score = correct, max = 4;
   const rb = document.getElementById('matchResult5'); rb.className = 'result-box show '+(score>=3?'pass':'fail'); rb.innerHTML = `ได้ ${score}/${max} คะแนน`;
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังบันทึก...';
   const res = await saveScore('media-m1',{studentId:s.id,name:s.name,room:s.class},{title:'แบบฝึกหัดที่ 1 บทที่ 5: จับคู่จริยธรรมดิจิทัล',score,maxScore:max,type:'exercise',note:''});
-  if (res.ok) showToast('บันทึกคะแนนสำเร็จ','success');
+  if (res.ok) { showToast('บันทึกคะแนนสำเร็จ','success'); _lockAutoGraded(btn, inputEls); }
+  else { showToast('บันทึกไม่สำเร็จ: '+res.error,'error'); btn.disabled=false; btn.innerHTML='<i class="fas fa-check-circle"></i> ตรวจคำตอบและส่งคะแนน'; }
 }
 
 const MCQ5_ANS = { q5_1: 'C', q5_2: 'B', q5_3: 'C', q5_4: 'B' };
 async function submitMCQ5() {
   if (_exLocked5) { showToast('แบบฝึกหัดยังไม่เปิด','warning'); return; }
+  const btn = document.getElementById('mcqBtn5'); if (btn.disabled) return;
   const s = getStudent(); if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน','warning'); return; }
   if (!Object.keys(MCQ5_ANS).every(q => document.querySelector(`input[name="${q}"]:checked`))) { showToast('กรุณาตอบให้ครบ','warning'); return; }
-  let correct = 0;
+  let correct = 0; const inputEls = [];
   Object.keys(MCQ5_ANS).forEach(q => {
     const chosen = document.querySelector(`input[name="${q}"]:checked`);
-    document.querySelectorAll(`input[name="${q}"]`).forEach(opt => { const l = opt.closest('.mcq-option'); l.classList.remove('correct-ans','wrong-ans'); if (opt.value===MCQ5_ANS[q]) l.classList.add('correct-ans'); else if (chosen&&opt===chosen&&opt.value!==MCQ5_ANS[q]) l.classList.add('wrong-ans'); });
+    document.querySelectorAll(`input[name="${q}"]`).forEach(opt => { inputEls.push(opt); const l = opt.closest('.mcq-option'); l.classList.remove('correct-ans','wrong-ans'); if (opt.value===MCQ5_ANS[q]) l.classList.add('correct-ans'); else if (chosen&&opt===chosen&&opt.value!==MCQ5_ANS[q]) l.classList.add('wrong-ans'); });
     if (chosen&&chosen.value===MCQ5_ANS[q]) correct++;
   });
   const score = correct, max = 4;
   const rb = document.getElementById('mcqResult5'); rb.className = 'result-box show '+(score>=3?'pass':'fail'); rb.innerHTML = `ได้ ${score}/${max} คะแนน`;
-  await saveScore('media-m1',{studentId:s.id,name:s.name,room:s.class},{title:'แบบฝึกหัดที่ 2 บทที่ 5: ปรนัยจริยธรรมดิจิทัล',score,maxScore:max,type:'quiz',note:''});
-  showToast('บันทึกคะแนนสำเร็จ','success');
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังบันทึก...';
+  const res = await saveScore('media-m1',{studentId:s.id,name:s.name,room:s.class},{title:'แบบฝึกหัดที่ 2 บทที่ 5: ปรนัยจริยธรรมดิจิทัล',score,maxScore:max,type:'quiz',note:''});
+  if (res.ok) { showToast('บันทึกคะแนนสำเร็จ','success'); _lockAutoGraded(btn, inputEls); }
+  else { showToast('บันทึกไม่สำเร็จ: '+res.error,'error'); btn.disabled=false; btn.innerHTML='<i class="fas fa-check-circle"></i> ตรวจคำตอบและส่งคะแนน'; }
 }
 
 const TF5_ANS = { tf5_1: 'F', tf5_2: 'T', tf5_3: 'T' };
 async function submitTF5() {
   if (_exLocked5) { showToast('แบบฝึกหัดยังไม่เปิด','warning'); return; }
+  const btn = document.getElementById('tfBtn5'); if (btn.disabled) return;
   const s = getStudent(); if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน','warning'); return; }
   if (!Object.keys(TF5_ANS).every(q => document.querySelector(`input[name="${q}"]:checked`))) { showToast('กรุณาตอบให้ครบ','warning'); return; }
-  let correct = 0;
+  let correct = 0; const inputEls = [];
   Object.keys(TF5_ANS).forEach(q => {
     const chosen = document.querySelector(`input[name="${q}"]:checked`);
-    document.querySelectorAll(`input[name="${q}"]`).forEach(opt => { const l = opt.closest('.mcq-option'); l.classList.remove('correct-ans','wrong-ans'); if (opt.value===TF5_ANS[q]) l.classList.add('correct-ans'); else if (chosen&&opt===chosen&&opt.value!==TF5_ANS[q]) l.classList.add('wrong-ans'); });
+    document.querySelectorAll(`input[name="${q}"]`).forEach(opt => { inputEls.push(opt); const l = opt.closest('.mcq-option'); l.classList.remove('correct-ans','wrong-ans'); if (opt.value===TF5_ANS[q]) l.classList.add('correct-ans'); else if (chosen&&opt===chosen&&opt.value!==TF5_ANS[q]) l.classList.add('wrong-ans'); });
     if (chosen&&chosen.value===TF5_ANS[q]) correct++;
   });
   const score = correct, max = 3;
   const rb = document.getElementById('tfResult5'); rb.className = 'result-box show '+(score>=2?'pass':'fail'); rb.innerHTML = `ได้ ${score}/${max} คะแนน`;
-  await saveScore('media-m1',{studentId:s.id,name:s.name,room:s.class},{title:'แบบฝึกหัดที่ 3 บทที่ 5: ถูก/ผิดจริยธรรมดิจิทัล',score,maxScore:max,type:'quiz',note:''});
-  showToast('บันทึกคะแนนสำเร็จ','success');
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังบันทึก...';
+  const res = await saveScore('media-m1',{studentId:s.id,name:s.name,room:s.class},{title:'แบบฝึกหัดที่ 3 บทที่ 5: ถูก/ผิดจริยธรรมดิจิทัล',score,maxScore:max,type:'quiz',note:''});
+  if (res.ok) { showToast('บันทึกคะแนนสำเร็จ','success'); _lockAutoGraded(btn, inputEls); }
+  else { showToast('บันทึกไม่สำเร็จ: '+res.error,'error'); btn.disabled=false; btn.innerHTML='<i class="fas fa-check-circle"></i> ตรวจคำตอบและส่งคะแนน'; }
 }
 
 function _loadAnalysisState5() {
   setupWorkCard({subjectId:'media-m1',title:'แบบฝึกหัดที่ 4 บทที่ 5: วิเคราะห์กรณีศึกษา Cyberbullying',
     formEl:document.getElementById('analysisFormArea5'),pendingBoxEl:document.getElementById('analysisPendingBox5'),
-    gradedBoxEl:document.getElementById('analysisGradedBox5'),editBtnEl:document.getElementById('editAnalysisBtn5'),
+    gradedBoxEl:document.getElementById('analysisGradedBox5'),
     onGraded:sub=>{ document.getElementById('analysisGradedScore5').textContent='คะแนน: '+sub.score+'/'+sub.maxScore; }
   });
 }
@@ -786,7 +812,7 @@ async function submitAnalysis5() {
 function _loadWorksheetState5() {
   setupWorkCard({subjectId:'media-m1',title:'แบบฝึกหัดที่ 5 บทที่ 5: ใบงานพลเมืองดิจิทัล',
     formEl:document.getElementById('worksheetFormArea5'),pendingBoxEl:document.getElementById('worksheetPendingBox5'),
-    gradedBoxEl:document.getElementById('worksheetGradedBox5'),editBtnEl:document.getElementById('editWorksheetBtn5'),
+    gradedBoxEl:document.getElementById('worksheetGradedBox5'),
     onGraded:sub=>{ document.getElementById('worksheetGradedScore5').textContent='คะแนน: '+sub.score+'/'+sub.maxScore; }
   });
 }
@@ -859,6 +885,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadUnitSettings5();
   _loadAnalysisState5();
   _loadWorksheetState5();
+  await _checkAutoGradedDone('แบบฝึกหัดที่ 1 บทที่ 5: จับคู่จริยธรรมดิจิทัล', document.getElementById('matchBtn5'), Object.keys(MATCH5_ANS).map(k => document.getElementById(k)), document.getElementById('matchResult5'));
+  await _checkAutoGradedDone('แบบฝึกหัดที่ 2 บทที่ 5: ปรนัยจริยธรรมดิจิทัล', document.getElementById('mcqBtn5'), Array.from(document.querySelectorAll('input[name^="q5_"]')), document.getElementById('mcqResult5'));
+  await _checkAutoGradedDone('แบบฝึกหัดที่ 3 บทที่ 5: ถูก/ผิดจริยธรรมดิจิทัล', document.getElementById('tfBtn5'), Array.from(document.querySelectorAll('input[name^="tf5_"]')), document.getElementById('tfResult5'));
   if (_testLocked5) { document.getElementById('testLockedBox5').style.display='block'; document.getElementById('testStartBox5').style.display='none'; }
   else { await checkTestDone5(); }
 });

@@ -645,14 +645,11 @@
         <div class="result-box" id="analysisResult"></div>
       </div>
       <div id="analysisPendingBox" style="display:none;margin-top:1rem;background:#fffbeb;border:1px solid #fcd34d;border-radius:12px;padding:1.25rem">
-        <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem">
+        <div style="display:flex;align-items:center;gap:.6rem">
           <i class="fas fa-clock" style="color:#d97706;font-size:1.3rem"></i>
           <p style="font-weight:700;color:#92400e;margin:0">ส่งงานแล้ว — รอครูตรวจ</p>
         </div>
-        <button id="editAnalysisBtn"
-          style="background:#fff;border:1px solid #fcd34d;color:#b45309;padding:.4rem .9rem;border-radius:8px;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer">
-          <i class="fas fa-pen"></i> แก้ไขคำตอบ
-        </button>
+        <p style="margin:.75rem 0 0;font-size:.8rem;color:#b45309"><i class="fas fa-lock"></i> ส่งงานแล้ว ไม่สามารถแก้ไขคำตอบได้อีก</p>
       </div>
       <div id="analysisGradedBox" style="display:none;margin-top:1rem;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:1.25rem;text-align:center">
         <i class="fas fa-circle-check" style="color:#16a34a;font-size:2rem;margin-bottom:.4rem;display:block"></i>
@@ -692,14 +689,11 @@
         <div class="result-box" id="worksheetResult"></div>
       </div>
       <div id="worksheetPendingBox" style="display:none;margin-top:1rem;background:#fffbeb;border:1px solid #fcd34d;border-radius:12px;padding:1.25rem">
-        <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem">
+        <div style="display:flex;align-items:center;gap:.6rem">
           <i class="fas fa-clock" style="color:#d97706;font-size:1.3rem"></i>
           <p style="font-weight:700;color:#92400e;margin:0">ส่งใบงานแล้ว — รอครูตรวจ</p>
         </div>
-        <button id="editWorksheetBtn"
-          style="background:#fff;border:1px solid #fcd34d;color:#b45309;padding:.4rem .9rem;border-radius:8px;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer">
-          <i class="fas fa-pen"></i> แก้ไขคำตอบ
-        </button>
+        <p style="margin:.75rem 0 0;font-size:.8rem;color:#b45309"><i class="fas fa-lock"></i> ส่งงานแล้ว ไม่สามารถแก้ไขคำตอบได้อีก</p>
       </div>
       <div id="worksheetGradedBox" style="display:none;margin-top:1rem;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:1.25rem;text-align:center">
         <i class="fas fa-circle-check" style="color:#16a34a;font-size:2rem;margin-bottom:.4rem;display:block"></i>
@@ -806,15 +800,38 @@ async function loadUnitSettings1() {
   });
 }
 
+/* ── Lock helpers: กันทำแบบฝึกหัดซ้ำ (auto-graded) ── */
+function _lockAutoGraded(btn, lockedLabel, inputEls) {
+  if (btn) { btn.disabled = true; btn.innerHTML = lockedLabel; }
+  (inputEls || []).forEach(el => el.disabled = true);
+}
+
+async function _checkAutoGradedDone(title, btn, lockedLabel, inputEls, resultBoxEl) {
+  const s = getStudent();
+  if (!s || typeof getSubmissionByTitle !== 'function') return;
+  const res = await getSubmissionByTitle('media-m1', s.id, title);
+  if (res.ok && res.data) {
+    _lockAutoGraded(btn, lockedLabel, inputEls);
+    if (resultBoxEl) {
+      resultBoxEl.className = 'result-box show pass';
+      resultBoxEl.innerHTML = `<i class="fas fa-lock"></i> ทำแบบฝึกหัดนี้แล้ว ได้ ${res.data.score}/${res.data.maxScore} คะแนน`;
+    }
+  }
+}
+
 /* ── Work 1: Match ── */
 const MATCH_ANSWERS = { m1: 'TikTok', m2: 'Blogspot', m3: 'TrueID News', m4: 'YouTube', m5: 'เกม Kahoot' };
+const MATCH1_LOCKED_LABEL = '<i class="fas fa-lock"></i> ทำแบบฝึกหัดนี้แล้ว';
 
 async function submitMatch() {
   if (_exLocked1) { showToast('ครูปิดการส่งแบบฝึกหัดชั่วคราว', 'warning'); return; }
+  const btn = document.getElementById('matchBtn1');
+  if (btn.disabled) return;
   const s = getStudent();
   if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน', 'warning'); return; }
 
-  const answers = { m1: document.getElementById('m1').value, m2: document.getElementById('m2').value, m3: document.getElementById('m3').value, m4: document.getElementById('m4').value, m5: document.getElementById('m5').value };
+  const selects = ['m1','m2','m3','m4','m5'].map(id => document.getElementById(id));
+  const answers = { m1: selects[0].value, m2: selects[1].value, m3: selects[2].value, m4: selects[3].value, m5: selects[4].value };
   const keys = Object.keys(answers);
 
   if (keys.some(k => !answers[k])) { showToast('กรุณาเลือกคำตอบให้ครบทุกข้อ', 'warning'); return; }
@@ -831,30 +848,46 @@ async function submitMatch() {
   resultBox.className = 'result-box show ' + (score >= 3 ? 'pass' : 'fail');
   resultBox.innerHTML = `ได้ ${score}/${max} คะแนน (ถูก ${correct} ข้อ จาก 5 ข้อ)`;
 
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังบันทึก...';
+
   const res = await saveScore('media-m1',
     { studentId: s.id, name: s.name, room: s.class },
     { title: 'แบบฝึกหัดที่ 1: จับคู่ประเภทสื่อ', score, maxScore: max, type: 'exercise', note: '' }
   );
-  if (res.ok) showToast('บันทึกคะแนนสำเร็จ', 'success');
-  else showToast('บันทึกไม่สำเร็จ: ' + res.error, 'error');
+  if (res.ok) {
+    showToast('บันทึกคะแนนสำเร็จ', 'success');
+    _lockAutoGraded(btn, MATCH1_LOCKED_LABEL, selects);
+  } else {
+    showToast('บันทึกไม่สำเร็จ: ' + res.error, 'error');
+    btn.disabled = false; btn.innerHTML = '<i class="fas fa-check-circle"></i> ตรวจคำตอบและส่งคะแนน';
+  }
 }
 
 /* ── Work 2: MCQ ── */
 const MCQ_ANSWERS = { q1: 'C', q2: 'B', q3: 'C' };
+const MCQ1_LOCKED_LABEL = '<i class="fas fa-lock"></i> ทำแบบฝึกหัดนี้แล้ว';
 
 async function submitMCQ() {
   if (_exLocked1) { showToast('ครูปิดการส่งแบบฝึกหัดชั่วคราว', 'warning'); return; }
+  const btn = document.getElementById('mcqBtn1');
+  if (btn.disabled) return;
   const s = getStudent();
   if (!s) { showToast('กรุณาเข้าสู่ระบบก่อน', 'warning'); return; }
+
+  if (!document.querySelector('input[name="q1"]:checked') || !document.querySelector('input[name="q2"]:checked') || !document.querySelector('input[name="q3"]:checked')) {
+    showToast('กรุณาตอบให้ครบทุกข้อ', 'warning'); return;
+  }
 
   const resultBox = document.getElementById('mcqResult');
   let correct = 0;
   const total = Object.keys(MCQ_ANSWERS).length;
+  const allInputs = [];
 
   Object.keys(MCQ_ANSWERS).forEach(q => {
     const chosen = document.querySelector(`input[name="${q}"]:checked`);
     const options = document.querySelectorAll(`input[name="${q}"]`);
     options.forEach(opt => {
+      allInputs.push(opt);
       const label = opt.closest('.mcq-option');
       label.classList.remove('correct-ans', 'wrong-ans');
       if (opt.value === MCQ_ANSWERS[q]) label.classList.add('correct-ans');
@@ -863,21 +896,24 @@ async function submitMCQ() {
     if (chosen && chosen.value === MCQ_ANSWERS[q]) correct++;
   });
 
-  if (!document.querySelector('input[name="q1"]:checked') || !document.querySelector('input[name="q2"]:checked') || !document.querySelector('input[name="q3"]:checked')) {
-    showToast('กรุณาตอบให้ครบทุกข้อ', 'warning'); return;
-  }
-
   const score = correct;
   const max = 3;
   resultBox.className = 'result-box show ' + (score >= 2 ? 'pass' : 'fail');
   resultBox.innerHTML = `ได้ ${score}/${max} คะแนน (ถูก ${correct} ข้อ จาก ${total} ข้อ)`;
 
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังบันทึก...';
+
   const res = await saveScore('media-m1',
     { studentId: s.id, name: s.name, room: s.class },
     { title: 'แบบฝึกหัดที่ 2: คำถามปรนัย', score, maxScore: max, type: 'quiz', note: '' }
   );
-  if (res.ok) showToast('บันทึกคะแนนสำเร็จ', 'success');
-  else showToast('บันทึกไม่สำเร็จ: ' + res.error, 'error');
+  if (res.ok) {
+    showToast('บันทึกคะแนนสำเร็จ', 'success');
+    _lockAutoGraded(btn, MCQ1_LOCKED_LABEL, allInputs);
+  } else {
+    showToast('บันทึกไม่สำเร็จ: ' + res.error, 'error');
+    btn.disabled = false; btn.innerHTML = '<i class="fas fa-check-circle"></i> ตรวจคำตอบและส่งคะแนน';
+  }
 }
 
 /* ── Work 3: Analysis ── */
@@ -888,7 +924,6 @@ function _loadAnalysisState() {
     formEl:       document.getElementById('analysisFormArea'),
     pendingBoxEl: document.getElementById('analysisPendingBox'),
     gradedBoxEl:  document.getElementById('analysisGradedBox'),
-    editBtnEl:    document.getElementById('editAnalysisBtn'),
     onGraded: sub => {
       document.getElementById('analysisGradedScore').textContent = 'คะแนน: ' + sub.score + '/' + sub.maxScore;
     }
@@ -939,7 +974,6 @@ function _loadWorksheetState() {
     formEl:       document.getElementById('worksheetFormArea'),
     pendingBoxEl: document.getElementById('worksheetPendingBox'),
     gradedBoxEl:  document.getElementById('worksheetGradedBox'),
-    editBtnEl:    document.getElementById('editWorksheetBtn'),
     onGraded: sub => {
       document.getElementById('worksheetGradedScore').textContent = 'คะแนน: ' + sub.score + '/' + sub.maxScore;
     }
@@ -991,6 +1025,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadUnitSettings1();
   _loadAnalysisState();
   _loadWorksheetState();
+  await _checkAutoGradedDone('แบบฝึกหัดที่ 1: จับคู่ประเภทสื่อ', document.getElementById('matchBtn1'), MATCH1_LOCKED_LABEL, ['m1','m2','m3','m4','m5'].map(id => document.getElementById(id)), document.getElementById('matchResult'));
+  await _checkAutoGradedDone('แบบฝึกหัดที่ 2: คำถามปรนัย', document.getElementById('mcqBtn1'), MCQ1_LOCKED_LABEL, Array.from(document.querySelectorAll('#wcard2 input[type=radio]')), document.getElementById('mcqResult'));
 });
 </script>
 </body>

@@ -1165,7 +1165,7 @@
 <script src="js/firebase-config.js"></script>
 <script src="js/students.js"></script>
 <script src="js/app.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
 <script>
 /* =========================================================
    Dashboard JS
@@ -1223,6 +1223,60 @@ updateClock();
 /* =========================================================
    Firebase loader
    ========================================================= */
+
+/* ----- รู้เท่าทันสื่อ: นักเรียนบางคนกดทำแบบฝึกหัดซ้ำ (auto-graded ทำใหม่ได้ไม่จำกัด)
+   ทำให้มีคะแนนซ้ำหลายรายการต่อหัวข้อเดียวกัน — ให้ตัดออก เหลือเฉพาะครั้งแรกสุดต่อหัวข้อ ----- */
+function _dedupeFirstAttempt(scores) {
+  const getTime = x => (x.submittedAt && x.submittedAt.toDate) ? x.submittedAt.toDate().getTime() : Infinity;
+  const sorted = [...(scores || [])].sort((a, b) => getTime(a) - getTime(b));
+  const seen = new Set();
+  const deduped = [];
+  sorted.forEach(sc => {
+    const key = sc.title || sc.id;
+    if (seen.has(key)) return;
+    seen.add(key);
+    deduped.push(sc);
+  });
+  return deduped;
+}
+
+/* รายการงานทั้งหมดที่เคยมีอยู่ในระบบของวิชานี้ (รวม maxScore) — ใช้เป็น "คะแนนเต็มจริง" และเป็นรายการคอลัมน์สำหรับ Export */
+function _buildAssignmentCatalog(subjData) {
+  const exMap = new Map();  // title -> maxScore
+  const tstMap = new Map();
+  (subjData || []).forEach(s => {
+    (s.scores || []).forEach(sc => {
+      const isEx  = sc.type === 'exercise' || sc.type === 'quiz' || sc.type === 'project';
+      const isTst = sc.type === 'exam';
+      if (isEx  && !exMap.has(sc.title))  exMap.set(sc.title, sc.maxScore || 0);
+      if (isTst && !tstMap.has(sc.title)) tstMap.set(sc.title, sc.maxScore || 0);
+    });
+  });
+  return {
+    exercises: [...exMap.entries()].map(([title, maxScore]) => ({ title, maxScore })),
+    tests:     [...tstMap.entries()].map(([title, maxScore]) => ({ title, maxScore }))
+  };
+}
+
+/* คะแนนเต็มที่แท้จริงของทั้งวิชา = รวม maxScore ของทุกหัวข้อที่เคยมีอยู่ในระบบ (ไม่ใช่แค่ที่นักเรียนคนนั้นเข้าทำ) */
+function _computeSubjectMaxTotals(subjData) {
+  const cat = _buildAssignmentCatalog(subjData);
+  const sum = arr => arr.reduce((a, x) => a + x.maxScore, 0);
+  return { exMax: sum(cat.exercises), tstMax: sum(cat.tests) };
+}
+
+function _dedupeMediaStudentData(data) {
+  return data.map(s => {
+    const deduped = _dedupeFirstAttempt(s.scores);
+    return {
+      ...s,
+      scores: deduped,
+      totalScore: deduped.reduce((a, x) => a + (x.score || 0), 0),
+      totalMax:   deduped.reduce((a, x) => a + (x.maxScore || 0), 0)
+    };
+  });
+}
+
 async function loadAllData() {
   allStudentData = [];
 
@@ -1244,7 +1298,8 @@ async function loadAllData() {
     for (const subj of subjects) {
       const res = await getAllStudentsScores(subj);
       if (res.ok) {
-        res.data.forEach(s => {
+        const data = subj === 'media-m1' ? _dedupeMediaStudentData(res.data) : res.data;
+        data.forEach(s => {
           allStudentData.push({ ...s, subjectId: subj, subjectName: subjectNames[subj] });
         });
       }
@@ -1937,8 +1992,8 @@ function _updateClassRoomSel() {
     rooms.map(r => `<option value="${r}">${r}</option>`).join('');
 }
 
-let _currentClassData = [];
 let _currentClassMeta = { subjectName: '', roomLabel: '' };
+let _currentClassExport = null; // ข้อมูลละเอียดสำหรับ Export (รายชิ้นงาน)
 
 document.querySelectorAll('[data-csubject]').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -1953,7 +2008,7 @@ document.querySelectorAll('[data-csubject]').forEach(btn => {
       '<tr><td colspan="9" style="text-align:center;padding:2.5rem;color:var(--text-muted)">เลือกห้องและกด "โหลดรายชื่อ"</td></tr>';
     document.getElementById('classSummary').style.display = 'none';
     document.getElementById('classLoadInfo').textContent = '';
-    _currentClassData = [];
+    _currentClassExport = null;
     document.getElementById('exportClassBtn').disabled = true;
   });
 });
@@ -1978,7 +2033,9 @@ document.getElementById('loadClassBtn').addEventListener('click', async () => {
   }
 
   /* โหลดคะแนน Firebase สำหรับวิชาที่เลือก */
-  const fbScores = {}; // { studentId → { exScore, exMax, tstScore, tstMax } }
+  const fbScores = {}; // { studentId → { exScore, tstScore, byTitle: Map(title→score) } } — คะแนนที่ทำได้จริงของนักเรียนแต่ละคน
+  let subjExMax = 0, subjTstMax = 0; // คะแนนเต็มจริงของทั้งวิชา (เท่ากันทุกคน ไม่ใช่แค่ที่คนนั้นเข้าทำ)
+  let catalog = { exercises: [], tests: [] }; // รายชื่องานทั้งหมดของวิชานี้ (สำหรับ Export แบบละเอียด)
 
   if (firebaseReady) {
     /* ใช้ allStudentData ที่โหลดไว้แล้ว หรือโหลดใหม่ */
@@ -1986,18 +2043,22 @@ document.getElementById('loadClassBtn').addEventListener('click', async () => {
     if (!subjData.length) {
       const res = await getAllStudentsScores(_classSubject);
       if (res.ok) {
-        subjData = res.data;
+        subjData = _classSubject === 'media-m1' ? _dedupeMediaStudentData(res.data) : res.data;
         subjData.forEach(s => allStudentData.push({ ...s, subjectId: _classSubject, subjectName: '' }));
       }
     }
+    catalog = _buildAssignmentCatalog(subjData);
+    subjExMax  = catalog.exercises.reduce((a, x) => a + x.maxScore, 0);
+    subjTstMax = catalog.tests.reduce((a, x) => a + x.maxScore, 0);
     subjData.forEach(s => {
       const exs  = (s.scores || []).filter(sc => sc.type === 'exercise' || sc.type === 'quiz' || sc.type === 'project');
       const tsts = (s.scores || []).filter(sc => sc.type === 'exam');
+      const byTitle = new Map();
+      (s.scores || []).forEach(sc => byTitle.set(sc.title, sc.score || 0));
       fbScores[s.studentId] = {
         exScore:  exs.reduce((a, b) => a + (b.score || 0), 0),
-        exMax:    exs.reduce((a, b) => a + (b.maxScore || 0), 0),
         tstScore: tsts.reduce((a, b) => a + (b.score || 0), 0),
-        tstMax:   tsts.reduce((a, b) => a + (b.maxScore || 0), 0),
+        byTitle
       };
     });
   }
@@ -2008,8 +2069,8 @@ document.getElementById('loadClassBtn').addEventListener('click', async () => {
   document.getElementById('classLoadInfo').textContent = `${students.length} คน ${roomLabel}`;
 
   const tbody = document.getElementById('classTableBody');
-  _currentClassData = [];
   _currentClassMeta = { subjectName: (SUBJECTS[_classSubject] && SUBJECTS[_classSubject].name) || _classSubject, roomLabel };
+  _currentClassExport = { students, fbScores, catalog, subjExMax, subjTstMax, roomLabel, subjectName: _currentClassMeta.subjectName };
   document.getElementById('exportClassBtn').disabled = true;
 
   if (!students.length) {
@@ -2018,28 +2079,21 @@ document.getElementById('loadClassBtn').addEventListener('click', async () => {
     return;
   }
 
-  let sumEx = 0, sumExMax = 0, sumTst = 0, sumTstMax = 0;
+  let sumEx = 0, sumTst = 0;
+  const totMaxPerStudent = subjExMax + subjTstMax;
 
   tbody.innerHTML = students.map(s => {
-    const sc = fbScores[s.studentId] || { exScore: 0, exMax: 0, tstScore: 0, tstMax: 0 };
-    const tot    = sc.exScore + sc.tstScore;
-    const totMax = sc.exMax   + sc.tstMax;
-    const pct    = totMax > 0 ? Math.round((tot / totMax) * 100) : 0;
+    const sc = fbScores[s.studentId] || { exScore: 0, tstScore: 0 };
+    const tot = sc.exScore + sc.tstScore;
+    const pct = totMaxPerStudent > 0 ? Math.round((tot / totMaxPerStudent) * 100) : 0;
     const pClass = pct >= 70 ? 'high' : pct >= 50 ? 'mid' : 'low';
 
-    sumEx    += sc.exScore;  sumExMax  += sc.exMax;
-    sumTst   += sc.tstScore; sumTstMax += sc.tstMax;
+    sumEx += sc.exScore; sumTst += sc.tstScore;
 
-    _currentClassData.push({
-      no: s.no || '', studentId: s.studentId, name: s.name || '', room: s.class || '',
-      exScore: sc.exScore, exMax: sc.exMax, tstScore: sc.tstScore, tstMax: sc.tstMax,
-      tot, totMax, pct
-    });
-
-    const exCell  = sc.exMax  > 0 ? `<span class="score-badge ${getScoreBadgeClass(sc.exScore, sc.exMax)}">${sc.exScore}/${sc.exMax}</span>` : '<span style="color:#94a3b8">—</span>';
-    const tstCell = sc.tstMax > 0 ? `<span class="score-badge ${getScoreBadgeClass(sc.tstScore, sc.tstMax)}">${sc.tstScore}/${sc.tstMax}</span>` : '<span style="color:#94a3b8">—</span>';
-    const totCell = totMax   > 0 ? `<strong>${tot}/${totMax}</strong>` : '<span style="color:#94a3b8">—</span>';
-    const pctCell = totMax   > 0 ? `<span class="score-badge ${pClass}">${pct}%</span>` : '<span style="color:#94a3b8">—</span>';
+    const exCell  = subjExMax  > 0 ? `<span class="score-badge ${getScoreBadgeClass(sc.exScore, subjExMax)}">${sc.exScore}/${subjExMax}</span>` : '<span style="color:#94a3b8">—</span>';
+    const tstCell = subjTstMax > 0 ? `<span class="score-badge ${getScoreBadgeClass(sc.tstScore, subjTstMax)}">${sc.tstScore}/${subjTstMax}</span>` : '<span style="color:#94a3b8">—</span>';
+    const totCell = totMaxPerStudent > 0 ? `<strong>${tot}/${totMaxPerStudent}</strong>` : '<span style="color:#94a3b8">—</span>';
+    const pctCell = totMaxPerStudent > 0 ? `<span class="score-badge ${pClass}">${pct}%</span>` : '<span style="color:#94a3b8">—</span>';
 
     return `<tr>
       <td style="color:#64748b;font-size:.82rem">${s.no || '—'}</td>
@@ -2061,43 +2115,162 @@ document.getElementById('loadClassBtn').addEventListener('click', async () => {
 
   document.getElementById('exportClassBtn').disabled = false;
 
-  /* สรุปคะแนนรวม */
+  /* สรุปคะแนนรวม — คะแนนเต็มต่อคน x จำนวนคน (คะแนนเต็มเท่ากันทุกคนตามคะแนนเต็มจริงของทั้งวิชา) */
+  const sumExMax = subjExMax * students.length, sumTstMax = subjTstMax * students.length;
   const gt = sumEx + sumTst, gtMax = sumExMax + sumTstMax;
   const gtPct = gtMax > 0 ? Math.round((gt / gtMax) * 100) : 0;
   const summaryEl = document.getElementById('classSummary');
   summaryEl.style.display = 'block';
   summaryEl.innerHTML =
     `<strong><i class="fas fa-chart-pie"></i> สรุปคะแนน${isAllRooms ? 'ทุกห้อง' : `ห้อง ${room}`}</strong>&emsp;` +
-    (sumExMax  > 0 ? `แบบฝึกหัด: <strong>${sumEx}/${sumExMax}</strong>&emsp;` : '') +
-    (sumTstMax > 0 ? `แบบทดสอบ: <strong>${sumTst}/${sumTstMax}</strong>&emsp;` : '') +
+    (sumExMax  > 0 ? `แบบฝึกหัด: <strong>${sumEx}/${sumExMax}</strong> (เต็ม ${subjExMax}/คน)&emsp;` : '') +
+    (sumTstMax > 0 ? `แบบทดสอบ: <strong>${sumTst}/${sumTstMax}</strong> (เต็ม ${subjTstMax}/คน)&emsp;` : '') +
     `รวม: <strong>${gt}/${gtMax}</strong>` +
     (gtMax > 0 ? ` <span style="color:#059669;font-weight:700">(${gtPct}%)</span>` : '');
 });
 
-/* ----- Export ตารางคะแนนที่โหลดอยู่เป็นไฟล์ Excel ----- */
-document.getElementById('exportClassBtn').addEventListener('click', () => {
-  if (!_currentClassData.length) { showToast('กรุณาโหลดรายชื่อก่อน', 'warning'); return; }
-  if (typeof XLSX === 'undefined') { showToast('ไม่สามารถโหลดไลบรารี Export ได้', 'error'); return; }
+/* ----- Export ตารางคะแนนแบบละเอียด: รายชิ้นงาน + ไฮไลต์สีแดงงานที่ยังไม่ทำ + คะแนนสัดส่วนเต็ม 100 ----- */
+document.getElementById('exportClassBtn').addEventListener('click', async () => {
+  if (!_currentClassExport || !_currentClassExport.students.length) { showToast('กรุณาโหลดรายชื่อก่อน', 'warning'); return; }
+  if (typeof ExcelJS === 'undefined') { showToast('ไม่สามารถโหลดไลบรารี Export ได้', 'error'); return; }
 
-  const rows = _currentClassData.map(r => ({
-    'เลขที่':        r.no,
-    'รหัสนักเรียน':  r.studentId,
-    'ชื่อ-นามสกุล':  r.name,
-    'ห้อง':          r.room,
-    'แบบฝึกหัด':     r.exMax  > 0 ? `${r.exScore}/${r.exMax}`   : '',
-    'แบบทดสอบ':      r.tstMax > 0 ? `${r.tstScore}/${r.tstMax}` : '',
-    'คะแนนรวม':      r.totMax > 0 ? `${r.tot}/${r.totMax}`      : '',
-    '%':             r.totMax > 0 ? r.pct : ''
-  }));
+  const btn = document.getElementById('exportClassBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังสร้างไฟล์...';
 
-  const ws = XLSX.utils.json_to_sheet(rows);
-  ws['!cols'] = [{ wch: 7 }, { wch: 12 }, { wch: 28 }, { wch: 10 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 8 }];
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'คะแนน');
+  try {
+    const { students, fbScores, catalog, subjExMax, subjTstMax, roomLabel, subjectName } = _currentClassExport;
+    const exList  = catalog.exercises;
+    const tstList = catalog.tests;
+    const totMaxPerStudent = subjExMax + subjTstMax;
 
-  const today = new Date().toISOString().slice(0, 10);
-  const fname = `คะแนน_${_currentClassMeta.subjectName}_${_currentClassMeta.roomLabel}_${today}.xlsx`.replace(/\s+/g, '_');
-  XLSX.writeFile(wb, fname);
+    const wb = new ExcelJS.Workbook();
+    wb.creator = 'ครูศิริศักดิ์ ปิลอง';
+    wb.created = new Date();
+    const ws = wb.addWorksheet('คะแนนละเอียด', { views: [{ state: 'frozen', xSplit: 4, ySplit: 2 }] });
+
+    const INFO_COLS = 4;
+    const exStart   = INFO_COLS + 1;
+    const tstStart  = exStart + exList.length;
+    const sumStart  = tstStart + tstList.length;
+
+    /* Row 1: หัวข้อกลุ่ม */
+    ws.getCell(1, 1).value = 'ข้อมูลนักเรียน';
+    ws.mergeCells(1, 1, 1, INFO_COLS);
+    if (exList.length) {
+      ws.getCell(1, exStart).value = 'แบบฝึกหัด';
+      ws.mergeCells(1, exStart, 1, exStart + exList.length - 1);
+    }
+    if (tstList.length) {
+      ws.getCell(1, tstStart).value = 'แบบทดสอบ';
+      ws.mergeCells(1, tstStart, 1, tstStart + tstList.length - 1);
+    }
+    ws.getCell(1, sumStart).value = 'สรุปคะแนน';
+    ws.mergeCells(1, sumStart, 1, sumStart + 4);
+
+    /* Row 2: หัวคอลัมน์ */
+    const headers = ['เลขที่', 'รหัสนักเรียน', 'ชื่อ-นามสกุล', 'ห้อง',
+      ...exList.map(a => `${a.title} (เต็ม ${a.maxScore})`),
+      ...tstList.map(a => `${a.title} (เต็ม ${a.maxScore})`),
+      'คะแนนแบบฝึกหัดที่ได้', 'คะแนนแบบทดสอบที่ได้', 'คะแนนรวมที่ได้', 'คะแนนเต็มจริง', 'คะแนน (เต็ม 100)'
+    ];
+    headers.forEach((h, i) => { ws.getCell(2, i + 1).value = h; });
+
+    [1, 2].forEach(r => {
+      ws.getRow(r).eachCell({ includeEmpty: true }, cell => {
+        cell.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+        cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: r === 1 ? 'FF7C3AED' : 'FF4C1D95' } };
+        cell.alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
+        cell.border = {
+          top: { style: 'thin', color: { argb: 'FFFFFFFF' } }, left: { style: 'thin', color: { argb: 'FFFFFFFF' } },
+          bottom: { style: 'thin', color: { argb: 'FFFFFFFF' } }, right: { style: 'thin', color: { argb: 'FFFFFFFF' } }
+        };
+      });
+    });
+    ws.getRow(1).height = 22;
+    ws.getRow(2).height = 46;
+
+    ws.getColumn(1).width = 7;
+    ws.getColumn(2).width = 12;
+    ws.getColumn(3).width = 26;
+    ws.getColumn(4).width = 10;
+    for (let i = 0; i < exList.length + tstList.length; i++) ws.getColumn(exStart + i).width = 22;
+    for (let i = 0; i < 5; i++) ws.getColumn(sumStart + i).width = 17;
+
+    const doneFill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFDCFCE7' } };
+    const doneFont = { color: { argb: 'FF166534' } };
+    const missFill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFEF4444' } };
+    const missFont = { color: { argb: 'FFFFFFFF' }, bold: true };
+    const thinGrey = { style: 'thin', color: { argb: 'FFE2E8F0' } };
+
+    /* แถวข้อมูล */
+    students.forEach((s, idx) => {
+      const rowNum = 3 + idx;
+      const sc = fbScores[s.studentId] || { exScore: 0, tstScore: 0, byTitle: new Map() };
+      const byTitle = sc.byTitle || new Map();
+      const tot = sc.exScore + sc.tstScore;
+      const scaled = totMaxPerStudent > 0 ? Math.round((tot / totMaxPerStudent) * 10000) / 100 : '';
+
+      const row = ws.getRow(rowNum);
+      row.getCell(1).value = s.no || '';
+      row.getCell(2).value = s.studentId;
+      row.getCell(3).value = s.name || '';
+      row.getCell(4).value = s.class || '';
+
+      [...exList, ...tstList].forEach((a, i) => {
+        const cell = row.getCell(exStart + i);
+        const done = byTitle.has(a.title);
+        cell.value = done ? (byTitle.get(a.title) || 0) : 0;
+        cell.fill = done ? doneFill : missFill;
+        cell.font = done ? doneFont : missFont;
+        cell.alignment = { horizontal: 'center' };
+      });
+
+      row.getCell(sumStart).value     = sc.exScore;
+      row.getCell(sumStart + 1).value = sc.tstScore;
+      row.getCell(sumStart + 2).value = tot;
+      row.getCell(sumStart + 3).value = totMaxPerStudent;
+      row.getCell(sumStart + 4).value = scaled;
+      for (let i = 0; i < 5; i++) {
+        row.getCell(sumStart + i).font = { bold: true };
+        row.getCell(sumStart + i).alignment = { horizontal: 'center' };
+      }
+      row.getCell(sumStart + 4).font = { bold: true, color: { argb: 'FF059669' } };
+
+      row.eachCell({ includeEmpty: true }, cell => { cell.border = { top: thinGrey, left: thinGrey, bottom: thinGrey, right: thinGrey }; });
+    });
+
+    /* คำอธิบายสัญลักษณ์ */
+    const legendRow = 3 + students.length + 1;
+    ws.getCell(legendRow, 1).value = 'คำอธิบาย:';
+    ws.getCell(legendRow, 1).font = { bold: true };
+    ws.getCell(legendRow + 1, 1).value = 'ช่องสีแดง = นักเรียนยังไม่ได้ทำ/ส่งงานชิ้นนั้น';
+    ws.getCell(legendRow + 1, 1).fill = missFill;
+    ws.getCell(legendRow + 1, 1).font = missFont;
+    ws.getCell(legendRow + 2, 1).value = 'ช่องสีเขียว = นักเรียนทำ/ส่งงานชิ้นนั้นแล้ว';
+    ws.getCell(legendRow + 2, 1).fill = doneFill;
+    ws.getCell(legendRow + 2, 1).font = doneFont;
+    ws.getCell(legendRow + 3, 1).value = `คะแนน (เต็ม 100) = (คะแนนรวมที่ได้ ÷ คะแนนเต็มจริง ${totMaxPerStudent}) × 100`;
+
+    const buf = await wb.xlsx.writeBuffer();
+    const blob = new Blob([buf], { type: 'application/octet-stream' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const today = new Date().toISOString().slice(0, 10);
+    a.href = url;
+    a.download = `คะแนนละเอียด_${subjectName}_${roomLabel}_${today}.xlsx`.replace(/\s+/g, '_');
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    showToast('Export ไฟล์ Excel สำเร็จ', 'success');
+  } catch (e) {
+    showToast('เกิดข้อผิดพลาดในการสร้างไฟล์: ' + e.message, 'error');
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fas fa-file-excel"></i> Export เป็น Excel';
 });
 
 /* =========================================================

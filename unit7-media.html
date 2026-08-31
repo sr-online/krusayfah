@@ -102,6 +102,8 @@
     .g-save-msg { font-size: .85rem; opacity: .85; margin-top: .6rem; }
     .g-replay-btn { margin-top: 1rem; background: rgba(255,255,255,.18); color: white; border: 1.5px solid rgba(255,255,255,.4); border-radius: 999px; padding: .6rem 1.6rem; font-family: inherit; font-size: .9rem; font-weight: 700; cursor: pointer; }
     .g-replay-btn:hover { background: rgba(255,255,255,.3); }
+    .g-replay-btn:disabled { opacity: .5; cursor: not-allowed; }
+    .g-replay-btn:disabled:hover { background: rgba(255,255,255,.18); }
 
     @media (max-width: 560px) { .g-options { grid-template-columns: 1fr; } .rule-grid { grid-template-columns: 1fr 1fr; } }
   </style>
@@ -240,7 +242,15 @@
         <div class="g-stat"><i class="fas fa-heart"></i> หัวใจที่เหลือ: <strong id="gLivesStat">0</strong></div>
       </div>
       <div class="g-save-msg" id="gSaveMsg"><i class="fas fa-spinner fa-spin"></i> กำลังบันทึกคะแนน...</div>
-      <button class="g-replay-btn" onclick="startGame7()"><i class="fas fa-rotate-right"></i> เล่นใหม่อีกครั้ง</button>
+      <button class="g-replay-btn" id="gVictoryReplayBtn" onclick="startGame7()"><i class="fas fa-rotate-right"></i> เล่นใหม่อีกครั้ง</button>
+    </div>
+
+    <!-- ALREADY DONE SCREEN (โหลดหน้าแล้วพบว่าทำภารกิจนี้ไปแล้ว) -->
+    <div id="gAlreadyDone" class="g-victory" style="display:none">
+      <div class="g-trophy">🏆</div>
+      <h2>ทำภารกิจนี้แล้ว!</h2>
+      <div class="g-score-big" id="gDoneScore">0/20</div>
+      <p style="opacity:.85;font-size:.9rem;margin:.5rem 0 0">คุณทำภารกิจรู้เท่าทันสื่อบทที่ 7 เรียบร้อยแล้ว ไม่สามารถเล่นซ้ำเพื่อบันทึกคะแนนใหม่ได้</p>
     </div>
 
     <!-- GAME OVER SCREEN -->
@@ -344,6 +354,8 @@ const TOTAL_Q7 = STAGES7.reduce((a,s)=>a+s.questions.length,0); // 20
 let _exLocked7 = false;
 let G7 = null; // { lives, score, combo, bestCombo, stageIdx, qIdx, timeout }
 
+let _game7Done = false;
+
 async function loadUnitSettings7() {
   const s = await getSubjectSettings('media-m1');
   _exLocked7 = s.unit7_exercise === false;
@@ -353,8 +365,21 @@ async function loadUnitSettings7() {
   }
 }
 
+async function checkGame7Done() {
+  const s = getStudent();
+  if (!s || typeof getSubmissionByTitle !== 'function') return;
+  const res = await getSubmissionByTitle('media-m1', s.id, 'บทที่ 7: ภารกิจรู้เท่าทันสื่อ (เกม)');
+  if (res.ok && res.data) {
+    _game7Done = true;
+    document.getElementById('gStart').style.display = 'none';
+    document.getElementById('gAlreadyDone').style.display = 'block';
+    document.getElementById('gDoneScore').textContent = `${res.data.score}/${res.data.maxScore}`;
+  }
+}
+
 function startGame7() {
   if (_exLocked7) { showToast('ภารกิจยังไม่เปิด','warning'); return; }
+  if (_game7Done) { showToast('คุณทำภารกิจนี้แล้ว ไม่สามารถเล่นซ้ำได้','warning'); return; }
   if (!getStudent()) { showToast('กรุณาเข้าสู่ระบบก่อน','warning'); return; }
   G7 = { lives:3, score:0, combo:0, bestCombo:0, stageIdx:0, qIdx:0, timeout:null };
   document.getElementById('gStart').style.display = 'none';
@@ -506,12 +531,20 @@ async function finishGame7() {
     note: `${badgeLabel} · คอมโบสูงสุด ${G7.bestCombo} · หัวใจเหลือ ${G7.lives}`
   });
 
-  if (res.ok) { saveMsg.innerHTML = '<i class="fas fa-circle-check" style="color:#86efac"></i> บันทึกคะแนนสำเร็จ!'; showToast('บันทึกคะแนนสำเร็จ','success'); }
-  else { saveMsg.textContent = '❌ บันทึกคะแนนไม่สำเร็จ: ' + res.error; showToast('เกิดข้อผิดพลาดในการบันทึกคะแนน','error'); }
+  if (res.ok) {
+    saveMsg.innerHTML = '<i class="fas fa-circle-check" style="color:#86efac"></i> บันทึกคะแนนสำเร็จ!';
+    showToast('บันทึกคะแนนสำเร็จ','success');
+    _game7Done = true;
+    const replayBtn = document.getElementById('gVictoryReplayBtn');
+    if (replayBtn) { replayBtn.disabled = true; replayBtn.innerHTML = '<i class="fas fa-lock"></i> ทำภารกิจนี้แล้ว บันทึกคะแนนแล้ว'; }
+  } else {
+    saveMsg.textContent = '❌ บันทึกคะแนนไม่สำเร็จ: ' + res.error; showToast('เกิดข้อผิดพลาดในการบันทึกคะแนน','error');
+  }
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
   await loadUnitSettings7();
+  await checkGame7Done();
 });
 </script>
 </body>
