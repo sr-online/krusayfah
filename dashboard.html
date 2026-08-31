@@ -1094,6 +1094,19 @@
             </label>
           </div>
         </div>
+        <!-- Unit 7 -->
+        <div class="settings-unit-card">
+          <div class="settings-unit-head"><i class="fas fa-gamepad"></i> บทที่ 7: ภารกิจรู้เท่าทันสื่อ (เกม)</div>
+          <div class="settings-unit-body">
+            <label class="toggle-label">
+              <span class="toggle-switch">
+                <input type="checkbox" id="tog_unit7_exercise" checked>
+                <span class="toggle-track"></span>
+              </span>
+              <span>เกมท้ายบท (20 คะแนน)</span>
+            </label>
+          </div>
+        </div>
       </div>
       <div id="settingsStatus" style="margin-top:.75rem;font-size:.85rem;display:none"></div>
     </div>
@@ -1948,7 +1961,8 @@ const SETTINGS_KEYS = [
   'unit3_exercise', 'unit3_test',
   'unit4_exercise', 'unit4_test',
   'unit5_exercise', 'unit5_test',
-  'unit6_exercise'
+  'unit6_exercise',
+  'unit7_exercise'
 ];
 
 async function loadSettings() {
