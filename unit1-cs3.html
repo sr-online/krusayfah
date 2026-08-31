@@ -761,11 +761,8 @@
             style="display:inline-flex;align-items:center;gap:.4rem;background:#fff;border:1px solid #fcd34d;color:#b45309;padding:.45rem 1rem;border-radius:8px;font-size:.88rem;font-weight:600;text-decoration:none">
             <i class="fas fa-external-link-alt"></i> เปิดเว็บไซต์
           </a>
-          <button id="editSitesBtn"
-            style="background:#fff;border:1px solid #fcd34d;color:#b45309;padding:.45rem 1rem;border-radius:8px;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer">
-            <i class="fas fa-pen"></i> แก้ไขลิงก์
-          </button>
         </div>
+        <p style="margin:.75rem 0 0;font-size:.8rem;color:#b45309"><i class="fas fa-lock"></i> ส่งงานแล้ว ไม่สามารถแก้ไขลิงก์ได้อีก</p>
       </div>
 
       <!-- ตรวจแล้ว -->
@@ -779,44 +776,6 @@
         </a>
       </div>
 
-    </div>
-  </div>
-
-  <!-- ===== งานที่ 2 (placeholder) ===== -->
-  <div class="work-card">
-    <div class="work-card-header">
-      <div class="work-num" style="background:linear-gradient(135deg,#64748b,#94a3b8)">2</div>
-      <div class="work-title">
-        <h3><i class="fas fa-file-alt" style="color:#94a3b8;margin-right:.4rem"></i>งานที่ 2</h3>
-        <p>ครูจะเพิ่มงานนี้เร็ว ๆ นี้</p>
-      </div>
-      <div class="work-badges">
-        <span class="work-score-badge" style="background:#f1f5f9;color:#64748b">— คะแนน</span>
-        <span class="work-status-badge coming"><i class="fas fa-clock" style="font-size:.7rem"></i> เร็ว ๆ นี้</span>
-      </div>
-    </div>
-    <div class="work-coming-body">
-      <i class="fas fa-hourglass-half"></i>
-      ยังไม่เปิดรับงาน — ติดตามจากครูในห้องเรียน
-    </div>
-  </div>
-
-  <!-- ===== งานที่ 3 (placeholder) ===== -->
-  <div class="work-card">
-    <div class="work-card-header">
-      <div class="work-num" style="background:linear-gradient(135deg,#64748b,#94a3b8)">3</div>
-      <div class="work-title">
-        <h3><i class="fas fa-file-alt" style="color:#94a3b8;margin-right:.4rem"></i>งานที่ 3</h3>
-        <p>ครูจะเพิ่มงานนี้เร็ว ๆ นี้</p>
-      </div>
-      <div class="work-badges">
-        <span class="work-score-badge" style="background:#f1f5f9;color:#64748b">— คะแนน</span>
-        <span class="work-status-badge coming"><i class="fas fa-clock" style="font-size:.7rem"></i> เร็ว ๆ นี้</span>
-      </div>
-    </div>
-    <div class="work-coming-body">
-      <i class="fas fa-hourglass-half"></i>
-      ยังไม่เปิดรับงาน — ติดตามจากครูในห้องเรียน
     </div>
   </div>
 
@@ -877,7 +836,6 @@
       formEl:       document.getElementById('activitySubmitForm'),
       pendingBoxEl: document.getElementById('activityPendingBox'),
       gradedBoxEl:  document.getElementById('activityGradedBox'),
-      editBtnEl:    document.getElementById('editSitesBtn'),
       noteInputEl:  document.getElementById('googleSitesUrl'),
       onPending: sub => {
         const u = sub.note || '';

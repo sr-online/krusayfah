@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>หน่วยที่ 3 การใช้เทคโนโลยีสารสนเทศอย่างปลอดภัย | วิทยาการคำนวณ 3</title>
+  <script>(function(){try{var s=JSON.parse(localStorage.getItem('srr_student_2569'));if(!s||!s.grade||!s.name)window.location.replace('login.html');}catch(e){window.location.replace('login.html');}})();</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ===== Unit Page Specific ===== */
+    .unit-hero {
+      background: linear-gradient(135deg, #dc2626 0%, #991b1b 60%, #7f1d1d 100%);
+      color: white;
+      padding: 2.5rem 1rem 0;
+    }
+    .unit-hero-content { max-width: 1200px; margin: 0 auto; }
+    .unit-hero h1 { font-size: 1.7rem; font-weight: 700; margin-bottom: .4rem; }
+    .unit-hero p { opacity: .85; font-size: .95rem; margin-bottom: .3rem; }
+    .unit-hero .indicator-box {
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 10px;
+      padding: .75rem 1rem;
+      margin: 1rem 0;
+      font-size: .9rem;
+    }
+
+    .unit-tabs { display: flex; gap: .5rem; flex-wrap: wrap; padding-top: 1rem; }
+    .unit-tab-btn {
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.3);
+      color: white; padding: .55rem 1.1rem;
+      border-radius: 8px 8px 0 0; cursor: pointer;
+      font-family: 'Sarabun', sans-serif; font-size: .9rem;
+      transition: all .2s; display: flex; align-items: center; gap: .4rem;
+    }
+    .unit-tab-btn.active { background: white; color: #dc2626; border-color: white; font-weight: 700; }
+    .unit-tab-btn:hover:not(.active) { background: rgba(255,255,255,.25); }
+
+    .unit-tab-content { display: none; }
+    .unit-tab-content.active { display: block; }
+
+    .lesson-section { background: white; border-radius: 14px; box-shadow: var(--shadow); margin-bottom: 1.5rem; overflow: hidden; }
+    .section-header { background: linear-gradient(90deg, #dc2626, #b91c1c); color: white; padding: 1rem 1.25rem; display: flex; align-items: center; gap: .75rem; cursor: pointer; user-select: none; }
+    .section-header .section-num { width: 32px; height: 32px; background: rgba(255,255,255,.25); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: .95rem; flex-shrink: 0; }
+    .section-header h2 { font-size: 1.05rem; font-weight: 700; flex: 1; }
+    .section-header .toggle-icon { transition: transform .3s; }
+    .section-header.collapsed .toggle-icon { transform: rotate(-90deg); }
+    .section-body { padding: 1.5rem; }
+    .section-body.hidden { display: none; }
+
+    .info-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.25rem; margin-bottom: 1rem; }
+    .info-card h3 { font-size: 1rem; font-weight: 700; color: #dc2626; margin-bottom: .75rem; display: flex; align-items: center; gap: .5rem; }
+    .info-card p { color: #374151; line-height: 1.8; margin-bottom: .5rem; }
+
+    .highlight-box { background: linear-gradient(135deg, #fef2f2, #fee2e2); border-left: 4px solid #dc2626; border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0; }
+    .highlight-box h4 { color: #991b1b; font-weight: 700; margin-bottom: .5rem; }
+    .highlight-box p, .highlight-box li { color: #374151; line-height: 1.8; }
+
+    .blue-box { background: linear-gradient(135deg, #eff6ff, #dbeafe); border-left: 4px solid #3b82f6; border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0; }
+    .blue-box h4 { color: #1e40af; font-weight: 700; margin-bottom: .5rem; }
+
+    .green-box { background: linear-gradient(135deg, #f0fdf4, #dcfce7); border-left: 4px solid #16a34a; border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0; }
+    .green-box h4 { color: #15803d; font-weight: 700; margin-bottom: .5rem; }
+
+    .orange-box { background: linear-gradient(135deg, #fff7ed, #fed7aa); border-left: 4px solid #ea580c; border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0; }
+    .orange-box h4 { color: #9a3412; font-weight: 700; margin-bottom: .5rem; }
+
+    .check-list { list-style: none; padding: 0; }
+    .check-list li { padding: .45rem 0; display: flex; align-items: flex-start; gap: .6rem; color: #374151; line-height: 1.7; }
+    .check-list li i { color: #dc2626; margin-top: .2rem; flex-shrink: 0; }
+
+    .tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem; }
+    .tool-card { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1rem; text-align: center; transition: all .2s; box-shadow: 0 2px 4px rgba(0,0,0,.06); }
+    .tool-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+    .tool-card .tool-icon { font-size: 2rem; margin-bottom: .5rem; }
+    .tool-card h4 { font-size: .9rem; font-weight: 700; color: #1e293b; margin-bottom: .3rem; }
+    .tool-card p { font-size: .8rem; color: #64748b; }
+
+    .impact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+    @media (max-width: 600px) { .impact-grid { grid-template-columns: 1fr; } }
+    .impact-card { border-radius: 10px; padding: 1.1rem; }
+    .impact-positive { background: #f0fdf4; border: 1px solid #bbf7d0; }
+    .impact-negative { background: #fef2f2; border: 1px solid #fecaca; }
+    .impact-card h4 { font-weight: 700; margin-bottom: .75rem; display: flex; align-items: center; gap: .5rem; }
+    .impact-positive h4 { color: #15803d; }
+    .impact-negative h4 { color: #dc2626; }
+    .impact-card ul { padding-left: 0; }
+
+    .code-item { border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: .5rem; overflow: hidden; }
+    .code-item-header { background: #f8fafc; padding: .7rem 1rem; cursor: pointer; display: flex; align-items: center; gap: .75rem; font-weight: 600; color: #1e293b; }
+    .code-item-header:hover { background: #f1f5f9; }
+    .code-num { min-width: 26px; height: 26px; background: #dc2626; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .78rem; font-weight: 700; flex-shrink: 0; }
+    .code-item-body { padding: .6rem 1rem .6rem 3.5rem; color: #64748b; font-size: .88rem; display: none; }
+    .code-item-body.open { display: block; }
+
+    .dtype-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: .9rem; }
+    .dtype-table th { background: #dc2626; color: white; padding: .65rem 1rem; text-align: left; font-weight: 700; }
+    .dtype-table td { padding: .65rem 1rem; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+    .dtype-table tr:nth-child(even) td { background: #fef9f9; }
+
+    /* ===== Work/Exercise Cards ===== */
+    .work-card { background: white; border-radius: 14px; box-shadow: var(--shadow); margin-bottom: 1.5rem; overflow: hidden; border: 1px solid #e2e8f0; }
+    .work-card-header { display: flex; align-items: flex-start; gap: 1rem; padding: 1.25rem; border-bottom: 1px solid #e2e8f0; background: #f8fafc; }
+    .work-num { min-width: 42px; height: 42px; background: linear-gradient(135deg, #b91c1c, #dc2626); color: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 700; flex-shrink: 0; }
+    .work-title { flex: 1; min-width: 0; }
+    .work-title h3 { font-size: 1rem; font-weight: 700; color: #1e293b; margin: 0 0 .25rem; }
+    .work-title p { font-size: .85rem; color: #64748b; margin: 0; line-height: 1.5; }
+    .work-badges { display: flex; flex-direction: column; align-items: flex-end; gap: .4rem; flex-shrink: 0; }
+    .work-score-badge { background: #fee2e2; color: #b91c1c; padding: .25rem .8rem; border-radius: 999px; font-size: .8rem; font-weight: 700; white-space: nowrap; }
+    .work-status-badge { padding: .2rem .75rem; border-radius: 999px; font-size: .78rem; font-weight: 600; white-space: nowrap; }
+    .work-status-badge.open { background: #d1fae5; color: #065f46; }
+    .work-status-badge.locked { background: #fee2e2; color: #991b1b; }
+    .work-card-body { padding: 1.25rem; }
+    .field-label { font-size: .9rem; font-weight: 700; color: #1e293b; margin: 1rem 0 .5rem; display: block; }
+    .field-label:first-child { margin-top: 0; }
+    .work-textarea { width: 100%; box-sizing: border-box; padding: .75rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 10px; font-family: inherit; font-size: .9rem; resize: vertical; min-height: 100px; color: #1e293b; }
+    .work-textarea:focus { outline: none; border-color: #dc2626; box-shadow: 0 0 0 3px rgba(220,38,38,.12); }
+    .submit-btn { display: inline-flex; align-items: center; gap: .5rem; background: linear-gradient(135deg,#b91c1c,#dc2626); color: white; border: none; border-radius: 10px; padding: .7rem 1.6rem; font-family: inherit; font-size: .92rem; font-weight: 700; cursor: pointer; margin-top: 1rem; }
+    .submit-btn:disabled { opacity: .55; cursor: not-allowed; }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) { .unit-hero h1 { font-size: 1.3rem; } .tool-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 480px) { .tool-grid { grid-template-columns: 1fr; } .dtype-table { font-size: .8rem; } }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-icon"><i class="fas fa-chalkboard-user"></i></div>
+      <span>ครูศิริศักดิ์ ปิลอง</span>
+    </a>
+    <ul class="navbar-menu">
+      <li><a href="home.html"><i class="fas fa-house"></i> หน้าหลัก</a></li>
+      <li><a href="subject-cs3.html"><i class="fas fa-microchip"></i> วิทยาการคำนวณ 3 ม.6</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="เมนู">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="home.html"><i class="fas fa-house"></i> หน้าหลัก</a>
+    <a href="subject-cs3.html"><i class="fas fa-microchip"></i> วิทยาการคำนวณ 3 ม.6</a>
+  </div>
+</nav>
+
+<!-- ===== UNIT HERO ===== -->
+<div class="unit-hero">
+  <div class="unit-hero-content container">
+    <p style="opacity:.75;font-size:.83rem;margin-bottom:.5rem">
+      <a href="home.html" style="color:rgba(255,255,255,.8)">หน้าหลัก</a>
+      <i class="fas fa-chevron-right" style="font-size:.65rem;margin:0 .35rem"></i>
+      <a href="subject-cs3.html" style="color:rgba(255,255,255,.8)">วิทยาการคำนวณ 3</a>
+      <i class="fas fa-chevron-right" style="font-size:.65rem;margin:0 .35rem"></i>
+      หน่วยที่ 3
+    </p>
+    <h1>🛡️ หน่วยที่ 3: การใช้เทคโนโลยีสารสนเทศอย่างปลอดภัย</h1>
+    <p>วิทยาการคำนวณ 3 &bull; มัธยมศึกษาปีที่ 6 &bull; ภาคเรียนที่ 1/2569</p>
+
+    <div class="indicator-box">
+      <strong>ตัวชี้วัด:</strong> วิเคราะห์ผลกระทบของเทคโนโลยีสารสนเทศ และประยุกต์ใช้จริยธรรม จรรยาบรรณ และกฎหมายที่เกี่ยวข้อง
+      เพื่อใช้เทคโนโลยีสารสนเทศอย่างปลอดภัยและมีความรับผิดชอบ
+      <em style="opacity:.8">(ว. 4.2 ม. 6/1)</em>
+    </div>
+
+    <div class="unit-tabs">
+      <button class="unit-tab-btn active" data-utab="lesson">
+        <i class="fas fa-book-open"></i> เนื้อหาบทเรียน
+      </button>
+      <button class="unit-tab-btn" data-utab="exercises">
+        <i class="fas fa-pencil-alt"></i> แบบฝึกหัด
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LESSON TAB ===== -->
+<div id="utab-lesson" class="unit-tab-content active">
+<div class="content-section">
+
+  <!-- ========== SECTION 1 ========== -->
+  <div class="lesson-section" id="section-impact">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-num">1</div>
+      <h2>ผลกระทบจากการใช้เทคโนโลยีสารสนเทศ</h2>
+      <i class="fas fa-chevron-down toggle-icon"></i>
+    </div>
+    <div class="section-body">
+
+      <div class="info-card">
+        <h3><i class="fas fa-scale-unbalanced"></i> ผลกระทบจากการใช้เทคโนโลยีสารสนเทศ</h3>
+        <p>ในปัจจุบันเทคโนโลยีสารสนเทศเข้ามามีบทบาทในชีวิตประจำวันของมนุษย์อย่างหลีกเลี่ยงไม่ได้ จึงควรเรียนรู้การใช้เทคโนโลยีสารสนเทศอย่างปลอดภัย
+          และมีความรู้เท่าทันทั้งคุณและโทษที่อาจเกิดขึ้นได้ ซึ่งส่งผลกระทบใน 4 ด้านหลัก ได้แก่ การดำเนินชีวิต อาชีพ สังคม และวัฒนธรรม</p>
+      </div>
+
+      <p style="font-weight:700;color:#1e293b;margin:1.2rem 0 .5rem">1.1 ผลกระทบต่อการดำเนินชีวิต</p>
+      <div class="impact-grid">
+        <div class="impact-card impact-positive">
+          <h4><i class="fas fa-thumbs-up"></i> ด้านบวก</h4>
+          <ul class="check-list">
+            <li><i class="fas fa-plus-circle" style="color:#16a34a!important"></i> เดินทางและเรียนรู้ที่มีขีดจำกัดน้อยลง</li>
+            <li><i class="fas fa-plus-circle" style="color:#16a34a!important"></i> ทำให้การทำงานมีประสิทธิภาพมากขึ้น</li>
+            <li><i class="fas fa-plus-circle" style="color:#16a34a!important"></i> ติดต่อสื่อสารกันได้สะดวกและรวดเร็ว</li>
+          </ul>
+        </div>
+        <div class="impact-card impact-negative">
+          <h4><i class="fas fa-thumbs-down"></i> ด้านลบ</h4>
+          <ul class="check-list">
+            <li><i class="fas fa-minus-circle" style="color:#dc2626!important"></i> ใช้เทคโนโลยีเกินความจำเป็นจนติดสมาร์ทโฟน</li>
+            <li><i class="fas fa-minus-circle" style="color:#dc2626!important"></i> การปฏิสัมพันธ์กับผู้อื่นในชีวิตจริงลดลง</li>
+            <li><i class="fas fa-minus-circle" style="color:#dc2626!important"></i> รับข่าวสารอย่างรวดเร็วโดยขาดความรอบคอบ อาจนำไปสู่การรับรู้ข้อมูลที่คลาดเคลื่อน</li>
+          </ul>
+        </div>
+      </div>
+
+      <p style="font-weight:700;color:#1e293b;margin:1.5rem 0 .5rem">1.2 ผลกระทบต่ออาชีพ</p>
+      <div class="blue-box">
+        <p>การพัฒนาอย่างรวดเร็วของเทคโนโลยีสารสนเทศส่งผลให้การทำงานของบุคลากรในหลายวงการเปลี่ยนแปลงไป ทั้งด้านการศึกษา การแพทย์และสาธารณสุข
+          อุตสาหกรรม และเกษตรกรรม ทุกอาชีพจึงจำเป็นต้องปรับตัวให้เข้ากับเทคโนโลยีใหม่ ๆ อยู่เสมอ</p>
+      </div>
+      <div class="impact-grid">
+        <div class="impact-card impact-positive">
+          <h4><i class="fas fa-thumbs-up"></i> ด้านบวก</h4>
+          <ul class="check-list">
+            <li><i class="fas fa-plus-circle" style="color:#16a34a!important"></i> ช่วยลดต้นทุนและเพิ่มประสิทธิภาพในการทำงาน</li>
+            <li><i class="fas fa-plus-circle" style="color:#16a34a!important"></i> เข้าถึงข้อมูลความรู้และเทคโนโลยีใหม่ได้เร็วขึ้น เช่น การเรียนออนไลน์ การผ่าตัดด้วยหุ่นยนต์ เกษตรแม่นยำ</li>
+          </ul>
+        </div>
+        <div class="impact-card impact-negative">
+          <h4><i class="fas fa-thumbs-down"></i> ด้านลบ</h4>
+          <ul class="check-list">
+            <li><i class="fas fa-minus-circle" style="color:#dc2626!important"></i> เครื่องจักรและระบบอัตโนมัติเข้ามาแทนที่แรงงานคนบางตำแหน่ง</li>
+            <li><i class="fas fa-minus-circle" style="color:#dc2626!important"></i> ผู้ที่ปรับตัวไม่ทันอาจสูญเสียโอกาสทางอาชีพ</li>
+          </ul>
+        </div>
+      </div>
+
+      <p style="font-weight:700;color:#1e293b;margin:1.5rem 0 .5rem">1.3 ผลกระทบต่อสังคม</p>
+      <div class="impact-grid">
+        <div class="impact-card impact-positive">
+          <h4><i class="fas fa-thumbs-up"></i> ด้านบวก</h4>
+          <ul class="check-list">
+            <li><i class="fas fa-plus-circle" style="color:#16a34a!important"></i> ทำให้การสื่อสารระหว่างบุคคลและกลุ่มคนสะดวก รวดเร็ว</li>
+            <li><i class="fas fa-plus-circle" style="color:#16a34a!important"></i> แลกเปลี่ยนความคิดเห็น ความรู้ และประสบการณ์ระหว่างกลุ่มคนที่สนใจเรื่องเดียวกันได้ง่ายขึ้น</li>
+          </ul>
+        </div>
+        <div class="impact-card impact-negative">
+          <h4><i class="fas fa-thumbs-down"></i> ด้านลบ</h4>
+          <ul class="check-list">
+            <li><i class="fas fa-minus-circle" style="color:#dc2626!important"></i> การใช้เทคโนโลยีอย่างไม่เหมาะสมอาจก่อให้เกิดการแพร่กระจายข่าวปลอม</li>
+            <li><i class="fas fa-minus-circle" style="color:#dc2626!important"></i> ข้อมูลส่วนบุคคลอาจถูกนำไปใช้ในทางที่ผิด ก่อปัญหาความเป็นส่วนตัว</li>
+          </ul>
+        </div>
+      </div>
+
+      <p style="font-weight:700;color:#1e293b;margin:1.5rem 0 .5rem">1.4 ผลกระทบต่อวัฒนธรรม</p>
+      <div class="impact-grid">
+        <div class="impact-card impact-positive">
+          <h4><i class="fas fa-thumbs-up"></i> ด้านบวก</h4>
+          <ul class="check-list">
+            <li><i class="fas fa-plus-circle" style="color:#16a34a!important"></i> ช่วยเผยแพร่วัฒนธรรมเป็นวงกว้างได้สะดวกรวดเร็ว เช่น ผ่าน YouTube และสื่อสังคมออนไลน์</li>
+            <li><i class="fas fa-plus-circle" style="color:#16a34a!important"></i> ช่วยอนุรักษ์และเผยแพร่ศิลปวัฒนธรรมในรูปแบบดิจิทัล</li>
+          </ul>
+        </div>
+        <div class="impact-card impact-negative">
+          <h4><i class="fas fa-thumbs-down"></i> ด้านลบ</h4>
+          <ul class="check-list">
+            <li><i class="fas fa-minus-circle" style="color:#dc2626!important"></i> คนรุ่นใหม่อาจละเลยวัฒนธรรมดั้งเดิม หันไปนิยมวัฒนธรรมต่างชาติ</li>
+            <li><i class="fas fa-minus-circle" style="color:#dc2626!important"></i> การรับวัฒนธรรมที่ไม่เหมาะสมอาจส่งผลต่อค่านิยมของสังคมไทย</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== SECTION 2 ========== -->
+  <div class="lesson-section" id="section-ethics">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-num">2</div>
+      <h2>จริยธรรมและจรรยาบรรณในการใช้เทคโนโลยีสารสนเทศ</h2>
+      <i class="fas fa-chevron-down toggle-icon"></i>
+    </div>
+    <div class="section-body">
+
+      <div class="impact-grid">
+        <div class="impact-card" style="background:#f0fdf4;border:1px solid #bbf7d0">
+          <h4 style="color:#15803d"><i class="fas fa-heart"></i> จริยธรรม</h4>
+          <p style="color:#374151;line-height:1.7;font-size:.9rem">หลักของความสำนึกที่หนักแน่น เพื่อป้องกันการทำผิด ในการปฏิบัติงานของบุคคลให้เหมาะสม
+            ด้วยความรับผิดชอบและความเคารพสิทธิของผู้อื่น</p>
+        </div>
+        <div class="impact-card" style="background:#eff6ff;border:1px solid #bfdbfe">
+          <h4 style="color:#1e40af"><i class="fas fa-gavel"></i> จรรยาบรรณ</h4>
+          <p style="color:#374151;line-height:1.7;font-size:.9rem">หลักหรือกฎเกณฑ์ที่กำหนดขึ้นสำหรับกลุ่มบุคคลเฉพาะทาง เพื่อเป็นแนวทางในการปฏิบัติงาน
+            ด้วยความซื่อสัตย์ต่อวิชาชีพ</p>
+        </div>
+      </div>
+
+      <div class="highlight-box" style="margin-top:1.5rem">
+        <h4><i class="fas fa-shield-halved"></i> หลัก PAPA</h4>
+        <p>เป็นหลักจริยธรรมพื้นฐาน 4 ประการที่เกี่ยวข้องกับเทคโนโลยีสารสนเทศ ซึ่งควรตระหนักและปฏิบัติตามอยู่เสมอ</p>
+      </div>
+      <div class="tool-grid">
+        <div class="tool-card"><div class="tool-icon">🔒</div><h4>Privacy</h4><p>ความเป็นส่วนตัว — สิทธิในการควบคุมข้อมูลของตนเอง ไม่เผยแพร่ข้อมูลของผู้อื่นโดยไม่ได้รับความยินยอม</p></div>
+        <div class="tool-card"><div class="tool-icon">✅</div><h4>Accuracy</h4><p>ความถูกต้อง — การให้ข้อมูลที่ถูกต้อง ครบถ้วน แม่นยำ และเป็นปัจจุบัน</p></div>
+        <div class="tool-card"><div class="tool-icon">📁</div><h4>Property</h4><p>ความเป็นเจ้าของ — สิทธิของบุคคลในการครอบครองข้อมูลและทรัพย์สินทางปัญญาตามกฎหมาย</p></div>
+        <div class="tool-card"><div class="tool-icon">🔑</div><h4>Accessibility</h4><p>การเข้าถึงข้อมูล — สิทธิและความสามารถในการเข้าถึงและใช้ข้อมูลได้อย่างเหมาะสมและปลอดภัย</p></div>
+      </div>
+
+      <p style="font-weight:700;color:#1e293b;margin:1.5rem 0 .5rem">จรรยาบรรณของผู้ปฏิบัติงานที่เกี่ยวข้องกับคอมพิวเตอร์ (5 ด้าน):</p>
+      <table class="dtype-table">
+        <thead><tr><th>ด้าน</th><th>สาระสำคัญ</th></tr></thead>
+        <tbody>
+          <tr><td><strong>ต่อตนเอง</strong></td><td>ยึดมั่นในความซื่อสัตย์ สุจริต มีวินัย และรับผิดชอบ พัฒนาตนเองอย่างต่อเนื่อง</td></tr>
+          <tr><td><strong>ต่อผู้ร่วมงาน</strong></td><td>ปฏิบัติต่อเพื่อนร่วมงานด้วยความสุภาพและให้เกียรติ ร่วมมือสร้างบรรยากาศที่ดีในการทำงาน</td></tr>
+          <tr><td><strong>ต่อวิชาชีพ</strong></td><td>รักษาเกียรติและศักดิ์ศรีของวิชาชีพ ไม่ใช้ความรู้ในทางที่ไม่ถูกต้องหรือเอื้อประโยชน์ส่วนตน</td></tr>
+          <tr><td><strong>ต่อสังคม</strong></td><td>ประพฤติตนเป็นพลเมืองดี เคารพกฎหมาย ส่งเสริมประโยชน์ส่วนรวมมากกว่าส่วนตน</td></tr>
+          <tr><td><strong>ต่อผู้รับบริการ</strong></td><td>ให้บริการด้วยความสุภาพ จริงใจ เสมอภาค และรักษาความลับของผู้รับบริการอย่างเคร่งครัด</td></tr>
+        </tbody>
+      </table>
+
+      <div class="green-box" style="margin-top:1.5rem">
+        <h4><i class="fas fa-globe"></i> คุณธรรมและจริยธรรมในการใช้งานอินเทอร์เน็ต</h4>
+      </div>
+      <ul class="check-list">
+        <li><i class="fas fa-check-circle"></i> ไม่เปิดเผยข้อมูลส่วนตัว เช่น ชื่อ-นามสกุล ที่อยู่ หมายเลขโทรศัพท์ ให้แก่บุคคลที่รู้จักกันทางอินเทอร์เน็ต</li>
+        <li><i class="fas fa-check-circle"></i> ใช้ความระมัดระวังในการสื่อสาร คิดอย่างรอบคอบก่อนโพสต์ และแสดงความคิดเห็นด้วยความสุภาพ</li>
+        <li><i class="fas fa-check-circle"></i> ใช้สื่อออนไลน์อย่างมีวิจารณญาณ ตรวจสอบความน่าเชื่อถือของข้อมูลก่อนเชื่อหรือส่งต่อ</li>
+        <li><i class="fas fa-check-circle"></i> หลีกเลี่ยงการนัดพบกับคนที่ไม่รู้จักจากโลกออนไลน์ โดยไม่ได้รับคำแนะนำจากผู้ปกครองหรือครู</li>
+        <li><i class="fas fa-check-circle"></i> เคารพสิทธิ์และความเป็นส่วนตัวของผู้อื่นเสมอเมื่อใช้งานอินเทอร์เน็ต</li>
+        <li><i class="fas fa-check-circle"></i> หลีกเลี่ยงการแสดงข้อมูลที่เป็นเท็จหรือสร้างความเสียหายต่อผู้อื่น</li>
+      </ul>
+
+    </div>
+  </div>
+
+  <!-- ========== SECTION 3 ========== -->
+  <div class="lesson-section" id="section-law">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-num">3</div>
+      <h2>กฎหมายเทคโนโลยีสารสนเทศ</h2>
+      <i class="fas fa-chevron-down toggle-icon"></i>
+    </div>
+    <div class="section-body">
+
+      <div class="info-card">
+        <h3><i class="fas fa-landmark"></i> กฎหมายที่เกี่ยวข้องกับเทคโนโลยีสารสนเทศ</h3>
+        <p>กฎหมายที่เกี่ยวข้องกับเทคโนโลยีสารสนเทศมีความสำคัญอย่างยิ่งในปัจจุบัน เนื่องจากการพัฒนาเทคโนโลยีอย่างรวดเร็วส่งผลกระทบต่อเศรษฐกิจ สังคม
+          และความมั่นคงของประเทศ จึงจำเป็นต้องมีการปรับปรุงกฎหมายให้ทันสมัยและปลอดภัยอยู่เสมอ</p>
+      </div>
+
+      <div id="lawList">
+        <div class="code-item"><div class="code-item-header" onclick="toggleCode(this)"><div class="code-num">1</div>พระราชบัญญัติว่าด้วยธุรกรรมทางอิเล็กทรอนิกส์ พ.ศ. 2544<i class="fas fa-chevron-down" style="margin-left:auto;color:#94a3b8;font-size:.8rem"></i></div><div class="code-item-body">กำหนดสถานะทางกฎหมายของข้อมูลอิเล็กทรอนิกส์ เพื่อให้การทำธุรกรรมออนไลน์มีความน่าเชื่อถือและปลอดภัย</div></div>
+        <div class="code-item"><div class="code-item-header" onclick="toggleCode(this)"><div class="code-num">2</div>พระราชบัญญัติว่าด้วยการกระทำความผิดเกี่ยวกับคอมพิวเตอร์ พ.ศ. 2550 (แก้ไขเพิ่มเติม พ.ศ. 2560)<i class="fas fa-chevron-down" style="margin-left:auto;color:#94a3b8;font-size:.8rem"></i></div><div class="code-item-body">กำหนดบทลงโทษสำหรับการกระทำความผิดผ่านระบบคอมพิวเตอร์ เช่น การเข้าถึงข้อมูลโดยไม่ได้รับอนุญาตหรือการเผยแพร่ข้อมูลเท็จ</div></div>
+        <div class="code-item"><div class="code-item-header" onclick="toggleCode(this)"><div class="code-num">3</div>พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (PDPA)<i class="fas fa-chevron-down" style="margin-left:auto;color:#94a3b8;font-size:.8rem"></i></div><div class="code-item-body">คุ้มครองสิทธิของเจ้าของข้อมูลส่วนบุคคล และกำหนดหน้าที่ของผู้ที่เกี่ยวข้องกับข้อมูลให้ดำเนินการอย่างถูกต้อง</div></div>
+        <div class="code-item"><div class="code-item-header" onclick="toggleCode(this)"><div class="code-num">4</div>พระราชบัญญัติการรักษาความมั่นคงปลอดภัยไซเบอร์ พ.ศ. 2562<i class="fas fa-chevron-down" style="margin-left:auto;color:#94a3b8;font-size:.8rem"></i></div><div class="code-item-body">วางแนวทางป้องกันและรับมือภัยคุกคามทางไซเบอร์ เพื่อคุ้มครองความมั่นคงของระบบสารสนเทศสำคัญของประเทศ</div></div>
+        <div class="code-item"><div class="code-item-header" onclick="toggleCode(this)"><div class="code-num">5</div>พระราชบัญญัติระบบการชำระเงิน พ.ศ. 2560<i class="fas fa-chevron-down" style="margin-left:auto;color:#94a3b8;font-size:.8rem"></i></div><div class="code-item-body">กำกับดูแลการใช้ระบบการชำระเงินอิเล็กทรอนิกส์ให้มีความปลอดภัย และสร้างความเชื่อมั่นในการทำธุรกรรมทางการเงิน</div></div>
+        <div class="code-item"><div class="code-item-header" onclick="toggleCode(this)"><div class="code-num">6</div>พระราชบัญญัติการพัฒนาดิจิทัลเพื่อเศรษฐกิจและสังคม พ.ศ. 2560<i class="fas fa-chevron-down" style="margin-left:auto;color:#94a3b8;font-size:.8rem"></i></div><div class="code-item-body">ส่งเสริมการพัฒนาและการใช้เทคโนโลยีดิจิทัลเพื่อขับเคลื่อนเศรษฐกิจและสังคมของประเทศอย่างยั่งยืน</div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== SECTION 4 ========== -->
+  <div class="lesson-section" id="section-copyright">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-num">4</div>
+      <h2>ลิขสิทธิ์ซอฟต์แวร์และกฎหมายลิขสิทธิ์</h2>
+      <i class="fas fa-chevron-down toggle-icon"></i>
+    </div>
+    <div class="section-body">
+
+      <div class="info-card">
+        <h3><i class="far fa-copyright"></i> ลิขสิทธิ์คืออะไร</h3>
+        <p><strong>ลิขสิทธิ์ (Copyright)</strong> คือ สิทธิทางกฎหมายที่คุ้มครองผลงานได้โดยอัตโนมัติเมื่อสร้างสรรค์งานที่เป็นต้นฉบับขึ้น
+          โดยไม่จำเป็นต้องจดทะเบียนหรือทำพิธีการใด ๆ เจ้าของลิขสิทธิ์จะมีสิทธิแต่เพียงผู้เดียวในการทำซ้ำ ดัดแปลง หรือเผยแพร่ผลงานของตนเอง
+          ซึ่งจะได้รับความคุ้มครองตลอดอายุของผู้สร้างสรรค์ และต่อเนื่องอีก 50 ปีหลังจากผู้สร้างสรรค์เสียชีวิต</p>
+      </div>
+
+      <p style="font-weight:700;color:#1e293b;margin:1.2rem 0 .5rem">ประเภทของงานอันมีลิขสิทธิ์:</p>
+      <div class="tool-grid">
+        <div class="tool-card"><div class="tool-icon">📚</div><h4>วรรณกรรม</h4><p>หนังสือ สิ่งพิมพ์ งานเขียน โปรแกรมคอมพิวเตอร์</p></div>
+        <div class="tool-card"><div class="tool-icon">💃</div><h4>นาฏกรรม</h4><p>ท่ารำ ท่าเต้น ท่าทางการแสดง</p></div>
+        <div class="tool-card"><div class="tool-icon">🎨</div><h4>ศิลปกรรม</h4><p>จิตรกรรม ประติมากรรม ภาพพิมพ์ สถาปัตยกรรม</p></div>
+        <div class="tool-card"><div class="tool-icon">🎵</div><h4>ดนตรีกรรม</h4><p>โน้ตเพลง คำร้อง ทำนอง</p></div>
+        <div class="tool-card"><div class="tool-icon">🎙️</div><h4>สิ่งบันทึกเสียง</h4><p>การบันทึกเสียงในแผ่นเสียงหรือไฟล์เสียง</p></div>
+        <div class="tool-card"><div class="tool-icon">🎬</div><h4>โสตทัศนวัสดุ / ภาพยนตร์</h4><p>ภาพและเสียงที่บันทึกจากกล้องหรือประกอบในภาพยนตร์</p></div>
+        <div class="tool-card"><div class="tool-icon">📡</div><h4>แพร่เสียงแพร่ภาพ</h4><p>การกระจายเสียงทางวิทยุ การถ่ายทอดสัญญาณผ่านออนไลน์</p></div>
+        <div class="tool-card"><div class="tool-icon">📄</div><h4>งานอื่นใด</h4><p>งานในแผนกวรรณคดี วิทยาศาสตร์ หรือศิลปะ</p></div>
+      </div>
+
+      <p style="font-weight:700;color:#1e293b;margin:1.5rem 0 .5rem">การละเมิดลิขสิทธิ์:</p>
+      <div class="impact-grid">
+        <div class="impact-card" style="background:#fff7ed;border:1px solid #fed7aa">
+          <h4 style="color:#9a3412"><i class="fas fa-hand"></i> การละเมิดลิขสิทธิ์โดยตรง</h4>
+          <p style="color:#374151;line-height:1.7;font-size:.9rem">การนำผลงานของผู้อื่นไปทำซ้ำ ดัดแปลง หรือเผยแพร่ต่อสาธารณชนโดยไม่ได้รับอนุญาต เช่น
+            นำคลิปวิดีโอของผู้อื่นไปโพสต์ลง YouTube โดยไม่ได้รับอนุญาต</p>
+        </div>
+        <div class="impact-card impact-negative">
+          <h4><i class="fas fa-people-arrows"></i> การละเมิดลิขสิทธิ์โดยอ้อม</h4>
+          <p style="color:#374151;line-height:1.7;font-size:.9rem">การมีส่วนเกี่ยวข้องหรือสนับสนุนให้เกิดการละเมิดลิขสิทธิ์ เช่น
+            การขาย แจกจ่าย หรือให้เช่างานที่ละเมิดลิขสิทธิ์นั้น ๆ</p>
+        </div>
+      </div>
+
+      <div class="highlight-box" style="margin-top:1.5rem">
+        <h4><i class="fas fa-triangle-exclamation"></i> การแสดงความคิดเห็นตาม พ.ร.บ. คอมพิวเตอร์ มาตรา 14</h4>
+        <p>การแสดงความคิดเห็นต้องอยู่ภายใต้ขอบเขตของกฎหมาย และเคารพสิทธิของผู้อื่นเสมอ ข้อห้ามสำคัญตามมาตรา 14 มีดังนี้</p>
+        <ul class="check-list" style="margin-top:.5rem">
+          <li><i class="fas fa-ban"></i> นำเข้าข้อมูลคอมพิวเตอร์ปลอมหรือเท็จ ซึ่งอาจก่อให้เกิดความเสียหายแก่ผู้อื่นหรือประชาชน</li>
+          <li><i class="fas fa-ban"></i> นำเข้าข้อมูลที่กระทบต่อความมั่นคงของประเทศ หรือก่อให้เกิดความตื่นตระหนกแก่ประชาชน</li>
+          <li><i class="fas fa-ban"></i> นำเข้าข้อมูลที่เป็นความผิดเกี่ยวกับความมั่นคงหรือการก่อการร้ายตามประมวลกฎหมายอาญา</li>
+          <li><i class="fas fa-ban"></i> นำเข้าข้อมูลลามกอนาจารที่ประชาชนทั่วไปสามารถเข้าถึงได้</li>
+          <li><i class="fas fa-ban"></i> เผยแพร่หรือส่งต่อข้อมูลดังกล่าว แม้จะรู้ว่าเป็นการกระทำผิดกฎหมาย มีโทษจำคุก ปรับ หรือทั้งจำทั้งปรับ</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- end content-section -->
+</div><!-- end utab-lesson -->
+
+<!-- ===== EXERCISES TAB ===== -->
+<div id="utab-exercises" class="unit-tab-content">
+<div class="content-section">
+
+  <div id="exerciseLockBanner" style="display:none;background:#fee2e2;border:1px solid #fca5a5;border-radius:10px;padding:1rem 1.2rem;margin-bottom:1.5rem">
+    <p style="margin:0;color:#991b1b;font-weight:600"><i class="fas fa-lock"></i> แบบฝึกหัดหน่วยที่ 3 ยังไม่เปิดรับงาน</p>
+  </div>
+
+  <!-- ===== แบบฝึกหัดท้ายบท ===== -->
+  <div class="work-card">
+    <div class="work-card-header">
+      <div class="work-num">1</div>
+      <div class="work-title">
+        <h3><i class="fas fa-pen-fancy" style="color:#dc2626;margin-right:.4rem"></i>แบบฝึกหัดท้ายบทที่ 3 (แบบเขียนตอบ)</h3>
+        <p>ตอบคำถามทั้ง 3 ข้อ โดยเชื่อมโยงเนื้อหากับการนำไปใช้ในชีวิตประจำวันจริงของตนเอง ครูจะตรวจให้คะแนนภายหลัง</p>
+      </div>
+      <div class="work-badges">
+        <span class="work-score-badge"><i class="fas fa-star" style="font-size:.75rem"></i> 20 คะแนน</span>
+        <span id="exBadge" class="work-status-badge open"><i class="fas fa-circle-check" style="font-size:.7rem"></i> เปิดรับงาน</span>
+      </div>
+    </div>
+    <div class="work-card-body">
+
+      <div id="ex3StudentInfo" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:.65rem .9rem;font-size:.88rem;color:#475569;margin-bottom:1rem">
+        <i class="fas fa-user-graduate" style="color:#dc2626"></i> กำลังโหลด...
+      </div>
+
+      <div id="ex3FormArea">
+        <label class="field-label">1. ให้นักเรียนยกตัวอย่างผลกระทบจากการใช้เทคโนโลยีสารสนเทศที่เกิดขึ้นจริงกับตนเองหรือคนใกล้ตัว ทั้งด้านบวกและด้านลบ อย่างละ 1 ตัวอย่าง พร้อมแนวทางป้องกันผลกระทบด้านลบนั้น</label>
+        <textarea class="work-textarea" id="ex3_q1" placeholder="ด้านบวก: ... / ด้านลบ: ... / แนวทางป้องกัน: ..."></textarea>
+
+        <label class="field-label">2. หากนักเรียนพบว่าเพื่อนกำลังจะแชร์ข่าวปลอมหรือข้อมูลที่ไม่ได้ตรวจสอบความถูกต้องลงในโซเชียลมีเดีย นักเรียนจะใช้หลักจริยธรรมและจรรยาบรรณการใช้อินเทอร์เน็ตที่เรียนมาอย่างไรในการให้คำแนะนำเพื่อน</label>
+        <textarea class="work-textarea" id="ex3_q2" placeholder="อธิบายวิธีการพูดคุยกับเพื่อน และหลักที่นำมาใช้..."></textarea>
+
+        <label class="field-label">3. ให้นักเรียนยกตัวอย่างสถานการณ์ในชีวิตประจำวันที่เกี่ยวข้องกับการละเมิดลิขสิทธิ์หรือการทำผิดกฎหมายคอมพิวเตอร์ (เช่น พ.ร.บ. คอมพิวเตอร์ พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล หรือกฎหมายลิขสิทธิ์) ที่นักเรียนเคยพบเห็น พร้อมอธิบายว่าควรปฏิบัติอย่างไรให้ถูกต้องตามกฎหมาย</label>
+        <textarea class="work-textarea" id="ex3_q3" placeholder="สถานการณ์ที่พบ: ... / สิ่งที่ควรทำแทน: ..."></textarea>
+
+        <button class="submit-btn" id="ex3SubmitBtn" onclick="submitEx3()"><i class="fas fa-paper-plane"></i> ส่งคำตอบ</button>
+        <div id="ex3Msg" style="margin-top:.75rem;font-size:.85rem;display:none"></div>
+      </div>
+
+      <div id="ex3PendingBox" style="display:none;margin-top:1.25rem;background:#fffbeb;border:1px solid #fcd34d;border-radius:12px;padding:1.5rem">
+        <div style="display:flex;align-items:center;gap:.75rem">
+          <i class="fas fa-clock" style="color:#d97706;font-size:1.5rem"></i>
+          <p style="font-weight:700;color:#92400e;margin:0">ส่งคำตอบแล้ว — รอครูตรวจ</p>
+        </div>
+        <p style="margin:.75rem 0 0;font-size:.8rem;color:#b45309"><i class="fas fa-lock"></i> ส่งงานแล้ว ไม่สามารถแก้ไขคำตอบได้อีก</p>
+      </div>
+
+      <div id="ex3GradedBox" style="display:none;margin-top:1.25rem;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:1.5rem;text-align:center">
+        <i class="fas fa-circle-check" style="color:#16a34a;font-size:2.5rem;margin-bottom:.6rem;display:block"></i>
+        <p style="font-weight:700;color:#166534;font-size:1.05rem;margin:0 0 .3rem">ครูตรวจแล้ว!</p>
+        <p id="ex3GradedScore" style="font-size:.9rem;color:#166534;margin:0"></p>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- end content-section -->
+</div><!-- end utab-exercises -->
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <p>&copy; 2569 <strong>ครูศิริศักดิ์ ปิลอง</strong> &mdash; วิทยาการคำนวณ 3 ม.6 | หน่วยที่ 3</p>
+</footer>
+
+<script src="js/auth.js"></script>
+<script>requireAuth('6');</script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/app.js"></script>
+<script>
+  /* ===== TAB ===== */
+  document.querySelectorAll('.unit-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.utab;
+      document.querySelectorAll('.unit-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.unit-tab-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('utab-' + target).classList.add('active');
+    });
+  });
+  if (location.hash === '#exercises') {
+    const exBtn = document.querySelector('[data-utab="exercises"]');
+    if (exBtn) exBtn.click();
+  }
+
+  function toggleSection(header) {
+    const body = header.nextElementSibling;
+    header.classList.toggle('collapsed');
+    body.classList.toggle('hidden');
+  }
+
+  function toggleCode(header) {
+    const body = header.nextElementSibling;
+    body.classList.toggle('open');
+  }
+
+  const ham = document.getElementById('hamburger');
+  const mob = document.getElementById('mobileMenu');
+  if (ham) ham.addEventListener('click', () => mob.classList.toggle('open'));
+
+  /* ===== EXERCISE: written-answer x3 ===== */
+  let _exLocked3 = false;
+  async function loadUnitSettings3() {
+    const s = await getSubjectSettings('cs3-m6');
+    _exLocked3 = s.unit3_exercise === false;
+    if (_exLocked3) {
+      document.getElementById('exerciseLockBanner').style.display = 'block';
+      const btn = document.getElementById('ex3SubmitBtn'); if (btn) btn.disabled = true;
+      const badge = document.getElementById('exBadge');
+      if (badge) { badge.className = 'work-status-badge locked'; badge.innerHTML = '<i class="fas fa-lock"></i> ปิดรับงาน'; }
+    }
+  }
+
+  function _loadEx3State() {
+    setupWorkCard({
+      subjectId:    'cs3-m6',
+      title:        'แบบฝึกหัดท้ายบทที่ 3: การใช้เทคโนโลยีสารสนเทศอย่างปลอดภัย',
+      formEl:       document.getElementById('ex3FormArea'),
+      pendingBoxEl: document.getElementById('ex3PendingBox'),
+      gradedBoxEl:  document.getElementById('ex3GradedBox'),
+      onGraded: sub => {
+        document.getElementById('ex3GradedScore').textContent = 'คะแนน: ' + sub.score + '/' + sub.maxScore;
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', async function () {
+    const s = getCurrentStudent();
+    if (s) {
+      document.getElementById('ex3StudentInfo').innerHTML =
+        '<i class="fas fa-user-graduate" style="color:#dc2626"></i> ' +
+        s.name + '&nbsp;&nbsp;|&nbsp;&nbsp;' + s.class +
+        '&nbsp;&nbsp;เลขที่ ' + s.no + '&nbsp;&nbsp;(รหัส ' + s.id + ')';
+    }
+    await loadUnitSettings3();
+    _loadEx3State();
+  });
+
+  async function submitEx3() {
+    if (_exLocked3) { showToast('แบบฝึกหัดยังไม่เปิด', 'warning'); return; }
+    const s = getCurrentStudent();
+    const q1 = document.getElementById('ex3_q1').value.trim();
+    const q2 = document.getElementById('ex3_q2').value.trim();
+    const q3 = document.getElementById('ex3_q3').value.trim();
+    const btn = document.getElementById('ex3SubmitBtn');
+    const msg = document.getElementById('ex3Msg');
+    msg.style.display = 'none';
+
+    if (!s) { msg.style.color = '#dc2626'; msg.textContent = 'กรุณาเข้าสู่ระบบก่อนส่งงาน'; msg.style.display = 'block'; return; }
+    if (!q1 || !q2 || !q3) { msg.style.color = '#dc2626'; msg.textContent = 'กรุณาตอบคำถามให้ครบทั้ง 3 ข้อ'; msg.style.display = 'block'; return; }
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังส่ง...';
+
+    const note = `1) ${q1}\n\n2) ${q2}\n\n3) ${q3}`;
+    const formEl = document.getElementById('ex3FormArea');
+    const editId = formEl.dataset.editScoreId;
+    const result = editId
+      ? await editPendingNote('cs3-m6', s.id, editId, note)
+      : await saveScore('cs3-m6',
+          { name: s.name, studentId: s.id, room: s.class },
+          { title: 'แบบฝึกหัดท้ายบทที่ 3: การใช้เทคโนโลยีสารสนเทศอย่างปลอดภัย', score: 0, maxScore: 20, type: 'exercise', status: 'pending', note }
+        );
+
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-paper-plane"></i> ส่งคำตอบ';
+
+    if (result.ok) {
+      delete formEl.dataset.editScoreId;
+      showToast('ส่งคำตอบสำเร็จ รอครูตรวจ', 'success');
+      _loadEx3State();
+    } else {
+      msg.style.color = '#dc2626';
+      msg.textContent = '❌ เกิดข้อผิดพลาด: ' + result.error;
+      msg.style.display = 'block';
+    }
+  }
+</script>
+</body>
+</html>

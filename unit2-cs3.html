@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>หน่วยที่ 2 การเปลี่ยนแปลงของเทคโนโลยีสารสนเทศ | วิทยาการคำนวณ 3</title>
+  <script>(function(){try{var s=JSON.parse(localStorage.getItem('srr_student_2569'));if(!s||!s.grade||!s.name)window.location.replace('login.html');}catch(e){window.location.replace('login.html');}})();</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ===== Unit Page Specific ===== */
+    .unit-hero {
+      background: linear-gradient(135deg, #dc2626 0%, #991b1b 60%, #7f1d1d 100%);
+      color: white;
+      padding: 2.5rem 1rem 0;
+    }
+    .unit-hero-content { max-width: 1200px; margin: 0 auto; }
+    .unit-hero h1 { font-size: 1.7rem; font-weight: 700; margin-bottom: .4rem; }
+    .unit-hero p { opacity: .85; font-size: .95rem; margin-bottom: .3rem; }
+    .unit-hero .indicator-box {
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 10px;
+      padding: .75rem 1rem;
+      margin: 1rem 0;
+      font-size: .9rem;
+    }
+
+    .unit-tabs { display: flex; gap: .5rem; flex-wrap: wrap; padding-top: 1rem; }
+    .unit-tab-btn {
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.3);
+      color: white; padding: .55rem 1.1rem;
+      border-radius: 8px 8px 0 0; cursor: pointer;
+      font-family: 'Sarabun', sans-serif; font-size: .9rem;
+      transition: all .2s; display: flex; align-items: center; gap: .4rem;
+    }
+    .unit-tab-btn.active { background: white; color: #dc2626; border-color: white; font-weight: 700; }
+    .unit-tab-btn:hover:not(.active) { background: rgba(255,255,255,.25); }
+
+    .unit-tab-content { display: none; }
+    .unit-tab-content.active { display: block; }
+
+    .lesson-section { background: white; border-radius: 14px; box-shadow: var(--shadow); margin-bottom: 1.5rem; overflow: hidden; }
+    .section-header { background: linear-gradient(90deg, #dc2626, #b91c1c); color: white; padding: 1rem 1.25rem; display: flex; align-items: center; gap: .75rem; cursor: pointer; user-select: none; }
+    .section-header .section-num { width: 32px; height: 32px; background: rgba(255,255,255,.25); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: .95rem; flex-shrink: 0; }
+    .section-header h2 { font-size: 1.05rem; font-weight: 700; flex: 1; }
+    .section-header .toggle-icon { transition: transform .3s; }
+    .section-header.collapsed .toggle-icon { transform: rotate(-90deg); }
+    .section-body { padding: 1.5rem; }
+    .section-body.hidden { display: none; }
+
+    .info-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.25rem; margin-bottom: 1rem; }
+    .info-card h3 { font-size: 1rem; font-weight: 700; color: #dc2626; margin-bottom: .75rem; display: flex; align-items: center; gap: .5rem; }
+    .info-card p { color: #374151; line-height: 1.8; margin-bottom: .5rem; }
+
+    .highlight-box { background: linear-gradient(135deg, #fef2f2, #fee2e2); border-left: 4px solid #dc2626; border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0; }
+    .highlight-box h4 { color: #991b1b; font-weight: 700; margin-bottom: .5rem; }
+    .highlight-box p, .highlight-box li { color: #374151; line-height: 1.8; }
+
+    .blue-box { background: linear-gradient(135deg, #eff6ff, #dbeafe); border-left: 4px solid #3b82f6; border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0; }
+    .blue-box h4 { color: #1e40af; font-weight: 700; margin-bottom: .5rem; }
+
+    .green-box { background: linear-gradient(135deg, #f0fdf4, #dcfce7); border-left: 4px solid #16a34a; border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0; }
+    .green-box h4 { color: #15803d; font-weight: 700; margin-bottom: .5rem; }
+
+    .orange-box { background: linear-gradient(135deg, #fff7ed, #fed7aa); border-left: 4px solid #ea580c; border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0; }
+    .orange-box h4 { color: #9a3412; font-weight: 700; margin-bottom: .5rem; }
+
+    .step-list { list-style: none; padding: 0; }
+    .step-list li { display: flex; align-items: flex-start; gap: .75rem; padding: .6rem 0; border-bottom: 1px solid #f1f5f9; }
+    .step-list li:last-child { border-bottom: none; }
+    .step-num { min-width: 28px; height: 28px; background: #dc2626; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .8rem; font-weight: 700; flex-shrink: 0; }
+
+    .check-list { list-style: none; padding: 0; }
+    .check-list li { padding: .45rem 0; display: flex; align-items: flex-start; gap: .6rem; color: #374151; line-height: 1.7; }
+    .check-list li i { color: #dc2626; margin-top: .2rem; flex-shrink: 0; }
+
+    .tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem; }
+    .tool-card { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1rem; text-align: center; transition: all .2s; box-shadow: 0 2px 4px rgba(0,0,0,.06); }
+    .tool-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+    .tool-card .tool-icon { font-size: 2rem; margin-bottom: .5rem; }
+    .tool-card h4 { font-size: .9rem; font-weight: 700; color: #1e293b; margin-bottom: .3rem; }
+    .tool-card p { font-size: .8rem; color: #64748b; }
+
+    .cc-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: .9rem; }
+    .cc-table th { background: #dc2626; color: white; padding: .65rem 1rem; text-align: left; font-weight: 700; }
+    .cc-table td { padding: .6rem 1rem; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+    .cc-table tr:nth-child(even) td { background: #fef2f2; }
+    .cc-table .cc-badge { display: inline-block; background: #dc2626; color: white; padding: .2rem .6rem; border-radius: 20px; font-size: .78rem; font-weight: 700; }
+
+    .impact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+    @media (max-width: 600px) { .impact-grid { grid-template-columns: 1fr; } }
+    .impact-card { border-radius: 10px; padding: 1.1rem; }
+    .impact-positive { background: #f0fdf4; border: 1px solid #bbf7d0; }
+    .impact-negative { background: #fef2f2; border: 1px solid #fecaca; }
+    .impact-card h4 { font-weight: 700; margin-bottom: .75rem; display: flex; align-items: center; gap: .5rem; }
+    .impact-positive h4 { color: #15803d; }
+    .impact-negative h4 { color: #dc2626; }
+
+    .code-item { border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: .5rem; overflow: hidden; }
+    .code-item-header { background: #f8fafc; padding: .7rem 1rem; cursor: pointer; display: flex; align-items: center; gap: .75rem; font-weight: 600; color: #1e293b; }
+    .code-item-header:hover { background: #f1f5f9; }
+    .code-num { min-width: 26px; height: 26px; background: #dc2626; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .78rem; font-weight: 700; flex-shrink: 0; }
+    .code-item-body { padding: .6rem 1rem .6rem 3.5rem; color: #64748b; font-size: .88rem; display: none; }
+    .code-item-body.open { display: block; }
+
+    .dtype-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: .9rem; }
+    .dtype-table th { background: #dc2626; color: white; padding: .65rem 1rem; text-align: left; font-weight: 700; }
+    .dtype-table td { padding: .65rem 1rem; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+    .dtype-table tr:nth-child(even) td { background: #fef9f9; }
+
+    /* ===== Work/Exercise Cards ===== */
+    .work-card { background: white; border-radius: 14px; box-shadow: var(--shadow); margin-bottom: 1.5rem; overflow: hidden; border: 1px solid #e2e8f0; }
+    .work-card-header { display: flex; align-items: flex-start; gap: 1rem; padding: 1.25rem; border-bottom: 1px solid #e2e8f0; background: #f8fafc; }
+    .work-num { min-width: 42px; height: 42px; background: linear-gradient(135deg, #b91c1c, #dc2626); color: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 700; flex-shrink: 0; }
+    .work-title { flex: 1; min-width: 0; }
+    .work-title h3 { font-size: 1rem; font-weight: 700; color: #1e293b; margin: 0 0 .25rem; }
+    .work-title p { font-size: .85rem; color: #64748b; margin: 0; line-height: 1.5; }
+    .work-badges { display: flex; flex-direction: column; align-items: flex-end; gap: .4rem; flex-shrink: 0; }
+    .work-score-badge { background: #fee2e2; color: #b91c1c; padding: .25rem .8rem; border-radius: 999px; font-size: .8rem; font-weight: 700; white-space: nowrap; }
+    .work-status-badge { padding: .2rem .75rem; border-radius: 999px; font-size: .78rem; font-weight: 600; white-space: nowrap; }
+    .work-status-badge.open { background: #d1fae5; color: #065f46; }
+    .work-status-badge.locked { background: #fee2e2; color: #991b1b; }
+    .work-card-body { padding: 1.25rem; }
+    .field-label { font-size: .9rem; font-weight: 700; color: #1e293b; margin: 1rem 0 .5rem; display: block; }
+    .field-label:first-child { margin-top: 0; }
+    .work-textarea { width: 100%; box-sizing: border-box; padding: .75rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 10px; font-family: inherit; font-size: .9rem; resize: vertical; min-height: 100px; color: #1e293b; }
+    .work-textarea:focus { outline: none; border-color: #dc2626; box-shadow: 0 0 0 3px rgba(220,38,38,.12); }
+    .submit-btn { display: inline-flex; align-items: center; gap: .5rem; background: linear-gradient(135deg,#b91c1c,#dc2626); color: white; border: none; border-radius: 10px; padding: .7rem 1.6rem; font-family: inherit; font-size: .92rem; font-weight: 700; cursor: pointer; margin-top: 1rem; }
+    .submit-btn:disabled { opacity: .55; cursor: not-allowed; }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) { .unit-hero h1 { font-size: 1.3rem; } .tool-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 480px) { .tool-grid { grid-template-columns: 1fr; } .cc-table, .dtype-table { font-size: .8rem; } }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-icon"><i class="fas fa-chalkboard-user"></i></div>
+      <span>ครูศิริศักดิ์ ปิลอง</span>
+    </a>
+    <ul class="navbar-menu">
+      <li><a href="home.html"><i class="fas fa-house"></i> หน้าหลัก</a></li>
+      <li><a href="subject-cs3.html"><i class="fas fa-microchip"></i> วิทยาการคำนวณ 3 ม.6</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="เมนู">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="home.html"><i class="fas fa-house"></i> หน้าหลัก</a>
+    <a href="subject-cs3.html"><i class="fas fa-microchip"></i> วิทยาการคำนวณ 3 ม.6</a>
+  </div>
+</nav>
+
+<!-- ===== UNIT HERO ===== -->
+<div class="unit-hero">
+  <div class="unit-hero-content container">
+    <p style="opacity:.75;font-size:.83rem;margin-bottom:.5rem">
+      <a href="home.html" style="color:rgba(255,255,255,.8)">หน้าหลัก</a>
+      <i class="fas fa-chevron-right" style="font-size:.65rem;margin:0 .35rem"></i>
+      <a href="subject-cs3.html" style="color:rgba(255,255,255,.8)">วิทยาการคำนวณ 3</a>
+      <i class="fas fa-chevron-right" style="font-size:.65rem;margin:0 .35rem"></i>
+      หน่วยที่ 2
+    </p>
+    <h1>🤖 หน่วยที่ 2: การเปลี่ยนแปลงของเทคโนโลยีสารสนเทศ</h1>
+    <p>วิทยาการคำนวณ 3 &bull; มัธยมศึกษาปีที่ 6 &bull; ภาคเรียนที่ 1/2569</p>
+
+    <div class="indicator-box">
+      <strong>ตัวชี้วัด:</strong> วิเคราะห์การเปลี่ยนแปลงของเทคโนโลยีสารสนเทศที่มีผลต่อการดำเนินชีวิต อาชีพ สังคม และวัฒนธรรม
+      รวมถึงแนวโน้มเทคโนโลยีปัญญาประดิษฐ์ หุ่นยนต์ และความเป็นจริงเสริมในปัจจุบัน
+      <em style="opacity:.8">(ว. 4.2 ม. 6/1)</em>
+    </div>
+
+    <div class="unit-tabs">
+      <button class="unit-tab-btn active" data-utab="lesson">
+        <i class="fas fa-book-open"></i> เนื้อหาบทเรียน
+      </button>
+      <button class="unit-tab-btn" data-utab="exercises">
+        <i class="fas fa-pencil-alt"></i> แบบฝึกหัด
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LESSON TAB ===== -->
+<div id="utab-lesson" class="unit-tab-content active">
+<div class="content-section">
+
+  <!-- ========== SECTION 1 ========== -->
+  <div class="lesson-section" id="section-change">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-num">1</div>
+      <h2>การเปลี่ยนแปลงของเทคโนโลยีสารสนเทศในปัจจุบัน</h2>
+      <i class="fas fa-chevron-down toggle-icon"></i>
+    </div>
+    <div class="section-body">
+
+      <div class="info-card">
+        <h3><i class="fas fa-arrows-spin"></i> การเปลี่ยนแปลงของเทคโนโลยีสารสนเทศ</h3>
+        <p>เทคโนโลยีสารสนเทศ คือ การนำความรู้ด้านวิทยาศาสตร์และเทคโนโลยีมาประยุกต์ใช้ในยุคดิจิทัลเพื่อการพัฒนาเศรษฐกิจ สังคม
+          และประเทศชาติ ให้สามารถแข่งขันกับต่างประเทศได้ ทั้งการเก็บ รวบรวม วิเคราะห์ และเผยแพร่ข้อมูล ซึ่งทวีความสำคัญมากขึ้นเรื่อย ๆ</p>
+        <p style="font-weight:700;color:#1e293b">วิวัฒนาการของโทรศัพท์มือถือในแต่ละยุคสื่อสาร:</p>
+        <div class="tool-grid">
+          <div class="tool-card"><div class="tool-icon">📟</div><h4>1G</h4><p>ยุคแบบอนาล็อก โทรศัพท์ขนาดใหญ่ ใช้เฉพาะการโทร</p></div>
+          <div class="tool-card"><div class="tool-icon">📱</div><h4>2G</h4><p>ยุคดิจิทัล เริ่มส่งข้อความ SMS ได้</p></div>
+          <div class="tool-card"><div class="tool-icon">📲</div><h4>3G</h4><p>ยุคส่งข้อมูลผ่านโทรศัพท์ อินเทอร์เน็ตความเร็วสูงขึ้น</p></div>
+          <div class="tool-card"><div class="tool-icon">💻</div><h4>4G</h4><p>ยุคส่งข้อมูลทางเครือข่าย รองรับวิดีโอความละเอียดสูง</p></div>
+          <div class="tool-card"><div class="tool-icon">🚀</div><h4>5G</h4><p>ยุคการสื่อสารแห่งอนาคต ความเร็วสูงและหน่วงต่ำมาก</p></div>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <h4><i class="fas fa-layer-group"></i> 4 ยุคของดิจิทัล (Digital 1.0 - 4.0)</h4>
+        <p>ปัจจุบันโลกกำลังก้าวเข้าสู่ยุคดิจิทัลอย่างสมบูรณ์ ซึ่งเทคโนโลยีสารสนเทศเข้ามาเปลี่ยนแปลงการพัฒนาเศรษฐกิจ สังคม
+          และการดำเนินชีวิตอย่างก้าวกระโดด แบ่งเป็น 4 ยุคหลัก ดังนี้</p>
+      </div>
+      <div class="tool-grid">
+        <div class="tool-card"><div class="tool-icon">🌐</div><h4>Digital 1.0</h4><p>ยุคอินเทอร์เน็ต จุดเริ่มต้นของการเชื่อมต่อและสื่อสารทางไกลผ่านเครือข่าย</p></div>
+        <div class="tool-card"><div class="tool-icon">📲</div><h4>Digital 2.0</h4><p>ยุคโซเชียลมีเดีย เน้นการสื่อสารและแบ่งปันเนื้อหาระหว่างผู้ใช้ เช่น Facebook, YouTube</p></div>
+        <div class="tool-card"><div class="tool-icon">📊</div><h4>Digital 3.0</h4><p>ยุคแห่งข้อมูลและข้อมูลขนาดใหญ่ ใช้ AI, IoT และ Blockchain เข้าถึงข้อมูลได้ทุกที่ทุกเวลา</p></div>
+        <div class="tool-card"><div class="tool-icon">🏙️</div><h4>Digital 4.0</h4><p>ยุคแห่งเทคโนโลยีอัจฉริยะ บูรณาการเข้ากับเศรษฐกิจและสังคมเต็มรูปแบบ เช่น Smart City</p></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== SECTION 2 ========== -->
+  <div class="lesson-section" id="section-ai">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-num">2</div>
+      <h2>ปัญญาประดิษฐ์ (Artificial Intelligence: AI)</h2>
+      <i class="fas fa-chevron-down toggle-icon"></i>
+    </div>
+    <div class="section-body">
+
+      <div class="info-card">
+        <h3><i class="fas fa-brain"></i> ปัญญาประดิษฐ์คืออะไร</h3>
+        <p>ปัจจุบันแม้กระทั่งนักวิทยาศาสตร์ก็ไม่มีนิยามของปัญญาประดิษฐ์ที่ตายตัวมากนัก แต่ส่วนใหญ่มักนิยามในทำนองว่า
+          "ปัญญาประดิษฐ์เป็นศาสตร์ทางด้านวิทยาศาสตร์และวิศวกรรมศาสตร์ที่สร้างความสามารถให้เครื่องจักร" ประเภทของปัญญาประดิษฐ์แบ่งออกเป็น 3 ระดับ ดังนี้</p>
+      </div>
+      <div class="tool-grid">
+        <div class="tool-card"><div class="tool-icon">🤖</div><h4>ANI</h4><p>Artificial Narrow Intelligence — ปัญญาประดิษฐ์ที่ถูกออกแบบมาให้ทำงานเฉพาะด้านเดียว เช่น Google Translate, Siri</p></div>
+        <div class="tool-card"><div class="tool-icon">🧠</div><h4>AGI</h4><p>Artificial General Intelligence — ระบบที่มีความสามารถคิด วิเคราะห์ เรียนรู้ได้เหมือนมนุษย์ ยังอยู่ระหว่างการวิจัย</p></div>
+        <div class="tool-card"><div class="tool-icon">🌌</div><h4>ASI</h4><p>Artificial Super Intelligence — ระบบที่มีความฉลาดเหนือมนุษย์ในทุกด้าน ยังไม่มีการพัฒนาได้จริงในปัจจุบัน</p></div>
+      </div>
+
+      <div class="highlight-box" style="margin-top:1.5rem">
+        <h4><i class="fas fa-diagram-project"></i> ตัวอย่างการประยุกต์ใช้ปัญญาประดิษฐ์</h4>
+        <p>ปัญญาประดิษฐ์ถูกนำมาประยุกต์ใช้ในหลากหลายด้านของชีวิตประจำวันและภาคอุตสาหกรรม</p>
+      </div>
+      <div class="tool-grid">
+        <div class="tool-card"><div class="tool-icon">🚗</div><h4>ด้านคมนาคม</h4><p>ควบคุมและวางแผนเส้นทาง เพิ่มความปลอดภัยในการจราจร เช่น ระบบนำทาง GPS อัจฉริยะ</p></div>
+        <div class="tool-card"><div class="tool-icon">🏥</div><h4>ด้านการแพทย์</h4><p>เพิ่มความแม่นยำ ลดความผิดพลาด เช่น หุ่นยนต์ผ่าตัด "ดาวินชี" (da Vinci Robot)</p></div>
+        <div class="tool-card"><div class="tool-icon">🏭</div><h4>ด้านอุตสาหกรรม</h4><p>ลดความเสี่ยงและต้นทุนการผลิต เช่น แขนกลอัจฉริยะบรรจุสินค้า ตรวจสอบคุณภาพอัตโนมัติ</p></div>
+        <div class="tool-card"><div class="tool-icon">🛰️</div><h4>ด้านการทหาร</h4><p>เพิ่มความมั่นคงและความปลอดภัยของประเทศ เช่น โดรนลาดตระเวน หุ่นยนต์กู้ระเบิด</p></div>
+        <div class="tool-card"><div class="tool-icon">🏠</div><h4>ด้านอื่น ๆ</h4><p>ช่วยงานในชีวิตประจำวัน เช่น หุ่นยนต์ดูดฝุ่นอัจฉริยะ หุ่นยนต์บริการในภัตตาคาร</p></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== SECTION 3 ========== -->
+  <div class="lesson-section" id="section-robot">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-num">3</div>
+      <h2>เทคโนโลยีหุ่นยนต์ (Robotic Technology)</h2>
+      <i class="fas fa-chevron-down toggle-icon"></i>
+    </div>
+    <div class="section-body">
+
+      <div class="info-card">
+        <h3><i class="fas fa-robot"></i> หุ่นยนต์คืออะไร</h3>
+        <p>หุ่นยนต์ (Robot) คือ เครื่องจักรกลที่มีกลไกหรือหน่วยประมวลผลอยู่ภายใน สามารถทำงานได้หลากหลายอย่างร่วมกับมนุษย์
+          หรือทำงานแทนมนุษย์ในสถานที่ต่าง ๆ ได้อย่างมีประสิทธิภาพ</p>
+      </div>
+
+      <div class="blue-box">
+        <h4><i class="fas fa-list"></i> แบ่งประเภทตามการใช้งาน</h4>
+        <p>แบ่งเป็นงานที่มนุษย์ไม่สามารถทำได้หรือมีความเสี่ยงอันตราย เช่น หุ่นยนต์สำรวจอวกาศ หุ่นยนต์ทางการแพทย์
+          หุ่นยนต์บริการ หุ่นยนต์ทำงานทางการทหาร และหุ่นยนต์ทำเหมือง</p>
+      </div>
+
+      <div class="impact-grid" style="margin-top:1rem">
+        <div class="impact-card impact-positive">
+          <h4><i class="fas fa-thumbtack"></i> หุ่นยนต์ที่ติดตั้งอยู่กับที่ (Fixed Robots)</h4>
+          <p style="color:#374151;line-height:1.7;font-size:.9rem">ทำงานอยู่กับตำแหน่งเดิม ไม่สามารถเคลื่อนที่ได้ เช่น แขนกลในโรงงานอุตสาหกรรม</p>
+        </div>
+        <div class="impact-card impact-negative" style="border-color:#bfdbfe;background:#eff6ff">
+          <h4 style="color:#1e40af"><i class="fas fa-route"></i> หุ่นยนต์ที่เคลื่อนที่ได้ (Mobile Robots)</h4>
+          <p style="color:#374151;line-height:1.7;font-size:.9rem">เคลื่อนที่ไปยังสถานที่ต่าง ๆ ได้ มักใช้ในงานขนส่งสินค้าและการทำความสะอาด</p>
+        </div>
+      </div>
+
+      <p style="font-weight:700;color:#1e293b;margin:1.5rem 0 .5rem">แบ่งประเภทตามกลไกหรือโครงสร้าง (6 แบบ):</p>
+      <table class="cc-table">
+        <thead><tr><th>ประเภทหุ่นยนต์</th><th>ลักษณะ</th></tr></thead>
+        <tbody>
+          <tr><td><span class="cc-badge">ข้อต่อ</span> Articulated</td><td>เคลื่อนไหวคล้ายข้อต่อแขนมนุษย์ เช่น การหยิบ โยน และขว้าง</td></tr>
+          <tr><td><span class="cc-badge">สการา</span> Scara</td><td>แขนเคลื่อนที่ในแนวนอน เหมาะกับงานประกอบชิ้นส่วนที่ต้องการความแม่นยำสูง</td></tr>
+          <tr><td><span class="cc-badge">คาร์ทีเซียน</span> Cartesian</td><td>เคลื่อนที่เป็นเส้นตรง 3 แกน ใช้งานง่ายและควบคุมได้สะดวก</td></tr>
+          <tr><td><span class="cc-badge">ทรงกระบอก</span> Cylindrical</td><td>แขนเคลื่อนที่ตามแนวทรงกระบอก เหมาะกับงานเคลื่อนย้ายและพื้นที่จำกัด</td></tr>
+          <tr><td><span class="cc-badge">ทรงกลม</span> Spherical</td><td>แขนขยับได้รอบตัว ทำงานในพื้นที่กว้างและหลากหลายทิศทาง</td></tr>
+          <tr><td><span class="cc-badge">คู่ขนาน</span> Parallel/Delta</td><td>ใช้แขนหลายชุดยึดร่วมกัน เคลื่อนไหวแม่นยำ เหมาะกับงานที่รวดเร็วและซับซ้อน</td></tr>
+        </tbody>
+      </table>
+
+      <p style="font-weight:700;color:#1e293b;margin:1.5rem 0 .5rem">แบ่งประเภทตามรูปร่างลักษณะภายนอก (4 แบบ):</p>
+      <table class="dtype-table">
+        <thead><tr><th>ประเภท</th><th>ลักษณะ</th></tr></thead>
+        <tbody>
+          <tr><td><strong>หุ่นยนต์ฮิวแมนนอยด์ (Humanoid Robot)</strong></td><td>ออกแบบให้คล้ายมนุษย์ เดิน ยืน เคลื่อนไหวได้ ใช้งานด้านบริการและการศึกษา</td></tr>
+          <tr><td><strong>หุ่นยนต์แอนดรอยด์ (Actroid)</strong></td><td>พัฒนาให้มีรูปร่าง สีหน้า และการเคลื่อนไหวเหมือนมนุษย์จริง ใช้ในงานบริการหรือสอนภาษา</td></tr>
+          <tr><td><strong>หุ่นยนต์นาโน (Nanorobot)</strong></td><td>ขนาดเล็กระดับนาโนเมตร ใช้ทางการแพทย์ เช่น ผ่าตัดเซลล์หรือจ่ายยาในร่างกาย</td></tr>
+          <tr><td><strong>หุ่นยนต์ไซบอร์ก (Cyborg)</strong></td><td>ผสมผสานระหว่างมนุษย์กับเทคโนโลยี เช่น แขนกล เพิ่มขีดความสามารถในการดำรงชีวิต</td></tr>
+        </tbody>
+      </table>
+
+      <div class="highlight-box" style="margin-top:1.5rem">
+        <h4><i class="fas fa-cogs"></i> เทคโนโลยีที่เกี่ยวข้องกับหุ่นยนต์</h4>
+        <p><strong>วิทยาการหุ่นยนต์</strong> แบ่งส่วนประกอบออกเป็น 3 ส่วนหลัก คือ ส่วนการควบคุม (Manipulation) ส่วนการรับรู้ (Perception)
+          และส่วนการรู้คิด (Cognition)</p>
+      </div>
+      <p style="font-weight:700;color:#1e293b;margin:1rem 0 .5rem">วิทยาการพัฒนาหุ่นยนต์ แบ่งออกเป็น 5 ส่วน:</p>
+      <ul class="step-list">
+        <li><div class="step-num">1</div><span><strong>วิทยาการด้านปฏิสัมพันธ์</strong> — การสื่อสารระหว่างหุ่นยนต์กับมนุษย์ เช่น การพูด ท่าทาง หรือเสียงตอบสนอง</span></li>
+        <li><div class="step-num">2</div><span><strong>วิทยาการด้านการเคลื่อนที่</strong> — ความสามารถในการเคลื่อนที่จากจุดหนึ่งไปอีกจุดหนึ่ง เช่น การใช้ล้อหรือขา</span></li>
+        <li><div class="step-num">3</div><span><strong>วิทยาการด้านการนำทาง</strong> — การระบุตำแหน่งและทิศทางของตนเอง เช่น ระบบดาวเทียมและเซนเซอร์ตรวจจับสิ่งกีดขวาง</span></li>
+        <li><div class="step-num">4</div><span><strong>วิทยาการด้านการเคลื่อนย้ายชิ้นงาน</strong> — การหยิบ จับ หรือยกของด้วยความแม่นยำและรวดเร็ว</span></li>
+        <li><div class="step-num">5</div><span><strong>วิทยาการด้านอัจฉริยะ</strong> — ความสามารถในการคิด วิเคราะห์ และตัดสินใจด้วยตนเอง</span></li>
+      </ul>
+
+    </div>
+  </div>
+
+  <!-- ========== SECTION 4 ========== -->
+  <div class="lesson-section" id="section-ar">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-num">4</div>
+      <h2>เทคโนโลยีความเป็นจริงเสริม (Augmented Reality: AR)</h2>
+      <i class="fas fa-chevron-down toggle-icon"></i>
+    </div>
+    <div class="section-body">
+
+      <div class="info-card">
+        <h3><i class="fas fa-vr-cardboard"></i> AR คืออะไร</h3>
+        <p>เทคโนโลยีความเป็นจริงเสริม ถูกคิดขึ้นโดย Ronald T. Azuma ในปี ค.ศ. 1997 ว่าเป็นเทคโนโลยีที่ผสานโลกความเป็นจริง
+          เข้ากับข้อมูลเสมือน โดยการเชื่อมต่อและซ้อนทับกับสภาพแวดล้อมจริงแบบเรียลไทม์ ทำให้ผู้ใช้สามารถมองเห็นและโต้ตอบกับข้อมูลเสมือนได้ทันที</p>
+      </div>
+
+      <div class="blue-box">
+        <h4><i class="fas fa-list-ol"></i> กระบวนการทำงานของเทคโนโลยีความเป็นจริงเสริม</h4>
+        <ul class="step-list" style="margin-top:.5rem">
+          <li><div class="step-num">1</div><span>การวิเคราะห์ภาพ — ตรวจจับและวิเคราะห์วัตถุในสภาพแวดล้อมจริงผ่านกล้อง</span></li>
+          <li><div class="step-num">2</div><span>การคำนวณตำแหน่งเชิง 3 มิติ — ระบุตำแหน่งและมุมมองของวัตถุในพื้นที่จริง</span></li>
+          <li><div class="step-num">3</div><span>กระบวนการสร้างภาพเสมือน 3 มิติ — ซ้อนทับข้อมูลดิจิทัลลงบนภาพจริงแบบเรียลไทม์</span></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== SECTION 5 ========== -->
+  <div class="lesson-section" id="section-career">
+    <div class="section-header" onclick="toggleSection(this)">
+      <div class="section-num">5</div>
+      <h2>อาชีพทางด้านเทคโนโลยีสารสนเทศ</h2>
+      <i class="fas fa-chevron-down toggle-icon"></i>
+    </div>
+    <div class="section-body">
+
+      <div class="info-card">
+        <h3><i class="fas fa-briefcase"></i> กลุ่มอาชีพด้านเทคโนโลยีสารสนเทศ</h3>
+        <p>เทคโนโลยีสารสนเทศได้สร้างโอกาสทางอาชีพใหม่ ๆ มากมาย ซึ่งสามารถแบ่งกลุ่มอาชีพหลักได้ ดังนี้</p>
+      </div>
+      <table class="dtype-table">
+        <thead><tr><th>กลุ่มอาชีพ</th><th>ตัวอย่างอาชีพ</th></tr></thead>
+        <tbody>
+          <tr><td><strong>ด้านการพัฒนาซอฟต์แวร์</strong></td><td>IT Project Manager, System Analyst, Programmer, Software Engineer, Software Tester</td></tr>
+          <tr><td><strong>ด้านเครือข่ายคอมพิวเตอร์</strong></td><td>Network Engineer, Network Administrator, System Engineer, System Administrator, System Support</td></tr>
+          <tr><td><strong>ด้านข้อมูล</strong></td><td>Database Administrator, Data Scientist, Data Analyst, Data Engineer, Data Security Officer, Data Miner</td></tr>
+          <tr><td><strong>ด้านเกม</strong></td><td>Game Developer, Game Designer, Game Artist/Animator, Game Tester/QA Tester, E-Sport Athletes</td></tr>
+          <tr><td><strong>ด้านมัลติมีเดียและกราฟิก</strong></td><td>Graphic Designer, Motion Graphic Designer, Animator, Video Editor, Web Designer</td></tr>
+          <tr><td><strong>ด้านสื่อสังคมออนไลน์</strong></td><td>Influencer, Streamer, Social Media Manager, Podcaster</td></tr>
+          <tr><td><strong>ด้านการตลาดและธุรกิจออนไลน์</strong></td><td>Digital Marketing Analyst, Content Marketing Writer, Online Advertiser/PPC Specialist, UX-UI Designer, E-Business Developer</td></tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+</div><!-- end content-section -->
+</div><!-- end utab-lesson -->
+
+<!-- ===== EXERCISES TAB ===== -->
+<div id="utab-exercises" class="unit-tab-content">
+<div class="content-section">
+
+  <div id="exerciseLockBanner" style="display:none;background:#fee2e2;border:1px solid #fca5a5;border-radius:10px;padding:1rem 1.2rem;margin-bottom:1.5rem">
+    <p style="margin:0;color:#991b1b;font-weight:600"><i class="fas fa-lock"></i> แบบฝึกหัดหน่วยที่ 2 ยังไม่เปิดรับงาน</p>
+  </div>
+
+  <!-- ===== แบบฝึกหัดท้ายบท ===== -->
+  <div class="work-card">
+    <div class="work-card-header">
+      <div class="work-num">1</div>
+      <div class="work-title">
+        <h3><i class="fas fa-pen-fancy" style="color:#dc2626;margin-right:.4rem"></i>แบบฝึกหัดท้ายบทที่ 2 (แบบเขียนตอบ)</h3>
+        <p>ตอบคำถามทั้ง 3 ข้อ โดยเชื่อมโยงเนื้อหากับการนำไปใช้ในชีวิตประจำวันจริงของตนเอง ครูจะตรวจให้คะแนนภายหลัง</p>
+      </div>
+      <div class="work-badges">
+        <span class="work-score-badge"><i class="fas fa-star" style="font-size:.75rem"></i> 20 คะแนน</span>
+        <span id="exBadge" class="work-status-badge open"><i class="fas fa-circle-check" style="font-size:.7rem"></i> เปิดรับงาน</span>
+      </div>
+    </div>
+    <div class="work-card-body">
+
+      <div id="ex2StudentInfo" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:.65rem .9rem;font-size:.88rem;color:#475569;margin-bottom:1rem">
+        <i class="fas fa-user-graduate" style="color:#dc2626"></i> กำลังโหลด...
+      </div>
+
+      <div id="ex2FormArea">
+        <label class="field-label">1. นักเรียนใช้เทคโนโลยีปัญญาประดิษฐ์ (AI) ใดบ้างในชีวิตประจำวัน จงยกตัวอย่างมาอย่างน้อย 2 ตัวอย่าง พร้อมอธิบายว่าเทคโนโลยีนั้นช่วยอำนวยความสะดวกในชีวิตของนักเรียนอย่างไร</label>
+        <textarea class="work-textarea" id="ex2_q1" placeholder="เช่น ใช้ Google Translate ช่วย... / ใช้ผู้ช่วยเสียง Siri ช่วย..."></textarea>
+
+        <label class="field-label">2. หากนักเรียนต้องเลือกอาชีพด้านเทคโนโลยีสารสนเทศในอนาคต (จากที่เรียนมา เช่น ด้านซอฟต์แวร์ ด้านข้อมูล ด้านเกม ด้านมัลติมีเดีย ฯลฯ) นักเรียนจะเลือกอาชีพใด เพราะเหตุใด และคิดว่าต้องพัฒนาทักษะใดเพิ่มเติมเพื่อประกอบอาชีพนั้น</label>
+        <textarea class="work-textarea" id="ex2_q2" placeholder="อาชีพที่เลือก: ... เพราะ... ทักษะที่ต้องพัฒนาเพิ่มเติม: ..."></textarea>
+
+        <label class="field-label">3. จงยกตัวอย่างเทคโนโลยีหุ่นยนต์หรือเทคโนโลยีความเป็นจริงเสริม (AR) ที่นักเรียนพบเห็นหรือเคยใช้งานจริงในชีวิตประจำวันหรือในชุมชนของตนเอง พร้อมอธิบายประโยชน์ที่ได้รับ</label>
+        <textarea class="work-textarea" id="ex2_q3" placeholder="เช่น หุ่นยนต์ดูดฝุ่นที่บ้าน / ฟิลเตอร์ AR บนแอปพลิเคชัน..."></textarea>
+
+        <button class="submit-btn" id="ex2SubmitBtn" onclick="submitEx2()"><i class="fas fa-paper-plane"></i> ส่งคำตอบ</button>
+        <div id="ex2Msg" style="margin-top:.75rem;font-size:.85rem;display:none"></div>
+      </div>
+
+      <div id="ex2PendingBox" style="display:none;margin-top:1.25rem;background:#fffbeb;border:1px solid #fcd34d;border-radius:12px;padding:1.5rem">
+        <div style="display:flex;align-items:center;gap:.75rem">
+          <i class="fas fa-clock" style="color:#d97706;font-size:1.5rem"></i>
+          <p style="font-weight:700;color:#92400e;margin:0">ส่งคำตอบแล้ว — รอครูตรวจ</p>
+        </div>
+        <p style="margin:.75rem 0 0;font-size:.8rem;color:#b45309"><i class="fas fa-lock"></i> ส่งงานแล้ว ไม่สามารถแก้ไขคำตอบได้อีก</p>
+      </div>
+
+      <div id="ex2GradedBox" style="display:none;margin-top:1.25rem;background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:1.5rem;text-align:center">
+        <i class="fas fa-circle-check" style="color:#16a34a;font-size:2.5rem;margin-bottom:.6rem;display:block"></i>
+        <p style="font-weight:700;color:#166534;font-size:1.05rem;margin:0 0 .3rem">ครูตรวจแล้ว!</p>
+        <p id="ex2GradedScore" style="font-size:.9rem;color:#166534;margin:0"></p>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- end content-section -->
+</div><!-- end utab-exercises -->
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <p>&copy; 2569 <strong>ครูศิริศักดิ์ ปิลอง</strong> &mdash; วิทยาการคำนวณ 3 ม.6 | หน่วยที่ 2</p>
+</footer>
+
+<script src="js/auth.js"></script>
+<script>requireAuth('6');</script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/app.js"></script>
+<script>
+  /* ===== TAB ===== */
+  document.querySelectorAll('.unit-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.utab;
+      document.querySelectorAll('.unit-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.unit-tab-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('utab-' + target).classList.add('active');
+    });
+  });
+  if (location.hash === '#exercises') {
+    const exBtn = document.querySelector('[data-utab="exercises"]');
+    if (exBtn) exBtn.click();
+  }
+
+  function toggleSection(header) {
+    const body = header.nextElementSibling;
+    header.classList.toggle('collapsed');
+    body.classList.toggle('hidden');
+  }
+
+  const ham = document.getElementById('hamburger');
+  const mob = document.getElementById('mobileMenu');
+  if (ham) ham.addEventListener('click', () => mob.classList.toggle('open'));
+
+  /* ===== EXERCISE: written-answer x3 ===== */
+  let _exLocked2 = false;
+  async function loadUnitSettings2() {
+    const s = await getSubjectSettings('cs3-m6');
+    _exLocked2 = s.unit2_exercise === false;
+    if (_exLocked2) {
+      document.getElementById('exerciseLockBanner').style.display = 'block';
+      const btn = document.getElementById('ex2SubmitBtn'); if (btn) btn.disabled = true;
+      const badge = document.getElementById('exBadge');
+      if (badge) { badge.className = 'work-status-badge locked'; badge.innerHTML = '<i class="fas fa-lock"></i> ปิดรับงาน'; }
+    }
+  }
+
+  function _loadEx2State() {
+    setupWorkCard({
+      subjectId:    'cs3-m6',
+      title:        'แบบฝึกหัดท้ายบทที่ 2: การเปลี่ยนแปลงของเทคโนโลยีสารสนเทศ',
+      formEl:       document.getElementById('ex2FormArea'),
+      pendingBoxEl: document.getElementById('ex2PendingBox'),
+      gradedBoxEl:  document.getElementById('ex2GradedBox'),
+      onGraded: sub => {
+        document.getElementById('ex2GradedScore').textContent = 'คะแนน: ' + sub.score + '/' + sub.maxScore;
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', async function () {
+    const s = getCurrentStudent();
+    if (s) {
+      document.getElementById('ex2StudentInfo').innerHTML =
+        '<i class="fas fa-user-graduate" style="color:#dc2626"></i> ' +
+        s.name + '&nbsp;&nbsp;|&nbsp;&nbsp;' + s.class +
+        '&nbsp;&nbsp;เลขที่ ' + s.no + '&nbsp;&nbsp;(รหัส ' + s.id + ')';
+    }
+    await loadUnitSettings2();
+    _loadEx2State();
+  });
+
+  async function submitEx2() {
+    if (_exLocked2) { showToast('แบบฝึกหัดยังไม่เปิด', 'warning'); return; }
+    const s = getCurrentStudent();
+    const q1 = document.getElementById('ex2_q1').value.trim();
+    const q2 = document.getElementById('ex2_q2').value.trim();
+    const q3 = document.getElementById('ex2_q3').value.trim();
+    const btn = document.getElementById('ex2SubmitBtn');
+    const msg = document.getElementById('ex2Msg');
+    msg.style.display = 'none';
+
+    if (!s) { msg.style.color = '#dc2626'; msg.textContent = 'กรุณาเข้าสู่ระบบก่อนส่งงาน'; msg.style.display = 'block'; return; }
+    if (!q1 || !q2 || !q3) { msg.style.color = '#dc2626'; msg.textContent = 'กรุณาตอบคำถามให้ครบทั้ง 3 ข้อ'; msg.style.display = 'block'; return; }
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังส่ง...';
+
+    const note = `1) ${q1}\n\n2) ${q2}\n\n3) ${q3}`;
+    const formEl = document.getElementById('ex2FormArea');
+    const editId = formEl.dataset.editScoreId;
+    const result = editId
+      ? await editPendingNote('cs3-m6', s.id, editId, note)
+      : await saveScore('cs3-m6',
+          { name: s.name, studentId: s.id, room: s.class },
+          { title: 'แบบฝึกหัดท้ายบทที่ 2: การเปลี่ยนแปลงของเทคโนโลยีสารสนเทศ', score: 0, maxScore: 20, type: 'exercise', status: 'pending', note }
+        );
+
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-paper-plane"></i> ส่งคำตอบ';
+
+    if (result.ok) {
+      delete formEl.dataset.editScoreId;
+      showToast('ส่งคำตอบสำเร็จ รอครูตรวจ', 'success');
+      _loadEx2State();
+    } else {
+      msg.style.color = '#dc2626';
+      msg.textContent = '❌ เกิดข้อผิดพลาด: ' + result.error;
+      msg.style.display = 'block';
+    }
+  }
+</script>
+</body>
+</html>

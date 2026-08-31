@@ -715,7 +715,21 @@
     </div>
 
     <!-- Table -->
-    <div id="inboxTableWrap" style="display:none;overflow-x:auto">
+    <div id="inboxTableWrap" style="display:none">
+      <div style="display:flex;gap:.6rem;flex-wrap:wrap;padding:.75rem 1rem;background:#f8fafc;border-bottom:1px solid var(--border)">
+        <button id="saveAllInboxBtn" onclick="saveAllInbox()"
+          style="background:linear-gradient(135deg,#2563eb,#1e40af);color:white;border:none;padding:.5rem 1.1rem;border-radius:8px;font-family:inherit;font-size:.83rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:.4rem">
+          <i class="fas fa-floppy-disk"></i> บันทึกทั้งหมด
+        </button>
+        <button id="fullMarkAllBtn" onclick="fullMarkAllInbox()"
+          style="background:linear-gradient(135deg,#059669,#34d399);color:white;border:none;padding:.5rem 1.1rem;border-radius:8px;font-family:inherit;font-size:.83rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:.4rem">
+          <i class="fas fa-star"></i> ให้คะแนนเต็มทั้งหมด
+        </button>
+        <span style="font-size:.78rem;color:var(--text-muted);align-self:center">
+          <i class="fas fa-circle-info"></i> "บันทึกทั้งหมด" จะบันทึกเฉพาะช่องที่กรอกคะแนนไว้แล้ว
+        </span>
+      </div>
+      <div style="overflow-x:auto">
       <table style="width:100%;border-collapse:collapse;font-size:.85rem" id="inboxTable">
         <thead>
           <tr style="background:#f8fafc;border-bottom:2px solid var(--border)">
@@ -730,6 +744,7 @@
         </thead>
         <tbody id="inboxBody"></tbody>
       </table>
+      </div>
     </div>
   </div>
 
@@ -939,6 +954,9 @@
         <button id="loadClassBtn" class="btn btn-primary" style="padding:.5rem 1.2rem">
           <i class="fas fa-users"></i> โหลดรายชื่อ
         </button>
+        <button id="exportClassBtn" class="btn btn-outline" style="padding:.5rem 1.2rem" disabled>
+          <i class="fas fa-file-excel"></i> Export เป็น Excel
+        </button>
         <span id="classLoadInfo" style="font-size:.82rem;color:var(--text-muted)"></span>
       </div>
 
@@ -950,6 +968,7 @@
               <th>เลขที่</th>
               <th>รหัส</th>
               <th>ชื่อ-นามสกุล</th>
+              <th>ห้อง</th>
               <th style="text-align:center">แบบฝึกหัด</th>
               <th style="text-align:center">แบบทดสอบ</th>
               <th style="text-align:center">รวม</th>
@@ -958,7 +977,7 @@
             </tr>
           </thead>
           <tbody id="classTableBody">
-            <tr><td colspan="8" style="text-align:center;padding:2.5rem;color:var(--text-muted)">
+            <tr><td colspan="9" style="text-align:center;padding:2.5rem;color:var(--text-muted)">
               <i class="fas fa-chalkboard" style="font-size:1.5rem;display:block;margin-bottom:.5rem;opacity:.3"></i>
               เลือกรายวิชาและห้องเรียน แล้วกด "โหลดรายชื่อ"
             </td></tr>
@@ -1146,6 +1165,7 @@
 <script src="js/firebase-config.js"></script>
 <script src="js/students.js"></script>
 <script src="js/app.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 /* =========================================================
    Dashboard JS
@@ -1672,12 +1692,19 @@ function viewCodeModal(btn) {
   overlay.querySelector('iframe').srcdoc = code;
 }
 
-function _renderInbox() {
+function _getVisibleInboxItems() {
   const subjectFilter = document.getElementById('inboxSubjectFilter').value;
   const roomFilter    = document.getElementById('inboxRoomFilter').value;
   let list = _inboxData;
   if (subjectFilter) list = list.filter(x => x.subjectId === subjectFilter);
   if (roomFilter)    list = list.filter(x => x.room === roomFilter);
+  return list;
+}
+
+function _renderInbox() {
+  const subjectFilter = document.getElementById('inboxSubjectFilter').value;
+  const roomFilter    = document.getElementById('inboxRoomFilter').value;
+  const list = _getVisibleInboxItems();
 
   const badge = document.getElementById('pendingBadge');
   badge.textContent = list.length;
@@ -1688,7 +1715,7 @@ function _renderInbox() {
     document.getElementById('inboxEmpty').style.display = 'block';
     document.getElementById('inboxEmpty').innerHTML =
       '<i class="fas fa-circle-check" style="font-size:2.5rem;color:#34d399;display:block;margin-bottom:.75rem"></i>' +
-      (filter ? 'ไม่มีงานค้างในรายวิชาที่เลือก' : 'ไม่มีงานค้าง — ทุกงานได้รับการตรวจแล้ว 🎉');
+      ((subjectFilter || roomFilter) ? 'ไม่มีงานค้างตามตัวกรองที่เลือก' : 'ไม่มีงานค้าง — ทุกงานได้รับการตรวจแล้ว 🎉');
     return;
   }
 
@@ -1780,6 +1807,78 @@ async function gradeSubmission(subjectId, studentId, scoreId, maxScore) {
   }
 }
 
+/* ----- Bulk grading: save all filled-in scores, or give everyone full marks ----- */
+async function _bulkGradeItems(pairs) {
+  // pairs: [{ item, score }]
+  const results = await Promise.allSettled(
+    pairs.map(({ item, score }) => updateScore(item.subjectId, item.studentId, item.scoreId, score))
+  );
+  let okCount = 0, failCount = 0;
+  results.forEach((r, i) => {
+    if (r.status === 'fulfilled' && r.value.ok) {
+      okCount++;
+      _inboxData = _inboxData.filter(x => x.scoreId !== pairs[i].item.scoreId);
+    } else {
+      failCount++;
+    }
+  });
+  _renderInbox();
+  return { okCount, failCount };
+}
+
+async function saveAllInbox() {
+  const visible = _getVisibleInboxItems();
+  if (!visible.length) { showToast('ไม่มีงานในรายการ', 'warning'); return; }
+
+  const toGrade = [];
+  let invalidCount = 0;
+  visible.forEach(item => {
+    const inp = document.getElementById('inp-' + item.scoreId);
+    const raw = inp ? inp.value.trim() : '';
+    if (raw === '') return; // ยังไม่กรอก ข้ามไป
+    const score = parseFloat(raw);
+    if (isNaN(score) || score < 0 || score > item.maxScore) { invalidCount++; return; }
+    toGrade.push({ item, score });
+  });
+
+  if (invalidCount) { showToast(`มีคะแนนไม่ถูกต้อง ${invalidCount} รายการ กรุณาตรวจสอบก่อนบันทึก`, 'warning'); return; }
+  if (!toGrade.length) { showToast('กรุณากรอกคะแนนอย่างน้อย 1 รายการก่อนบันทึก', 'warning'); return; }
+  if (!confirm(`ยืนยันบันทึกคะแนนที่กรอกไว้ทั้งหมด ${toGrade.length} รายการ?`)) return;
+
+  const btn = document.getElementById('saveAllInboxBtn');
+  const btn2 = document.getElementById('fullMarkAllBtn');
+  btn.disabled = true; btn2.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังบันทึก...';
+
+  const { okCount, failCount } = await _bulkGradeItems(toGrade);
+
+  btn.disabled = false; btn2.disabled = false;
+  btn.innerHTML = '<i class="fas fa-floppy-disk"></i> บันทึกทั้งหมด';
+
+  if (okCount) showToast(`✅ บันทึกคะแนนสำเร็จ ${okCount} รายการ` + (failCount ? ` (ล้มเหลว ${failCount})` : ''), failCount ? 'warning' : 'success');
+  else showToast('บันทึกไม่สำเร็จ', 'error');
+}
+
+async function fullMarkAllInbox() {
+  const visible = _getVisibleInboxItems();
+  if (!visible.length) { showToast('ไม่มีงานในรายการ', 'warning'); return; }
+  if (!confirm(`ยืนยันให้คะแนนเต็มทุกรายการที่แสดงอยู่ ${visible.length} รายการ?`)) return;
+
+  const btn = document.getElementById('fullMarkAllBtn');
+  const btn2 = document.getElementById('saveAllInboxBtn');
+  btn.disabled = true; btn2.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังบันทึก...';
+
+  const toGrade = visible.map(item => ({ item, score: item.maxScore }));
+  const { okCount, failCount } = await _bulkGradeItems(toGrade);
+
+  btn.disabled = false; btn2.disabled = false;
+  btn.innerHTML = '<i class="fas fa-star"></i> ให้คะแนนเต็มทั้งหมด';
+
+  if (okCount) showToast(`✅ ให้คะแนนเต็มสำเร็จ ${okCount} รายการ` + (failCount ? ` (ล้มเหลว ${failCount})` : ''), failCount ? 'warning' : 'success');
+  else showToast('บันทึกไม่สำเร็จ', 'error');
+}
+
 document.getElementById('inboxSubjectFilter').addEventListener('change', _renderInbox);
 document.getElementById('inboxRoomFilter').addEventListener('change', _renderInbox);
 
@@ -1834,8 +1933,12 @@ function _updateClassRoomSel() {
   const rooms = _getRoomsForGrade(_classGrade);
   const sel = document.getElementById('classRoomSelect');
   sel.innerHTML = '<option value="">— เลือกห้อง —</option>' +
+    '<option value="__ALL__">— ทุกห้อง (ทั้งวิชา) —</option>' +
     rooms.map(r => `<option value="${r}">${r}</option>`).join('');
 }
+
+let _currentClassData = [];
+let _currentClassMeta = { subjectName: '', roomLabel: '' };
 
 document.querySelectorAll('[data-csubject]').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -1847,27 +1950,31 @@ document.querySelectorAll('[data-csubject]').forEach(btn => {
     else                                     btn.classList.add('active-s3');
     _updateClassRoomSel();
     document.getElementById('classTableBody').innerHTML =
-      '<tr><td colspan="8" style="text-align:center;padding:2.5rem;color:var(--text-muted)">เลือกห้องและกด "โหลดรายชื่อ"</td></tr>';
+      '<tr><td colspan="9" style="text-align:center;padding:2.5rem;color:var(--text-muted)">เลือกห้องและกด "โหลดรายชื่อ"</td></tr>';
     document.getElementById('classSummary').style.display = 'none';
     document.getElementById('classLoadInfo').textContent = '';
+    _currentClassData = [];
+    document.getElementById('exportClassBtn').disabled = true;
   });
 });
 
 document.getElementById('loadClassBtn').addEventListener('click', async () => {
   const room = document.getElementById('classRoomSelect').value;
   if (!room) { showToast('กรุณาเลือกห้องก่อน', 'warning'); return; }
+  const isAllRooms = room === '__ALL__';
 
   const btn = document.getElementById('loadClassBtn');
   btn.disabled = true;
   btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังโหลด...';
 
-  /* รวบรวมนักเรียนในห้องจาก STUDENTS */
+  /* รวบรวมนักเรียนในห้อง (หรือทุกห้องของเกรดนี้) จาก STUDENTS */
   const students = [];
   if (typeof STUDENTS !== 'undefined') {
     Object.entries(STUDENTS).forEach(([id, s]) => {
-      if (s.class === room) students.push({ ...s, studentId: id });
+      const matchRoom = isAllRooms ? String(s.grade) === String(_classGrade) : s.class === room;
+      if (matchRoom) students.push({ ...s, studentId: id });
     });
-    students.sort((a, b) => (a.no || 0) - (b.no || 0));
+    students.sort((a, b) => (a.class || '').localeCompare(b.class || '') || (a.no || 0) - (b.no || 0));
   }
 
   /* โหลดคะแนน Firebase สำหรับวิชาที่เลือก */
@@ -1897,11 +2004,17 @@ document.getElementById('loadClassBtn').addEventListener('click', async () => {
 
   btn.disabled = false;
   btn.innerHTML = '<i class="fas fa-users"></i> โหลดรายชื่อ';
-  document.getElementById('classLoadInfo').textContent = `${students.length} คน ในห้อง ${room}`;
+  const roomLabel = isAllRooms ? 'ทุกห้อง' : `ห้อง ${room}`;
+  document.getElementById('classLoadInfo').textContent = `${students.length} คน ${roomLabel}`;
 
   const tbody = document.getElementById('classTableBody');
+  _currentClassData = [];
+  _currentClassMeta = { subjectName: (SUBJECTS[_classSubject] && SUBJECTS[_classSubject].name) || _classSubject, roomLabel };
+  document.getElementById('exportClassBtn').disabled = true;
+
   if (!students.length) {
-    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:#94a3b8">ไม่พบนักเรียนในห้องนี้</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:2rem;color:#94a3b8">ไม่พบนักเรียนในห้องนี้</td></tr>';
+    document.getElementById('classSummary').style.display = 'none';
     return;
   }
 
@@ -1917,6 +2030,12 @@ document.getElementById('loadClassBtn').addEventListener('click', async () => {
     sumEx    += sc.exScore;  sumExMax  += sc.exMax;
     sumTst   += sc.tstScore; sumTstMax += sc.tstMax;
 
+    _currentClassData.push({
+      no: s.no || '', studentId: s.studentId, name: s.name || '', room: s.class || '',
+      exScore: sc.exScore, exMax: sc.exMax, tstScore: sc.tstScore, tstMax: sc.tstMax,
+      tot, totMax, pct
+    });
+
     const exCell  = sc.exMax  > 0 ? `<span class="score-badge ${getScoreBadgeClass(sc.exScore, sc.exMax)}">${sc.exScore}/${sc.exMax}</span>` : '<span style="color:#94a3b8">—</span>';
     const tstCell = sc.tstMax > 0 ? `<span class="score-badge ${getScoreBadgeClass(sc.tstScore, sc.tstMax)}">${sc.tstScore}/${sc.tstMax}</span>` : '<span style="color:#94a3b8">—</span>';
     const totCell = totMax   > 0 ? `<strong>${tot}/${totMax}</strong>` : '<span style="color:#94a3b8">—</span>';
@@ -1926,6 +2045,7 @@ document.getElementById('loadClassBtn').addEventListener('click', async () => {
       <td style="color:#64748b;font-size:.82rem">${s.no || '—'}</td>
       <td><code style="font-size:.78rem;color:#475569">${s.studentId}</code></td>
       <td>${s.name || '—'}</td>
+      <td style="color:#64748b;font-size:.82rem">${s.class || '—'}</td>
       <td style="text-align:center">${exCell}</td>
       <td style="text-align:center">${tstCell}</td>
       <td style="text-align:center">${totCell}</td>
@@ -1939,17 +2059,45 @@ document.getElementById('loadClassBtn').addEventListener('click', async () => {
     </tr>`;
   }).join('');
 
-  /* สรุปคะแนนห้อง */
+  document.getElementById('exportClassBtn').disabled = false;
+
+  /* สรุปคะแนนรวม */
   const gt = sumEx + sumTst, gtMax = sumExMax + sumTstMax;
   const gtPct = gtMax > 0 ? Math.round((gt / gtMax) * 100) : 0;
   const summaryEl = document.getElementById('classSummary');
   summaryEl.style.display = 'block';
   summaryEl.innerHTML =
-    `<strong><i class="fas fa-chart-pie"></i> สรุปคะแนนห้อง ${room}</strong>&emsp;` +
+    `<strong><i class="fas fa-chart-pie"></i> สรุปคะแนน${isAllRooms ? 'ทุกห้อง' : `ห้อง ${room}`}</strong>&emsp;` +
     (sumExMax  > 0 ? `แบบฝึกหัด: <strong>${sumEx}/${sumExMax}</strong>&emsp;` : '') +
     (sumTstMax > 0 ? `แบบทดสอบ: <strong>${sumTst}/${sumTstMax}</strong>&emsp;` : '') +
     `รวม: <strong>${gt}/${gtMax}</strong>` +
     (gtMax > 0 ? ` <span style="color:#059669;font-weight:700">(${gtPct}%)</span>` : '');
+});
+
+/* ----- Export ตารางคะแนนที่โหลดอยู่เป็นไฟล์ Excel ----- */
+document.getElementById('exportClassBtn').addEventListener('click', () => {
+  if (!_currentClassData.length) { showToast('กรุณาโหลดรายชื่อก่อน', 'warning'); return; }
+  if (typeof XLSX === 'undefined') { showToast('ไม่สามารถโหลดไลบรารี Export ได้', 'error'); return; }
+
+  const rows = _currentClassData.map(r => ({
+    'เลขที่':        r.no,
+    'รหัสนักเรียน':  r.studentId,
+    'ชื่อ-นามสกุล':  r.name,
+    'ห้อง':          r.room,
+    'แบบฝึกหัด':     r.exMax  > 0 ? `${r.exScore}/${r.exMax}`   : '',
+    'แบบทดสอบ':      r.tstMax > 0 ? `${r.tstScore}/${r.tstMax}` : '',
+    'คะแนนรวม':      r.totMax > 0 ? `${r.tot}/${r.totMax}`      : '',
+    '%':             r.totMax > 0 ? r.pct : ''
+  }));
+
+  const ws = XLSX.utils.json_to_sheet(rows);
+  ws['!cols'] = [{ wch: 7 }, { wch: 12 }, { wch: 28 }, { wch: 10 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 8 }];
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'คะแนน');
+
+  const today = new Date().toISOString().slice(0, 10);
+  const fname = `คะแนน_${_currentClassMeta.subjectName}_${_currentClassMeta.roomLabel}_${today}.xlsx`.replace(/\s+/g, '_');
+  XLSX.writeFile(wb, fname);
 });
 
 /* =========================================================
